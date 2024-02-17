@@ -11,13 +11,13 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Quasar App Template</q-toolbar-title>
+        <q-toolbar-title> CSmCG </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" :show-if-above="false" bordered>
       <q-list>
-        <q-item-label header> Color correction</q-item-label>
+        <q-item-label header> Menu</q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
@@ -44,6 +44,11 @@ const essentialLinks: EssentialLinkProps[] = [
     title: 'Dashboard',
     icon: 'dashboard',
     routeName: RouteName.DASHBOARD,
+  },
+  {
+    title: 'Lab 01. Cube',
+    icon: 'view_in_ar',
+    routeName: RouteName.ROTATING_CUBE_O1,
   },
 ];
 

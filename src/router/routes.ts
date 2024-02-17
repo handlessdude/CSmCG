@@ -12,6 +12,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/dashboard/pages/DashboardPage.vue'),
       },
+      {
+        path: '/01-rotating-cube',
+        name: RouteName.ROTATING_CUBE_O1,
+        component: () =>
+          import('src/features/lab-01-rotating-cube/pages/CubePage.vue'),
+      },
     ],
   },
   {

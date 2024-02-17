@@ -22,6 +22,7 @@ export interface EssentialLinkProps {
   routeName: RouteName;
   icon?: string;
 }
+
 const props = defineProps<EssentialLinkProps>();
 
 const route = useRoute();
