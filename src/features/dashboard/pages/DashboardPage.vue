@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import NoImagePlaceholder from 'components/NoImagePlaceholder.vue';
+import NoImagePlaceholder from 'src/shared/components/NoImagePlaceholder.vue';
 </script>
 
 <style scoped lang="scss">

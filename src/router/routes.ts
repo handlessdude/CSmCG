@@ -4,12 +4,13 @@ import { RouteName } from 'src/router/route-name';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/shared/layouts/MainLayout.vue'),
     children: [
       {
         path: '',
         name: RouteName.DASHBOARD,
-        component: () => import('pages/DashboardPage.vue'),
+        component: () =>
+          import('src/features/dashboard/pages/DashboardPage.vue'),
       },
     ],
   },

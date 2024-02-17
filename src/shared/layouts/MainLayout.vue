@@ -34,10 +34,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { RouteName } from 'src/router/route-name';
 import EssentialLink, {
   EssentialLinkProps,
-} from 'components/EssentialLink.vue';
-import { RouteName } from 'src/router/route-name';
+} from 'src/shared/components/EssentialLink.vue';
 
 const essentialLinks: EssentialLinkProps[] = [
   {
