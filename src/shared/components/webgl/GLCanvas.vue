@@ -1,14 +1,12 @@
 <template>
-  <q-page padding>
-    <TableCard>
-      <canvas
-        ref="glCanvas"
-        height="480" width="640" ID="gl-canvas">
-        Your browser is for peasants. Get Chrome.
-      </canvas>
-      <p v-if="showPlaceholder">No WebGL context</p>
-    </TableCard>
-  </q-page>
+  <TableCard>
+    <canvas
+      ref="glCanvas"
+      height="480" width="640" ID="gl-canvas">
+      Your browser is for peasants. Get Chrome.
+    </canvas>
+    <p v-if="showPlaceholder">No WebGL context</p>
+  </TableCard>
 </template>
 
 <script setup lang="ts">

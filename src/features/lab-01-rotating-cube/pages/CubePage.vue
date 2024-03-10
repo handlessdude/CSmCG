@@ -8,7 +8,7 @@
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 
 import { boxIndices, boxVertices } from 'src/shared/resources/box-model';
-import { fragmentShaderSource, vertexShaderSource } from 'src/features/lab-01-rotating-cube/resources/shaders';
+import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
 import { onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { useCubeRotationLoop } from 'src/features/lab-01-rotating-cube/hooks/use-cube-rotation-loop';

@@ -6,10 +6,13 @@ const setupShaderProgram = (
   const vertexShader = gl.createShader(gl.VERTEX_SHADER);
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 
-  if (!vertexShader || !fragmentShader) {
-    // todo add exception or something
-    return;
+  if (!vertexShader) {
+    throw new Error('Vertex shader not found')
   }
+  if (!fragmentShader) {
+    throw new Error('Fragment shader not found')
+  }
+
   gl.shaderSource(vertexShader, vertexShaderSource);
   gl.shaderSource(fragmentShader, fragmentShaderSource);
 
@@ -32,8 +35,7 @@ const setupShaderProgram = (
 
   const program = gl.createProgram() as WebGLProgram;
   if (!program) {
-    // todo add exception or something
-    return;
+    throw new Error('Error creating gl program')
   }
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);

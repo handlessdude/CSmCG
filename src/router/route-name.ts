@@ -1,4 +1,5 @@
 export enum RouteName {
   DASHBOARD = 'DASHBOARD',
   ROTATING_CUBE_O1 = 'ROTATING_CUBE_O1',
+  STATIC_2D_02 = 'STATIC_2D_02',
 }

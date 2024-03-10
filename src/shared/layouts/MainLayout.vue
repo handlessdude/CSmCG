@@ -50,6 +50,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'view_in_ar',
     routeName: RouteName.ROTATING_CUBE_O1,
   },
+  {
+    title: 'Lab 02. Static2d',
+    icon: '2d',
+    routeName: RouteName.STATIC_2D_02,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

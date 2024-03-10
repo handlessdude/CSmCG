@@ -1,20 +1,20 @@
 const setupBuffers = (
   gl: WebGL2RenderingContext,
   program: WebGLProgram,
-  boxVertices: Array<number>,
-  boxIndices: Array<number>,
+  vertices: Array<number>,
+  indices: Array<number>,
 ) => {
   //Buffers
 
   const boxVertexBufferObject = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexBufferObject);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(boxVertices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
   const boxIndexBufferObject = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
-    new Uint16Array(boxIndices),
+    new Uint16Array(indices),
     gl.STATIC_DRAW
   );
 

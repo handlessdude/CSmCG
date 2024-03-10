@@ -18,11 +18,17 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-01-rotating-cube/pages/CubePage.vue'),
       },
+      {
+        path: '/02-static2d',
+        name: RouteName.STATIC_2D_02,
+        component: () =>
+          import('src/features/lab-02-static2d/pages/Static2dPage.vue'),
+      },
     ],
   },
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    component: () => import('src/features/lab-02-static2d/pages/ErrorNotFound.vue'),
   },
 ];
 
