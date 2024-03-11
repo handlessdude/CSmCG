@@ -12,9 +12,12 @@ const generateRegularPolygon = (
   const vertices: Point[] = [];
   const angleIncrement = (2 * Math.PI) / numSides;
 
+  const startAngle = 3 * Math.PI / 2;
+
   for (let i = numSides - 1; i >= 0; i--) {
-    const x = center.x + radius * Math.cos(i * angleIncrement);
-    const y = center.y + radius * Math.sin(i * angleIncrement);
+    const angle = startAngle + i * angleIncrement;
+    const x = center.x + radius * Math.cos(angle);
+    const y = center.y + radius * Math.sin(angle);
     vertices.push({ x, y });
   }
 

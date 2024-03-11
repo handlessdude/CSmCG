@@ -2,7 +2,7 @@ import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 import { setupShaderProgram, setupTransformationMatrices } from 'src/utils/webgl';
 import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
 import { identity } from 'src/shared/resources/identity';
-import { cyan, red } from 'src/shared/resources/colors';
+import { red } from 'src/shared/resources/colors';
 import { glMatrix } from 'gl-matrix';
 import { generateRegularPolygon } from 'src/features/lab-02-static2d/utils/get-regular-pentagon';
 
@@ -14,7 +14,7 @@ const center = {
 const coordinates = generateRegularPolygon(5, center, 1);
 
 const vertices = [
-  center.x, center.y, 0.0, ...cyan,
+  center.x, center.y, 0.0, ...red,
   ...coordinates.map((point) => [point.x, point.y, 0.0, ...red]),
   coordinates[0].x, coordinates[0].y, 0.0, ...red,
 ].flat()
@@ -32,7 +32,6 @@ const usePentagonScene = (
   ) as WebGLProgram;
 
   // setup buffers
-  // setupBuffers(glContext, program, vertices, indices);
   const boxVertexBufferObject = glContext.createBuffer();
   glContext.bindBuffer(glContext.ARRAY_BUFFER, boxVertexBufferObject);
   glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(vertices), glContext.STATIC_DRAW);
