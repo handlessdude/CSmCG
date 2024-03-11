@@ -24,6 +24,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-02-static2d/pages/Static2dPage.vue'),
       },
+      {
+        path: '/03-static2d3d',
+        name: RouteName.STATIC_2D_3D_03,
+        component: () =>
+          import('src/features/lab-03-static2d3d/pages/Static2d3dPage.vue'),
+      },
     ],
   },
   {

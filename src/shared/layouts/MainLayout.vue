@@ -55,6 +55,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: '2d',
     routeName: RouteName.STATIC_2D_02,
   },
+  {
+    title: 'Lab 03. Static2d3d',
+    icon: '2d',
+    routeName: RouteName.STATIC_2D_3D_03,
+  },
 ];
 
 const leftDrawerOpen = ref(false);
