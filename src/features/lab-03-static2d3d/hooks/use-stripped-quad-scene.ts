@@ -43,14 +43,23 @@ in vec3 vPosition;
 out vec4 fragColor;
 
 void main() {
-  float k = 5.0;
-  int sum = int(vPosition.x * k) + int(vPosition.y * k) + int(vPosition.z * k);
-  if ((sum - (sum / 2 * 2)) == 0) {
-    fragColor = vec4(vColor, 1.0);
-  }
-  else {
-    fragColor = vec4(1.0, 1.0, 1.0, 1);
-  }
+  float stripeWidth = 0.2;
+  float xCoord = abs(fract(vPosition.x / stripeWidth));
+
+  // if (xCoord > 0.5) {
+  //   fragColor = vec4(vColor, 1.0);
+  // } else {
+  //   fragColor = vec4(1.0);
+  // }
+
+  float isInsideStripe = step(xCoord, 0.5); // === 1 if inside stripe, 0 otherwise
+
+  // Blend between vColor and white based on whether the fragment is inside a stripe
+  fragColor = mix(
+    vec4(vColor, 1.0),
+    vec4(1.0),
+    isInsideStripe
+  );
 }
 `
 const useStrippedQuadScene = (glCanvas: typeof GLCanvas) => {
