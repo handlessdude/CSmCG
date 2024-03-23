@@ -60,6 +60,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'texture',
     routeName: RouteName.STATIC_2D_3D_03,
   },
+  {
+    title: 'Lab 04. Pedestal',
+    icon: 'leaderboard',
+    routeName: RouteName.PEDESTAL,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

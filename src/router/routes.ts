@@ -30,6 +30,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-03-static2d3d/pages/Static2d3dPage.vue'),
       },
+      {
+        path: '/04-pedestal',
+        name: RouteName.PEDESTAL,
+        component: () =>
+          import('src/features/lab-04-pedestal/pages/PedestalPage.vue'),
+      },
     ],
   },
   {
