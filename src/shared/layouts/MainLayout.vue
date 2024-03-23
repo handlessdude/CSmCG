@@ -52,12 +52,12 @@ const essentialLinks: EssentialLinkProps[] = [
   },
   {
     title: 'Lab 02. Static2d',
-    icon: '2d',
+    icon: 'square',
     routeName: RouteName.STATIC_2D_02,
   },
   {
     title: 'Lab 03. Static2d3d',
-    icon: '2d',
+    icon: 'texture',
     routeName: RouteName.STATIC_2D_3D_03,
   },
 ];

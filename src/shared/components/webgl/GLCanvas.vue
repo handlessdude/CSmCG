@@ -1,16 +1,13 @@
 <template>
-  <TableCard>
-    <canvas
-      ref="glCanvas"
-      height="480" width="640" ID="gl-canvas">
-      Your browser is for peasants. Get Chrome.
-    </canvas>
-    <p v-if="showPlaceholder">No WebGL context</p>
-  </TableCard>
+  <canvas
+    ref="glCanvas"
+    height="480" width="640" ID="gl-canvas">
+    Your browser is for peasants. Get Chrome.
+  </canvas>
+  <p v-if="showPlaceholder">No WebGL context</p>
 </template>
 
 <script setup lang="ts">
-import TableCard from 'src/shared/components/TableCard.vue';
 import { computed, ref, Ref, watch } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 

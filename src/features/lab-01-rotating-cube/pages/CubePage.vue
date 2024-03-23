@@ -1,6 +1,15 @@
 <template>
-  <q-page>
-    <GLCanvas ref="glCanvas" />
+  <q-page padding>
+      <div class="
+        column
+        q-gutter-lg
+        items-center
+        justify-center
+      ">
+        <q-card flat class="q-pa-xs">
+          <GLCanvas ref="glCanvas" />
+        </q-card>
+      </div>
   </q-page>
 </template>
 

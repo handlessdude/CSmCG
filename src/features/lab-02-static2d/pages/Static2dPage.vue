@@ -1,10 +1,18 @@
 <template>
-  <q-page>
-    <div class="row">
-      <GLCanvas ref="quadCanvas" />
-    </div>
-    <div class="row">
-      <GLCanvas ref="triangleCanvas" />
+  <q-page padding>
+    <div
+      class="column
+        q-gutter-lg
+        items-center
+        justify-center"
+    >
+<!--      layout doesnt work without q-card as containers-->
+        <q-card flat class="bg-black q-pa-xs">
+          <GLCanvas ref="quadCanvas" />
+        </q-card>
+        <q-card flat class="bg-black q-pa-xs">
+          <GLCanvas ref="triangleCanvas" />
+        </q-card>
     </div>
   </q-page>
 </template>

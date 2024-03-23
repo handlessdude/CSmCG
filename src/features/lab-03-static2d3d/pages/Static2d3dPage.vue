@@ -1,13 +1,20 @@
 <template>
-  <q-page>
-    <div class="row">
-      <GLCanvas ref="pentagonCanvas" />
-    </div>
-    <div class="row">
-      <GLCanvas ref="cubeCanvas" />
-    </div>
-    <div class="row">
-      <GLCanvas ref="quadCanvas" />
+  <q-page padding>
+    <div
+      class="column
+        q-gutter-lg
+        items-center
+        justify-center"
+    >
+      <q-card flat class="bg-black q-pa-xs">
+        <GLCanvas ref="pentagonCanvas" />
+      </q-card>
+      <q-card flat class="bg-black q-pa-xs">
+        <GLCanvas ref="cubeCanvas" />
+      </q-card>
+      <q-card flat class="bg-black q-pa-xs">
+        <GLCanvas ref="quadCanvas" />
+      </q-card>
     </div>
   </q-page>
 </template>
