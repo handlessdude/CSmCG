@@ -28,6 +28,12 @@ import { identity } from 'src/shared/resources/identity';
 import { usePedestalScene } from 'src/features/lab-04-pedestal/hooks/use-pedestal-scene';
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
+
+enum UserControls {
+  RotateClockwise = '1',
+  RotateCounterclockwise = '2',
+}
+
 const setupAnimation = () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {
     throw new Error('No canvas context found')
@@ -83,8 +89,8 @@ const setupAnimation = () => {
     'keydown',
     (event: KeyboardEvent) => {
       const key = event.key;
-      if (key === '1') { decAngle(); }
-      if (key === '2') { incAngle(); }
+      if (key === UserControls.RotateClockwise) { decAngle(); }
+      if (key === UserControls.RotateCounterclockwise) { incAngle(); }
     },
     false,
   );

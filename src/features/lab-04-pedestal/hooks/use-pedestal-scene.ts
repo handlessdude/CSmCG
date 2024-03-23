@@ -18,13 +18,32 @@ class RotationAngle {
   }
 
   decAngle = () => {
-    this.#angle += -this.#step * (this.deltaTime?.() ?? 1.0);
+    this.#angle += -this.#step * this.deltaTime();
     if (this.#angle < 0) this.#angle = 2 * Math.PI + this.#angle;
   }
 
   incAngle = () => {
-    this.#angle += this.#step * (this.deltaTime?.() ?? 1.0);
+    this.#angle += this.#step * this.deltaTime();
     if (this.#angle > 2 * Math.PI) this.#angle = 0;
+  }
+}
+
+class Timer {
+  #prevTick = 0;
+  #delta = 0;
+
+  get delta () {
+    return this.#delta
+  }
+
+  init = () => {
+    this.#prevTick = performance.now();
+  }
+
+  updateDelta = () => {
+    const curTick = performance.now();
+    this.#delta = curTick - this.#prevTick;
+    this.#prevTick = curTick;
   }
 }
 
@@ -33,21 +52,13 @@ const usePedestalScene = (
   worldMatrix: Float32Array,
   matWorldUniformLocation: WebGLUniformLocation
 ) => {
+  const timer = new Timer();
+  const angle = new RotationAngle(() => timer.delta);
 
   const identityMatrix = makeIdentity4x4();
 
-  let prevTick = 0;
-  let deltaTime = 0;
-  const updateTimeDelta = () => {
-    const curTick = performance.now();
-    deltaTime = curTick - prevTick;
-    prevTick = curTick;
-  }
-
-  const angle = new RotationAngle(() => deltaTime);
-
   const loop = () => {
-    updateTimeDelta();
+    timer.updateDelta();
     mat4.rotate(worldMatrix, identityMatrix, angle.value, [0, 1, 0]);
     glContext.uniformMatrix4fv(matWorldUniformLocation, false, worldMatrix);
 
@@ -60,7 +71,7 @@ const usePedestalScene = (
   };
 
   const runSceneLoop = () => {
-    prevTick = performance.now();
+    timer.init();
     requestAnimationFrame(loop);
   }
 
