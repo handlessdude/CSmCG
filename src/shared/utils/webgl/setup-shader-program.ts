@@ -1,3 +1,4 @@
+// todo: remove
 const setupShaderProgram = (
   gl: WebGL2RenderingContext,
   vertexShaderSource: string,
