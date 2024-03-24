@@ -1,5 +1,6 @@
 import { mat4 } from 'gl-matrix';
 import { boxIndices } from 'src/shared/resources/box-model';
+import { identity } from 'src/shared/resources/identity';
 
 
 const useCubeRotationLoop = (
@@ -10,15 +11,13 @@ const useCubeRotationLoop = (
 
   const xRotationMatrix = new Float32Array(16);
   const yRotationMatrix = new Float32Array(16);
-  const identityMatrix = new Float32Array(16);
-  mat4.identity(identityMatrix);
 
   let angle= 0;
 
   const loop = () => {
     angle = (performance.now() / 1000 / 6) * 2 * Math.PI;
-    mat4.rotate(yRotationMatrix, identityMatrix, angle, [0, 1, 0]);
-    mat4.rotate(xRotationMatrix, identityMatrix, angle / 4, [1, 0, 0]);
+    mat4.rotate(yRotationMatrix, identity, angle, [0, 1, 0]);
+    mat4.rotate(xRotationMatrix, identity, angle / 4, [1, 0, 0]);
     mat4.mul(worldMatrix, yRotationMatrix, xRotationMatrix);
     glContext.uniformMatrix4fv(matWorldUniformLocation, false, worldMatrix);
 

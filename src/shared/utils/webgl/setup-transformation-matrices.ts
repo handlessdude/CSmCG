@@ -7,7 +7,7 @@ const setWorldMatrix = (
     rotation: Float32Array,
     scale: Float32Array,
 }) => {
-  // T * R * S
+  // T * R * S [* originVector]
   const temp = new Float32Array(16);
   mat4.mul(temp, worldConfig.translation, worldConfig.rotation);
   mat4.mul(worldMatrix, temp, worldConfig.scale);
