@@ -22,9 +22,9 @@ import { onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { useCubeRotationLoop } from 'src/features/lab-01-rotating-cube/hooks/use-cube-rotation-loop';
 import { glMatrix } from 'gl-matrix';
-import { setupShaderProgram } from 'src/utils/webgl/setup-shader-program';
-import { setupBuffers } from 'src/utils/webgl/setup-buffers';
-import { setupTransformationMatrices } from 'src/utils/webgl';
+import { setupShaderProgram } from 'src/shared/utils/webgl/setup-shader-program';
+import { setupBuffers } from 'src/shared/utils/webgl/setup-buffers';
+import { setupTransformationMatrices } from 'src/shared/utils/webgl';
 import { identity } from 'src/shared/resources/identity';
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);

@@ -1,6 +1,7 @@
 import { mat4 } from 'gl-matrix';
-import { boxIndices } from 'src/shared/resources/box-model';
-import { makeIdentity4x4 } from 'src/utils/linal';
+import { boxIndices, boxVertices } from 'src/shared/resources/box-model';
+import { makeIdentity4x4 } from 'src/shared/utils/linal';
+import { Mesh } from 'src/shared/entities/mesh';
 
 class RotationAngle {
   #angle = 0;
@@ -48,6 +49,7 @@ class Timer {
 }
 
 const usePedestalScene = (
+  program: WebGLProgram,
   glContext: WebGL2RenderingContext,
   worldMatrix: Float32Array,
   matWorldUniformLocation: WebGLUniformLocation
@@ -57,15 +59,18 @@ const usePedestalScene = (
 
   const identityMatrix = makeIdentity4x4();
 
+  const cube = new Mesh(boxVertices, boxIndices);
+  cube.setupBuffers(program, glContext);
+
   const loop = () => {
     timer.updateDelta();
     mat4.rotate(worldMatrix, identityMatrix, angle.value, [0, 1, 0]);
     glContext.uniformMatrix4fv(matWorldUniformLocation, false, worldMatrix);
 
-    glContext.clearColor(2.55, 2.55, 2.55, 1.0);
+    glContext.clearColor(1.0, 1.0, 1.0, 1.0);
     glContext.clear(glContext.DEPTH_BUFFER_BIT | glContext.COLOR_BUFFER_BIT);
 
-    glContext.drawElements(glContext.TRIANGLES, boxIndices.length, glContext.UNSIGNED_SHORT, 0);
+    cube.draw(glContext);
 
     requestAnimationFrame(loop);
   };

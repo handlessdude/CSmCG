@@ -1,5 +1,5 @@
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
-import { setupShaderProgram, setupTransformationMatrices } from 'src/utils/webgl';
+import { setupShaderProgram, setupTransformationMatrices } from 'src/shared/utils/webgl';
 import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
 import { identity } from 'src/shared/resources/identity';
 import { red } from 'src/shared/resources/colors';

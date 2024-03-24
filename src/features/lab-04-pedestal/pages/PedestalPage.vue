@@ -15,15 +15,12 @@
 
 <script setup lang="ts">
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
-
-import { boxIndices, boxVertices } from 'src/shared/resources/box-model';
 import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
 import { onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { glMatrix } from 'gl-matrix';
-import { setupShaderProgram } from 'src/utils/webgl/setup-shader-program';
-import { setupBuffers } from 'src/utils/webgl/setup-buffers';
-import { setupTransformationMatrices } from 'src/utils/webgl';
+import { setupShaderProgram } from 'src/shared/utils/webgl/setup-shader-program';
+import { setupTransformationMatrices } from 'src/shared/utils/webgl';
 import { identity } from 'src/shared/resources/identity';
 import { usePedestalScene } from 'src/features/lab-04-pedestal/hooks/use-pedestal-scene';
 
@@ -47,9 +44,6 @@ const setupAnimation = () => {
     vertexShaderSource,
     fragmentShaderSource
   ) as WebGLProgram;
-
-  // setup buffers
-  setupBuffers(glContext, program, boxVertices, boxIndices);
 
   glContext.useProgram(program);
 
@@ -82,7 +76,7 @@ const setupAnimation = () => {
     decAngle,
     incAngle
   } = usePedestalScene(
-    glContext, worldMatrix, matWorldUniformLocation
+    program, glContext, worldMatrix, matWorldUniformLocation
   )
 
   document.addEventListener(

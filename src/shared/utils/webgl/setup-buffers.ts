@@ -39,6 +39,11 @@ const setupBuffers = (
   );
   gl.enableVertexAttribArray(positionAttribLocation);
   gl.enableVertexAttribArray(colorAttribLocation);
+
+  return {
+    positionAttribLocation,
+    colorAttribLocation
+  }
 }
 
 export {
