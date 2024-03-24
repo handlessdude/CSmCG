@@ -70,10 +70,16 @@ class Mesh {
     return this.#rotateZ;
   }
 
-  get modelMat() {
+  get rotate() {
+    mat4.mul(this.#rotate, this.#rotateY, this.#rotateX);
+    mat4.mul(this.#rotate, this.#rotate, this.#rotateZ);
+    return this.#rotate
+  }
+
+  get worldMat() {
     // const temp = new Float32Array(16);
     this.#modelMat = new Float32Array(16);
-    mat4.mul(this.#modelMat, this.#translate, this.#rotate);
+    mat4.mul(this.#modelMat, this.#translate, this.rotate);
     mat4.mul(this.#modelMat, this.#modelMat, this.#scale);
     return this.#modelMat;
   }
