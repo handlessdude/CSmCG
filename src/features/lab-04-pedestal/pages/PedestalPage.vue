@@ -25,8 +25,12 @@ import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
 enum UserControls {
-  RotateClockwise = '1',
-  RotateCounterclockwise = '2',
+  CubeRotateClockwise = '1',
+  CubeRotateCounterclockwise = '2',
+  GroupSelfRotateClockwise = '3',
+  GroupSelfRotateCounterclockwise = '4',
+  GroupAbsRotateClockwise = '5',
+  GroupAbsRotateCounterclockwise = '6',
 }
 
 const setupCamera = (
@@ -81,11 +85,8 @@ const setupAnimation = () => {
     glContext
   );
 
-  const {
-    viewMatrix,
-    projMatrix,
-  } = setupCamera(program,{
-      eye: [0, 3, -8],
+  setupCamera(program,{
+      eye: [0, 5, -15],
       center: [0, 0, 0],
       up: [0, 1, 0],
     },
@@ -99,16 +100,23 @@ const setupAnimation = () => {
 
   const {
     runSceneLoop,
-    decAngle,
-    incAngle
+    cubeRotate,
+    groupSelfRotate,
+    groupAbsRotate
   } = usePedestalScene(program)
 
   document.addEventListener(
     'keydown',
     (event: KeyboardEvent) => {
       const key = event.key;
-      if (key === UserControls.RotateClockwise) { decAngle(); }
-      if (key === UserControls.RotateCounterclockwise) { incAngle(); }
+      if (key === UserControls.CubeRotateClockwise) cubeRotate.dec();
+      if (key === UserControls.CubeRotateCounterclockwise) cubeRotate.inc();
+
+      if (key === UserControls.GroupSelfRotateClockwise) groupSelfRotate.dec();
+      if (key === UserControls.GroupSelfRotateCounterclockwise) groupSelfRotate.inc();
+
+      if (key === UserControls.GroupAbsRotateClockwise) groupAbsRotate.dec();
+      if (key === UserControls.GroupAbsRotateCounterclockwise) groupAbsRotate.inc();
     },
     false,
   );
