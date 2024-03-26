@@ -48,17 +48,18 @@ const usePedestalScene = (
     );
 
     // t r s
-    const pedestalCenter = pedestal.center;
+    const toPedestalCenter = pedestal.center;
     pedestal.members.forEach((member, index, array)=> {
       const memberCenter = member.center;
 
-      const pedestalCenterDist: vec3 = [0, 0, 0];
-      vec3.subtract(pedestalCenterDist, memberCenter, pedestalCenter);
+      const toMemberCenter: vec3 = [0, 0, 0];
+      vec3.subtract(toMemberCenter, memberCenter, toPedestalCenter);
+
       mat4.identity(member.worldMat);
       mat4.rotate(member.worldMat, member.worldMat, pedestalAbsAngle.value, [0, 1, 0]);
-      mat4.translate(member.worldMat, member.worldMat, pedestalCenter);
+      mat4.translate(member.worldMat, member.worldMat, toPedestalCenter); // global coordinates
       mat4.rotate(member.worldMat, member.worldMat, pedestalSelfAngle.value, [0, 1, 0]);
-      mat4.translate(member.worldMat, member.worldMat, pedestalCenterDist);
+      mat4.translate(member.worldMat, member.worldMat, toMemberCenter); // pedestal coordinates
       mat4.rotate(member.worldMat, member.worldMat, cubeAngle.value, [0, 1, 0]);
     });
 
