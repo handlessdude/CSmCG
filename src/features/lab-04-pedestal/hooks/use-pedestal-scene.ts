@@ -19,19 +19,40 @@ const usePedestalScene = (
 
   const pedestal = new MeshGroup(shaderProgram);
 
-  const cubeCenters: Array<vec3> = [
-    [-2, 0, 0],
-    [0, 0, 0],
-    [2, 0, 0],
-    [0, 2, 0],
+  const colorToFrac = (
+    color: ReadonlyVec3
+  ): ReadonlyVec3 => [color[0] / 255.0, color[1] / 255.0, color[2] / 255.0];
+
+  const silver = colorToFrac ([218, 232, 240]);
+  const gold = colorToFrac([249, 229, 164]);
+  const bronze = colorToFrac([250, 189, 98]);
+
+  const cubesData: Array<{
+    color: ReadonlyVec3,
+    center: vec3,
+  }> = [
+    {
+      color: silver,
+      center: [-2, 0, 0],
+    },{
+      color: gold,
+      center: [0, 0, 0],
+    },{
+      color: gold,
+      center: [0, 2, 0],
+    },
+    {
+      color: bronze,
+      center: [2, 0, 0],
+    },
   ];
 
   const pedestalOffset: ReadonlyVec3 = [-5, 0, 0];
-  cubeCenters.forEach((center)=> {
+  cubesData.forEach(({ center })=> {
     vec3.add(center, center, pedestalOffset);
   })
-  cubeCenters.forEach((center) => {
-    const cube =  new CubeMesh(center);
+  cubesData.forEach(({ center, color }) => {
+    const cube =  new CubeMesh(center, color);
     cube.setupBuffers(
       shaderProgram.program as WebGLProgram,
       shaderProgram.glContext
@@ -60,6 +81,7 @@ const usePedestalScene = (
       mat4.translate(member.worldMat, member.worldMat, toPedestalCenter); // global coordinates
       mat4.rotate(member.worldMat, member.worldMat, pedestalSelfAngle.value, [0, 1, 0]);
       mat4.translate(member.worldMat, member.worldMat, toMemberCenter); // pedestal coordinates
+
       mat4.rotate(member.worldMat, member.worldMat, cubeAngle.value, [0, 1, 0]);
     });
 
