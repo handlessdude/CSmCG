@@ -56,7 +56,10 @@ const usePedestalScene = (
   const loop = () => {
     timer.updateDelta();
 
-    shaderProgram.glContext.clearColor(...palette.darkBlue, 1.0);
+    shaderProgram.glContext.clearColor(
+      ...(palette.darkBlue as [number, number, number]),
+      1.0
+    );
     shaderProgram.glContext.clear(
       shaderProgram.glContext.DEPTH_BUFFER_BIT | shaderProgram.glContext.COLOR_BUFFER_BIT
     );
