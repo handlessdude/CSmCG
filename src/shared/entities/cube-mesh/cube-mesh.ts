@@ -35,19 +35,17 @@ const cubeVertices: Array<ReadonlyVec3> = [
   [1.0, -1.0, -1.0 ],
 ];
 
-const initVertices = (
-  vertices: Array<ReadonlyVec3>,
-  color: ReadonlyVec3
-) => {
-  return vertices.map((val) => [...val, ...color]).flat()
-}
-
 class CubeMesh extends Mesh {
   constructor(
     center: vec3 = [0, 0, 0],
     color: ReadonlyVec3 = [0, 0, 1]
   ) {
-    super(initVertices(cubeVertices, color), boxIndices, center);
+    super(
+      cubeVertices.flat()  as unknown as Float32Array,
+      boxIndices,
+      center,
+      color
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 const vertexShaderSource = `#version 300 es
-in vec3 vertPosition;
-in vec3 vertColor;
+layout(location = 0) in vec3 vertPosition;
+layout(location = 1) in vec3 vertColor;
 out vec3 fragColor;
 
 uniform mat4 mWorld;
@@ -13,6 +13,10 @@ void main() {
 }
 `;
 
+const vertPositionKey= 'vertPosition';
+
+const vertColorKey= 'vertColor';
+
 const fragmentShaderSource = `#version 300 es
 precision highp float;
 
@@ -24,4 +28,4 @@ void main() {
 }
 `;
 
-export { fragmentShaderSource, vertexShaderSource };
+export { fragmentShaderSource, vertexShaderSource, vertColorKey, vertPositionKey };

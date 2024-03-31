@@ -2,7 +2,7 @@ import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 import { setupBuffers, setupShaderProgram, setupTransformationMatrices } from 'src/shared/utils/webgl';
 import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
 import { identity } from 'src/shared/resources/identity';
-import { blue, green, red } from 'src/shared/resources/colors';
+import { blue, green, red } from 'src/shared/resources/palette';
 import { glMatrix } from 'gl-matrix';
 
 const vertices = [

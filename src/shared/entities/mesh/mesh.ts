@@ -1,17 +1,23 @@
-import { setupBuffers } from 'src/shared/utils/webgl';
-import { vec3 } from 'gl-matrix';
+import { ReadonlyVec3, vec3 } from 'gl-matrix';
 import { makeIdentity4x4 } from 'src/shared/utils/linal';
+import { setupEBO, setupVBO } from 'src/shared/utils/webgl/setup-buffers';
+import { vertColorKey, vertPositionKey } from 'src/shared/resources/basic-shaders';
+
+const positionSize = 3;
+const colorSize = 3;
 
 class Mesh {
   #positionAttribLocation = 0;
   #colorAttribLocation = 0;
-  #vertexBufferObject: WebGLBuffer | null = null;
-  #indexBufferObject: WebGLBuffer | null = null;
+  #positionVBO: WebGLBuffer | null = null;
+  #colorVBO: WebGLBuffer | null = null;
+  #EBO: WebGLBuffer | null = null;
 
   constructor(
-    private readonly vertices: number[],
-    private readonly indices: number[],
+    private readonly vertices: Float32Array,
+    private readonly indices: Uint16Array,
     readonly center: vec3 = [0, 0, 0],
+    private readonly color: ReadonlyVec3 = [0, 0, 1],
     readonly worldMat = makeIdentity4x4(),
   ) { }
 
@@ -20,40 +26,58 @@ class Mesh {
     glContext: WebGL2RenderingContext,
   ) => {
     const {
-      positionAttribLocation,
-      colorAttribLocation,
-      vertexBufferObject,
+      vertexBufferObject: positionVBO,
+      attribLocation: positionAttribLocation
+    } = setupVBO(
+      glContext, program, this.vertices, vertPositionKey
+    );
+    const verticesCount = this.vertices.length / 3;
+    const colorData = Array(verticesCount).fill(this.color).flat();
+    const {
+      vertexBufferObject: colorVBO,
+      attribLocation: colorAttribLocation
+    } = setupVBO(
+      glContext,
+      program,
+      colorData as unknown as Float32Array,
+      vertColorKey
+    );
+    const {
       indexBufferObject
-    } = setupBuffers(glContext, program, this.vertices, this.indices);
+    } = setupEBO(glContext, program, this.indices);
     this.#positionAttribLocation = positionAttribLocation;
     this.#colorAttribLocation = colorAttribLocation;
-    this.#vertexBufferObject = vertexBufferObject;
-    this.#indexBufferObject = indexBufferObject;
+    this.#positionVBO = positionVBO;
+    this.#colorVBO = colorVBO;
+    this.#EBO = indexBufferObject;
   }
 
   draw = (
     glContext: WebGL2RenderingContext,
   ) => {
-    glContext.bindBuffer(glContext.ARRAY_BUFFER, this.#vertexBufferObject);
-    glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, this.#indexBufferObject);
+    glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, this.#EBO);
+
+    glContext.enableVertexAttribArray(this.#positionAttribLocation);
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, this.#positionVBO);
     glContext.vertexAttribPointer(
       this.#positionAttribLocation,
-      3,
+      positionSize,
       glContext.FLOAT,
       false,
-      6 * Float32Array.BYTES_PER_ELEMENT,
+      positionSize * Float32Array.BYTES_PER_ELEMENT,
       0
     );
+
+    glContext.enableVertexAttribArray(this.#colorAttribLocation);
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, this.#colorVBO);
     glContext.vertexAttribPointer(
       this.#colorAttribLocation,
-      3,
+      colorSize,
       glContext.FLOAT,
       false,
-      6 * Float32Array.BYTES_PER_ELEMENT,
-      3 * Float32Array.BYTES_PER_ELEMENT
+      colorSize * Float32Array.BYTES_PER_ELEMENT,
+      0
     );
-    glContext.enableVertexAttribArray(this.#positionAttribLocation);
-    glContext.enableVertexAttribArray(this.#colorAttribLocation);
     glContext.drawElements(glContext.TRIANGLES, this.indices.length, glContext.UNSIGNED_SHORT, 0);
     glContext.disableVertexAttribArray(this.#positionAttribLocation);
     glContext.disableVertexAttribArray(this.#colorAttribLocation);

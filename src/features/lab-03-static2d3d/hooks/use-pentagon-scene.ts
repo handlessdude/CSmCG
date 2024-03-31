@@ -2,7 +2,7 @@ import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 import { setupShaderProgram, setupTransformationMatrices } from 'src/shared/utils/webgl';
 import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
 import { identity } from 'src/shared/resources/identity';
-import { red } from 'src/shared/resources/colors';
+import { red } from 'src/shared/resources/palette';
 import { glMatrix } from 'gl-matrix';
 import { generateRegularPolygon } from 'src/features/lab-02-static2d/utils/get-regular-pentagon';
 

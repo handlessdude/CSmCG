@@ -4,6 +4,7 @@ import { MeshGroup } from 'src/features/lab-04-pedestal/utils/entities/mesh-grou
 import { RotationAngle } from 'src/features/lab-04-pedestal/utils/controls/rotation-angle';
 import { mat4, ReadonlyVec3, vec3 } from 'gl-matrix';
 import { CubeMesh } from 'src/shared/entities/cube-mesh/cube-mesh';
+import {  palette } from 'src/shared/resources/palette';
 
 const usePedestalScene = (
   shaderProgram: BaseShaderProgram,
@@ -19,30 +20,22 @@ const usePedestalScene = (
 
   const pedestal = new MeshGroup(shaderProgram);
 
-  const colorToFrac = (
-    color: ReadonlyVec3
-  ): ReadonlyVec3 => [color[0] / 255.0, color[1] / 255.0, color[2] / 255.0];
-
-  const silver = colorToFrac ([218, 232, 240]);
-  const gold = colorToFrac([249, 229, 164]);
-  const bronze = colorToFrac([250, 189, 98]);
-
   const cubesData: Array<{
     color: ReadonlyVec3,
     center: vec3,
   }> = [
     {
-      color: silver,
+      color: palette.silver,
       center: [-2, 0, 0],
     },{
-      color: gold,
+      color: palette.gold,
       center: [0, 0, 0],
     },{
-      color: gold,
+      color: palette.gold,
       center: [0, 2, 0],
     },
     {
-      color: bronze,
+      color: palette.bronze,
       center: [2, 0, 0],
     },
   ];
@@ -63,14 +56,14 @@ const usePedestalScene = (
   const loop = () => {
     timer.updateDelta();
 
-    shaderProgram.glContext.clearColor(1.0, 1.0, 1.0, 1.0);
+    shaderProgram.glContext.clearColor(...palette.darkBlue, 1.0);
     shaderProgram.glContext.clear(
       shaderProgram.glContext.DEPTH_BUFFER_BIT | shaderProgram.glContext.COLOR_BUFFER_BIT
     );
 
     // t r s
     const toPedestalCenter = pedestal.center;
-    pedestal.members.forEach((member, index, array)=> {
+    pedestal.members.forEach((member)=> {
       const memberCenter = member.center;
 
       const toMemberCenter: vec3 = [0, 0, 0];
