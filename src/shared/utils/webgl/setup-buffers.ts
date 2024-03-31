@@ -33,8 +33,8 @@ const setupEBO = (
 const setupBuffers = (
   gl: WebGL2RenderingContext,
   program: WebGLProgram,
-  vertices: Array<number>,
-  indices: Array<number>,
+  vertices: Float32Array,
+  indices: Uint16Array,
 ) => {
   const vertexBufferObject = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);

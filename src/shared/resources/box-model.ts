@@ -1,7 +1,7 @@
 import { palette } from 'src/shared/resources/palette';
 
 
-const boxVertices = [
+const boxVertices = new Float32Array( [
   //top
   -1.0, 1.0, -1.0, ...palette.red,
   -1.0, 1.0, 1.0,  ...palette.red,
@@ -32,7 +32,7 @@ const boxVertices = [
   -1.0, -1.0, 1.0,  ...palette.magenta,
   1.0, -1.0, 1.0,   ...palette.magenta,
   1.0, -1.0, -1.0,  ...palette.magenta,
-];
+]);
 
 const boxIndices = new Uint16Array([
   //top
