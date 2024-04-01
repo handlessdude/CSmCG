@@ -19,8 +19,8 @@ import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/b
 import { onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { glMatrix } from 'gl-matrix';
-import { usePedestalScene } from 'src/features/lab-04-pedestal/hooks/use-pedestal-scene';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
+import { useBaseShadingScene } from 'src/features/lab-05-base-shading/hooks/use-base-shading-scene';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { UserControls } from 'src/shared/utils/controls/rotation-angle';
 
@@ -57,7 +57,7 @@ const setupAnimation = () => {
     cubeRotate,
     groupSelfRotate,
     groupAbsRotate
-  } = usePedestalScene(program)
+  } = useBaseShadingScene(program)
 
   document.addEventListener(
     'keydown',

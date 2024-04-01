@@ -65,6 +65,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'leaderboard',
     routeName: RouteName.PEDESTAL,
   },
+  {
+    title: 'Lab 05. Base Shading',
+    icon: 'leaderboard',
+    routeName: RouteName.BASE_SHADING,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

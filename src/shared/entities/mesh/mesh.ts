@@ -7,11 +7,12 @@ const positionSize = 3;
 const colorSize = 3;
 
 class Mesh {
-  #positionAttribLocation = 0;
-  #colorAttribLocation = 0;
-  #positionVBO: WebGLBuffer | null = null;
-  #colorVBO: WebGLBuffer | null = null;
-  #EBO: WebGLBuffer | null = null;
+  #elementBufferObject: WebGLBuffer | null = null;
+  #bufferPool: Record<string, {
+    vertexBufferObject: WebGLBuffer | null;
+    attribLocation: number;
+    componentsPerAttribute: number;
+  }> = {}
 
   constructor(
     private readonly vertices: Float32Array,
@@ -21,66 +22,89 @@ class Mesh {
     readonly worldMat = makeIdentity4x4(),
   ) { }
 
-  setupBuffers = (
+  attachBuffer = (
+    program: WebGLProgram,
+    glContext: WebGL2RenderingContext,
+    bufferKey: string,
+    bufferData: Float32Array,
+    componentsPerAttribute: number,
+  ) => {
+    const {
+      vertexBufferObject,
+      attribLocation
+    } = setupVBO(glContext, program, bufferData, bufferKey);
+    this.#bufferPool[bufferKey] = {
+      vertexBufferObject, attribLocation, componentsPerAttribute
+    }
+  }
+
+  setupBaseBuffers = (
     program: WebGLProgram,
     glContext: WebGL2RenderingContext,
   ) => {
-    const {
-      vertexBufferObject: positionVBO,
-      attribLocation: positionAttribLocation
-    } = setupVBO(
-      glContext, program, this.vertices, vertPositionKey
-    );
-    const verticesCount = this.vertices.length / 3;
-    const colorData = Array(verticesCount).fill(this.color).flat();
-    const {
-      vertexBufferObject: colorVBO,
-      attribLocation: colorAttribLocation
-    } = setupVBO(
-      glContext,
+    this.attachBuffer(
       program,
+      glContext,
+      vertPositionKey,
+      this.vertices,
+      positionSize
+    )
+
+    const verticesCount = this.vertices.length / positionSize;
+    const colorData = Array(verticesCount).fill(this.color).flat();
+
+    this.attachBuffer(
+      program,
+      glContext,
+      vertColorKey,
       colorData as unknown as Float32Array,
-      vertColorKey
-    );
+      colorSize
+    )
+
     const {
       indexBufferObject
     } = setupEBO(glContext, program, this.indices);
-    this.#positionAttribLocation = positionAttribLocation;
-    this.#colorAttribLocation = colorAttribLocation;
-    this.#positionVBO = positionVBO;
-    this.#colorVBO = colorVBO;
-    this.#EBO = indexBufferObject;
+
+    this.#elementBufferObject = indexBufferObject;
+  }
+
+  #enableBuffers = (glContext: WebGL2RenderingContext) => {
+   Object.values(this.#bufferPool).forEach(({
+      vertexBufferObject,
+      attribLocation,
+      componentsPerAttribute
+   }) => {
+     glContext.enableVertexAttribArray(attribLocation);
+     glContext.bindBuffer(glContext.ARRAY_BUFFER, vertexBufferObject);
+     glContext.vertexAttribPointer(
+       attribLocation,
+       componentsPerAttribute,
+       glContext.FLOAT,
+       false,
+       componentsPerAttribute * Float32Array.BYTES_PER_ELEMENT,
+       0
+     );
+   })
+  }
+
+  #disableBuffers = (glContext: WebGL2RenderingContext) => {
+    Object.values(this.#bufferPool).forEach(({attribLocation}) => {
+      glContext.disableVertexAttribArray(attribLocation);
+    })
   }
 
   draw = (
     glContext: WebGL2RenderingContext,
   ) => {
-    glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, this.#EBO);
-
-    glContext.enableVertexAttribArray(this.#positionAttribLocation);
-    glContext.bindBuffer(glContext.ARRAY_BUFFER, this.#positionVBO);
-    glContext.vertexAttribPointer(
-      this.#positionAttribLocation,
-      positionSize,
-      glContext.FLOAT,
-      false,
-      positionSize * Float32Array.BYTES_PER_ELEMENT,
+    glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
+    this. #enableBuffers(glContext);
+    glContext.drawElements(
+      glContext.TRIANGLES,
+      this.indices.length,
+      glContext.UNSIGNED_SHORT,
       0
     );
-
-    glContext.enableVertexAttribArray(this.#colorAttribLocation);
-    glContext.bindBuffer(glContext.ARRAY_BUFFER, this.#colorVBO);
-    glContext.vertexAttribPointer(
-      this.#colorAttribLocation,
-      colorSize,
-      glContext.FLOAT,
-      false,
-      colorSize * Float32Array.BYTES_PER_ELEMENT,
-      0
-    );
-    glContext.drawElements(glContext.TRIANGLES, this.indices.length, glContext.UNSIGNED_SHORT, 0);
-    glContext.disableVertexAttribArray(this.#positionAttribLocation);
-    glContext.disableVertexAttribArray(this.#colorAttribLocation);
+    this.#disableBuffers(glContext);
   }
 }
 

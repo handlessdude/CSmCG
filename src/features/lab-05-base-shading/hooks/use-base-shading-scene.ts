@@ -6,8 +6,10 @@ import { mat4, vec3 } from 'gl-matrix';
 import { CubeMesh } from 'src/shared/entities/cube-mesh/cube-mesh';
 import { palette } from 'src/shared/resources/palette';
 import { cubesData, pedestalOffset } from 'src/shared/resources/pedestal-model';
+import { Mesh } from 'src/shared/entities/mesh/mesh';
+// import { boxNormals } from 'src/shared/resources/box-model';
 
-const usePedestalScene = (
+const useBaseShadingScene = (
   shaderProgram: BaseShaderProgram,
 ) => {
   if (!shaderProgram.program) {
@@ -32,6 +34,13 @@ const usePedestalScene = (
       shaderProgram.program as WebGLProgram,
       shaderProgram.glContext
     );
+    /*cube.attachBuffer(
+      shaderProgram.program as WebGLProgram,
+      shaderProgram.glContext,
+      'vertNormal',
+      boxNormals,
+      3
+    );*/
     pedestal.members.push(cube);
   })
 
@@ -46,9 +55,7 @@ const usePedestalScene = (
       shaderProgram.glContext.DEPTH_BUFFER_BIT | shaderProgram.glContext.COLOR_BUFFER_BIT
     );
 
-    // t r s
-    const toPedestalCenter = pedestal.center;
-    pedestal.members.forEach((member)=> {
+    const placeMemberOnScene = (member: Mesh)=> {
       const memberCenter = member.center;
 
       const toMemberCenter: vec3 = [0, 0, 0];
@@ -61,7 +68,11 @@ const usePedestalScene = (
       mat4.translate(member.worldMat, member.worldMat, toMemberCenter); // pedestal coordinates
 
       mat4.rotate(member.worldMat, member.worldMat, cubeAngle.value, [0, 1, 0]);
-    });
+    }
+
+    // t r s
+    const toPedestalCenter = pedestal.center;
+    pedestal.members.forEach(placeMemberOnScene);
 
     pedestal.draw();
 
@@ -91,4 +102,4 @@ const usePedestalScene = (
     },
   }
 }
-export { usePedestalScene }
+export { useBaseShadingScene }

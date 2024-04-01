@@ -1,6 +1,5 @@
 import { palette } from 'src/shared/resources/palette';
 
-
 const boxVertices = new Float32Array( [
   //top
   -1.0, 1.0, -1.0, ...palette.red,
@@ -55,4 +54,31 @@ const boxIndices = new Uint16Array([
   22, 20, 23
 ]);
 
-export { boxIndices, boxVertices };
+const boxNormals = new Float32Array([
+  0.0, 1.0, 0.0,
+  0.0, 1.0, 0.0,
+  0.0, 1.0, 0.0,
+  0.0, 1.0, 0.0,
+  -1.0, 0.0, 0.0,
+  -1.0, 0.0, 0.0,
+  -1.0, 0.0, 0.0,
+  -1.0, 0.0, 0.0,
+  1.0, 0.0, 0.0,
+  1.0, 0.0, 0.0,
+  1.0, 0.0, 0.0,
+  1.0, 0.0, 0.0,
+  0.0, 0.0, 1.0,
+  0.0, 0.0, 1.0,
+  0.0, 0.0, 1.0,
+  0.0, 0.0, 1.0,
+  0.0, 0.0, -1.0,
+  0.0, 0.0, -1.0,
+  0.0, 0.0, -1.0,
+  0.0, 0.0, -1.0,
+  0.0, -1.0, 0.0,
+  0.0, -1.0, 0.0,
+  0.0, -1.0, 0.0,
+  0.0, -1.0, 0.0,
+]);
+
+export { boxIndices, boxVertices, boxNormals };
