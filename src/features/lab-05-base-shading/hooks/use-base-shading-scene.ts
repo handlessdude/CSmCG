@@ -45,6 +45,9 @@ const useBaseShadingScene = (
     pedestal.members.push(cube);
   })
 
+  const lightPosKey = 'lightPos';
+  const lightPos = [0, 5, -15];
+
   const loop = () => {
     timer.updateDelta();
 
@@ -74,6 +77,7 @@ const useBaseShadingScene = (
     const toPedestalCenter = pedestal.center;
     pedestal.members.forEach(placeMemberOnScene);
 
+    shaderProgram.setVec3(lightPosKey, lightPos);
     pedestal.draw();
 
     requestAnimationFrame(loop);

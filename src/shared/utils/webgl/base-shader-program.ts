@@ -96,25 +96,57 @@ class BaseShaderProgram {
     }
   }
 
-  setWorldMat = (m: Float32Array) => {
+  #getUniformLocation = (name: string) => {
+    if (!this.#program) throw new Error('Shader program not defined');
+    const location = this.glContext.getUniformLocation(this.#program, name);
+    if (location === -1) throw new Error(`Uniform '${name}' not defined`);
+    return location;
+  }
+
+  setMat4 = (name: string, val: Float32Array) => {
+    const location = this.#getUniformLocation(name);
+    this.glContext.uniformMatrix4fv(location, false, val);
+  }
+
+  setFloat = (name: string, val: number) => {
+    const location = this.#getUniformLocation(name);
+    this.glContext.uniform1f(location, val);
+  }
+
+  setVec2 = (name: string, val: Float32List) => {
+    const location = this.#getUniformLocation(name);
+    this.glContext.uniform2fv(location, val);
+  }
+
+  setVec3 = (name: string, val: Float32List) => {
+    const location = this.#getUniformLocation(name);
+    this.glContext.uniform3fv(location, val);
+  }
+
+  setVec4 = (name: string, val: Float32List) => {
+    const location = this.#getUniformLocation(name);
+    this.glContext.uniform4fv(location, val);
+  }
+
+  setWorldMat = (val: Float32Array) => {
     if (!this.#matWorldUniformLocation) {
       throw new Error('WorldUniformLocation not found')
     }
-    this.glContext.uniformMatrix4fv(this.#matWorldUniformLocation, false, m);
+    this.glContext.uniformMatrix4fv(this.#matWorldUniformLocation, false, val);
   }
 
-  setViewMat = (m: Float32Array) => {
+  setViewMat = (val: Float32Array) => {
     if (!this.#matViewUniformLocation) {
       throw new Error('ViewUniformLocation not found')
     }
-    this.glContext.uniformMatrix4fv(this.#matViewUniformLocation, false, m);
+    this.glContext.uniformMatrix4fv(this.#matViewUniformLocation, false, val);
   }
 
-  setProjMat = (m: Float32Array) => {
+  setProjMat = (val: Float32Array) => {
     if (!this.#matProjUniformLocation) {
       throw new Error('ProjUniformLocation not found')
     }
-    this.glContext.uniformMatrix4fv(this.#matProjUniformLocation, false, m);
+    this.glContext.uniformMatrix4fv(this.#matProjUniformLocation, false, val);
   }
 
   get program() {

@@ -21,9 +21,9 @@ import { glMatrix } from 'gl-matrix';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import { useBaseShadingScene } from 'src/features/lab-05-base-shading/hooks/use-base-shading-scene';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
-import { vertexShaderSource } from 'src/shared/resources/shaders/gourad/vertex-shader';
-import { fragmentShaderSource } from 'src/shared/resources/shaders/gourad/fragment-shader';
 import { setKeyboardListener } from 'src/features/lab-05-base-shading/utils/keyboard-controller';
+import { vertexShaderSource } from 'src/shared/resources/shaders/phong/vertex-shader';
+import { fragmentShaderSource } from 'src/shared/resources/shaders/phong/fragment-shader';
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
