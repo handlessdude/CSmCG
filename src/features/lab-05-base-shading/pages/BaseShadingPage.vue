@@ -17,7 +17,7 @@
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 import { onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
-import { glMatrix } from 'gl-matrix';
+import { glMatrix, ReadonlyVec3 } from 'gl-matrix';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import { useBaseShadingScene } from 'src/features/lab-05-base-shading/hooks/use-base-shading-scene';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
@@ -40,8 +40,9 @@ const setupAnimation = () => {
     glContext
   );
 
+  const viewPos: ReadonlyVec3 = [0, 5, -15];
   setupCamera(program,{
-      eye: [0, 5, -15],
+      eye: viewPos,
       center: [0, 0, 0],
       up: [0, 1, 0],
     },
@@ -58,7 +59,11 @@ const setupAnimation = () => {
     cubeRotate,
     groupSelfRotate,
     groupAbsRotate
-  } = useBaseShadingScene(program)
+  } = useBaseShadingScene(
+    program,
+    viewPos as unknown as Float32List,
+    viewPos as unknown as Float32List
+  )
 
   setKeyboardListener(cubeRotate, groupSelfRotate, groupAbsRotate);
 

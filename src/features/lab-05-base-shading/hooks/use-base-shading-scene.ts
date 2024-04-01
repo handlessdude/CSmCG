@@ -12,6 +12,8 @@ import { attributeKeys } from 'src/shared/resources/shaders/gourad/vertex-shader
 
 const useBaseShadingScene = (
   shaderProgram: BaseShaderProgram,
+  lightPos: Float32List,
+  viewPos: Float32List,
 ) => {
   if (!shaderProgram.program) {
     throw new Error('Shader program not found')
@@ -46,7 +48,7 @@ const useBaseShadingScene = (
   })
 
   const lightPosKey = 'lightPos';
-  const lightPos = [0, 5, -15];
+  const viewPosKey = 'viewPos';
 
   const loop = () => {
     timer.updateDelta();
@@ -78,6 +80,8 @@ const useBaseShadingScene = (
     pedestal.members.forEach(placeMemberOnScene);
 
     shaderProgram.setVec3(lightPosKey, lightPos);
+    shaderProgram.setVec3(viewPosKey, viewPos);
+
     pedestal.draw();
 
     requestAnimationFrame(loop);
