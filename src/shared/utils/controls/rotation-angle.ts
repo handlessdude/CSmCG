@@ -24,16 +24,6 @@ class RotationAngle {
   }
 }
 
-// todo move somewhere
-enum UserControls {
-  CubeRotateClockwise = '1',
-  CubeRotateCounterclockwise = '2',
-  GroupSelfRotateClockwise = '3',
-  GroupSelfRotateCounterclockwise = '4',
-  GroupAbsRotateClockwise = '5',
-  GroupAbsRotateCounterclockwise = '6',
-}
-
 export {
-  RotationAngle, UserControls
+  RotationAngle,
 }

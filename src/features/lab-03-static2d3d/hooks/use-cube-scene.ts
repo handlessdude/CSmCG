@@ -1,6 +1,6 @@
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 import { setupBuffers, setupShaderProgram, setupTransformationMatrices } from 'src/shared/utils/webgl';
-import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/basic-shaders';
+import { fragmentShaderSource, vertexShaderSource } from 'src/shared/resources/shaders/base/base-shaders';
 import { identity } from 'src/shared/resources/identity';
 import { glMatrix, mat4 } from 'gl-matrix';
 import { boxIndices, boxVertices } from 'src/shared/resources/box-model';

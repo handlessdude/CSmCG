@@ -1,7 +1,7 @@
 import { ReadonlyVec3, vec3 } from 'gl-matrix';
 import { makeIdentity4x4 } from 'src/shared/utils/linal';
 import { setupEBO, setupVBO } from 'src/shared/utils/webgl/setup-buffers';
-import { vertColorKey, vertPositionKey } from 'src/shared/resources/basic-shaders';
+import { vertColorKey, vertPositionKey } from 'src/shared/resources/shaders/base/base-shaders';
 
 const positionSize = 3;
 const colorSize = 3;

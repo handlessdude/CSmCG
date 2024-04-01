@@ -7,7 +7,8 @@ import { CubeMesh } from 'src/shared/entities/cube-mesh/cube-mesh';
 import { palette } from 'src/shared/resources/palette';
 import { cubesData, pedestalOffset } from 'src/shared/resources/pedestal-model';
 import { Mesh } from 'src/shared/entities/mesh/mesh';
-// import { boxNormals } from 'src/shared/resources/box-model';
+import { boxNormals } from 'src/shared/resources/box-model';
+import { attributeKeys } from 'src/shared/resources/shaders/gourad/vertex-shader';
 
 const useBaseShadingScene = (
   shaderProgram: BaseShaderProgram,
@@ -34,13 +35,13 @@ const useBaseShadingScene = (
       shaderProgram.program as WebGLProgram,
       shaderProgram.glContext
     );
-    /*cube.attachBuffer(
+    cube.attachBuffer(
       shaderProgram.program as WebGLProgram,
       shaderProgram.glContext,
-      'vertNormal',
+      attributeKeys.vertNormal,
       boxNormals,
       3
-    );*/
+    );
     pedestal.members.push(cube);
   })
 
@@ -70,7 +71,6 @@ const useBaseShadingScene = (
       mat4.rotate(member.worldMat, member.worldMat, cubeAngle.value, [0, 1, 0]);
     }
 
-    // t r s
     const toPedestalCenter = pedestal.center;
     pedestal.members.forEach(placeMemberOnScene);
 

@@ -9,7 +9,7 @@ const setupVBO = (
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
   const attribLocation = gl.getAttribLocation(program, attribKey);
-
+  // if (attribLocation===-1) throw new Error(`Unable to getAttribLocation: ${attribKey}`)
   return {
     vertexBufferObject,
     attribLocation
