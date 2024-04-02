@@ -9,18 +9,18 @@ class MeshGroup {
     return this.#members
   }
 
-  constructor(
+/*  constructor(
     private readonly shaderProgram: BaseShaderProgram,
-  ) { }
+  ) { }*/
 
-  #drawMember = (mesh: Mesh) => {
-    this.shaderProgram.setWorldMat(mesh.worldMat);
-    mesh.draw(this.shaderProgram.glContext);
+  #drawMember = (mesh: Mesh, shader: BaseShaderProgram) => {
+    shader.setWorldMat(mesh.worldMat);
+    mesh.draw(shader.glContext);
   }
 
-  draw = () => {
+  draw = (shader: BaseShaderProgram) => {
     this.#members.forEach((cube) => {
-      this.#drawMember(cube)
+      this.#drawMember(cube, shader)
     })
   };
 
