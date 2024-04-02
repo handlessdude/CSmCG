@@ -4,7 +4,7 @@ import { setupEBO, setupVBO } from 'src/shared/utils/webgl/setup-buffers';
 import { vertColorKey, vertPositionKey } from 'src/shared/resources/shaders/base/base-shaders';
 import { BaseMaterial } from 'src/shared/entities/material/base-material';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
-import { uniformKeys } from 'src/shared/resources/shaders/shader-keys';
+import { uniforms } from 'src/shared/resources/shaders/shader-keys';
 
 const positionSize = 3;
 const colorSize = 3;
@@ -101,7 +101,7 @@ class Mesh {
     shader: BaseShaderProgram
   ) => {
     if (this.material) {
-      shader.setFloat(uniformKeys.materialShininess, this.material.shininess);
+      shader.setFloat(uniforms.materialShininess, this.material.shininess);
     }
     shader.glContext.bindBuffer(shader.glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
     this.#enableBuffers(shader.glContext);

@@ -1,29 +1,29 @@
-import { attributeKeys, uniformKeys } from 'src/shared/resources/shaders/shader-keys';
+import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 
 const vertexShaderSource = `#version 300 es
-layout(location = 0) in vec3 ${attributeKeys.vertPosition};
-layout(location = 1) in vec3 ${attributeKeys.vertColor};
-layout(location = 2) in vec3 ${attributeKeys.vertNormal};
+layout(location = 0) in vec3 ${attributes.vertPosition};
+layout(location = 1) in vec3 ${attributes.vertColor};
+layout(location = 2) in vec3 ${attributes.vertNormal};
 
-uniform vec3 ${uniformKeys.lightPos};
-uniform vec3 ${uniformKeys.viewPos};
+uniform vec3 ${uniforms.lightPos};
+uniform vec3 ${uniforms.viewPos};
 
-uniform mat4 ${uniformKeys.mWorld};
-uniform mat4 ${uniformKeys.mView};
-uniform mat4 ${uniformKeys.mProj};
+uniform mat4 ${uniforms.mWorld};
+uniform mat4 ${uniforms.mView};
+uniform mat4 ${uniforms.mProj};
 
-uniform float ${uniformKeys.lightAmbientStrength};
-uniform float ${uniformKeys.lightSpecularStrength};
-uniform vec3 ${uniformKeys.lightAmbientColor};
-uniform vec3 ${uniformKeys.lightDiffuseColor};
-uniform vec3 ${uniformKeys.lightSpecularColor};
+uniform float ${uniforms.lightAmbientStrength};
+uniform float ${uniforms.lightSpecularStrength};
+uniform vec3 ${uniforms.lightAmbientColor};
+uniform vec3 ${uniforms.lightDiffuseColor};
+uniform vec3 ${uniforms.lightSpecularColor};
 
-uniform float ${uniformKeys.materialShininess};
+uniform float ${uniforms.materialShininess};
 // uniform vec3 materialAmbientColor;
 // uniform vec3 materialDiffuseColor;
 // uniform vec3 materialSpecularColor;
 
-uniform float ${uniformKeys.isPhongLightingEnabled};
+uniform float ${uniforms.isPhongLightingEnabled};
 
 out vec3 fragColor;
 out vec3 lightingColor;
@@ -50,13 +50,13 @@ void main() {
   // specular
   vec3 viewDir = normalize(viewPos - Position);
   vec3 reflectDir = reflect(-lightDir, norm);
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniformKeys.materialShininess});
+  float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniforms.materialShininess});
   vec3 specular = lightSpecularStrength * spec * lightSpecularColor;
 
   lightingColor =
-    ${uniformKeys.isPhongLightingEnabled} * ambient
+    ${uniforms.isPhongLightingEnabled} * ambient
     + diffuse
-    + ${uniformKeys.isPhongLightingEnabled} * specular;
+    + ${uniforms.isPhongLightingEnabled} * specular;
 
   fragColor = lightingColor * vertColor;
 }

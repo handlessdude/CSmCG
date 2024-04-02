@@ -1,4 +1,4 @@
-import { uniformKeys } from 'src/shared/resources/shaders/shader-keys';
+import { uniforms } from 'src/shared/resources/shaders/shader-keys';
 
 // todo: insert keys in script itself
 
@@ -9,21 +9,21 @@ in vec3 fragColor;
 in vec3 fragNormal;
 in vec3 fragPos;
 
-uniform vec3 ${uniformKeys.lightPos};
-uniform vec3 ${uniformKeys.viewPos};
+uniform vec3 ${uniforms.lightPos};
+uniform vec3 ${uniforms.viewPos};
 
-uniform float ${uniformKeys.lightAmbientStrength};
-uniform float ${uniformKeys.lightSpecularStrength};
-uniform vec3 ${uniformKeys.lightAmbientColor};
-uniform vec3 ${uniformKeys.lightDiffuseColor};
-uniform vec3 ${uniformKeys.lightSpecularColor};
+uniform float ${uniforms.lightAmbientStrength};
+uniform float ${uniforms.lightSpecularStrength};
+uniform vec3 ${uniforms.lightAmbientColor};
+uniform vec3 ${uniforms.lightDiffuseColor};
+uniform vec3 ${uniforms.lightSpecularColor};
 
-uniform float ${uniformKeys.materialShininess};
+uniform float ${uniforms.materialShininess};
 // uniform vec3 materialAmbientColor;
 // uniform vec3 materialDiffuseColor;
 // uniform vec3 materialSpecularColor;
 
-uniform float ${uniformKeys.isPhongLightingEnabled};
+uniform float ${uniforms.isPhongLightingEnabled};
 
 out vec4 outColor;
 
@@ -39,13 +39,13 @@ void main() {
 
   vec3 viewDir = normalize(viewPos - fragPos);
   vec3 reflectDir = reflect(-lightDir, norm);
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniformKeys.materialShininess});
+  float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniforms.materialShininess});
   vec3 specular = lightSpecularStrength * spec * lightSpecularColor;
 
   vec3 result = (
-    ${uniformKeys.isPhongLightingEnabled} * ambient
+    ${uniforms.isPhongLightingEnabled} * ambient
     + diffuse
-    + ${uniformKeys.isPhongLightingEnabled} * specular
+    + ${uniforms.isPhongLightingEnabled} * specular
   ) * fragColor;
 
   outColor = vec4(result, 1.0);

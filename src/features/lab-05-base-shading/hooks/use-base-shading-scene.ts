@@ -12,7 +12,7 @@ import { PointLightSource } from 'src/shared/entities/light-source/point-light-s
 import { ShaderType } from 'src/features/lab-05-base-shading/resources/shader-type';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { ref, Ref } from 'vue';
-import { attributeKeys, uniformKeys } from 'src/shared/resources/shaders/shader-keys';
+import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { LightingModelType } from 'src/features/lab-05-base-shading/resources/lighting-model-type';
 
 const useBaseShadingScene = (
@@ -68,7 +68,7 @@ const useBaseShadingScene = (
     mesh.attachBuffer(
       shader.program as WebGLProgram,
       shader.glContext,
-      attributeKeys.vertNormal,
+      attributes.vertNormal,
       boxNormals,
       3
     );
@@ -98,8 +98,8 @@ const useBaseShadingScene = (
 
     shaders[shaderType.value].use();
 
-    shaders[shaderType.value].setMat4(uniformKeys.mView, viewMatrix);
-    shaders[shaderType.value].setMat4(uniformKeys.mProj, projMatrix)
+    shaders[shaderType.value].setMat4(uniforms.mView, viewMatrix);
+    shaders[shaderType.value].setMat4(uniforms.mProj, projMatrix)
 
     shaders[shaderType.value].glContext.clearColor(
       ...(palette.darkBlue as [number, number, number]),
@@ -129,18 +129,18 @@ const useBaseShadingScene = (
 
     // light uniforms
     const isPhongEnabled = Number(lightingModelType.value === LightingModelType.PHONG);
-    shaders[shaderType.value].setFloat(uniformKeys.isPhongLightingEnabled, isPhongEnabled);
+    shaders[shaderType.value].setFloat(uniforms.isPhongLightingEnabled, isPhongEnabled);
 
-    shaders[shaderType.value].setVec3(uniformKeys.lightPos, lightSource.position as Float32List);
-    shaders[shaderType.value].setFloat(uniformKeys.lightAmbientStrength, lightSource.ambient.strength);
-    shaders[shaderType.value].setFloat(uniformKeys.lightSpecularStrength, lightSource.specular.strength);
-    shaders[shaderType.value].setVec3(uniformKeys.lightAmbientColor, lightSource.ambient.color as Float32List);
-    shaders[shaderType.value].setVec3(uniformKeys.lightDiffuseColor, lightSource.diffuse.color as Float32List);
-    shaders[shaderType.value].setVec3(uniformKeys.lightSpecularColor, lightSource.specular.color as Float32List);
+    shaders[shaderType.value].setVec3(uniforms.lightPos, lightSource.position as Float32List);
+    shaders[shaderType.value].setFloat(uniforms.lightAmbientStrength, lightSource.ambient.strength);
+    shaders[shaderType.value].setFloat(uniforms.lightSpecularStrength, lightSource.specular.strength);
+    shaders[shaderType.value].setVec3(uniforms.lightAmbientColor, lightSource.ambient.color as Float32List);
+    shaders[shaderType.value].setVec3(uniforms.lightDiffuseColor, lightSource.diffuse.color as Float32List);
+    shaders[shaderType.value].setVec3(uniforms.lightSpecularColor, lightSource.specular.color as Float32List);
 
     // eye uniforms
     shaders[shaderType.value].setVec3(
-      uniformKeys.viewPos,
+      uniforms.viewPos,
       camera.position as Float32List,
     );
 

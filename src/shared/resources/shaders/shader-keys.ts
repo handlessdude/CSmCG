@@ -1,10 +1,10 @@
-const attributeKeys = {
+const attributes = {
   vertPosition: 'vertPosition',
   vertColor: 'vertColor',
   vertNormal: 'vertNormal',
 }
 
-const uniformKeys = {
+const uniforms = {
   mWorld: 'mWorld',
   mView: 'mView',
   mProj: 'mProj',
@@ -30,5 +30,5 @@ const uniformKeys = {
 }
 
 export {
-  uniformKeys, attributeKeys
+  uniforms, attributes
 }

@@ -1,13 +1,13 @@
-import { attributeKeys, uniformKeys } from 'src/shared/resources/shaders/shader-keys';
+import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 
 const vertexShaderSource = `#version 300 es
-layout(location = 0) in vec3 ${attributeKeys.vertPosition};
-layout(location = 1) in vec3 ${attributeKeys.vertColor};
-layout(location = 2) in vec3 ${attributeKeys.vertNormal};
+layout(location = 0) in vec3 ${attributes.vertPosition};
+layout(location = 1) in vec3 ${attributes.vertColor};
+layout(location = 2) in vec3 ${attributes.vertNormal};
 
-uniform mat4 ${uniformKeys.mWorld};
-uniform mat4 ${uniformKeys.mView};
-uniform mat4 ${uniformKeys.mProj};
+uniform mat4 ${uniforms.mWorld};
+uniform mat4 ${uniforms.mView};
+uniform mat4 ${uniforms.mProj};
 
 out vec3 fragColor;
 out vec3 fragPos;
