@@ -2,6 +2,9 @@ import { ReadonlyVec3, vec3 } from 'gl-matrix';
 import { makeIdentity4x4 } from 'src/shared/utils/linal';
 import { setupEBO, setupVBO } from 'src/shared/utils/webgl/setup-buffers';
 import { vertColorKey, vertPositionKey } from 'src/shared/resources/shaders/base/base-shaders';
+import { BaseMaterial } from 'src/shared/entities/material/base-material';
+import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
+import { uniformKeys } from 'src/shared/resources/shaders/shader-keys';
 
 const positionSize = 3;
 const colorSize = 3;
@@ -19,6 +22,7 @@ class Mesh {
     private readonly indices: Uint16Array,
     readonly center: vec3 = [0, 0, 0],
     private readonly color: ReadonlyVec3 = [0, 0, 1],
+    public material: BaseMaterial | undefined = undefined,
     readonly worldMat = makeIdentity4x4(),
   ) { }
 
@@ -94,17 +98,20 @@ class Mesh {
   }
 
   draw = (
-    glContext: WebGL2RenderingContext,
+    shader: BaseShaderProgram
   ) => {
-    glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
-    this.#enableBuffers(glContext);
-    glContext.drawElements(
-      glContext.TRIANGLES,
+    if (this.material) {
+      shader.setFloat(uniformKeys.materialShininess, this.material.shininess);
+    }
+    shader.glContext.bindBuffer(shader.glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
+    this.#enableBuffers(shader.glContext);
+    shader.glContext.drawElements(
+      shader.glContext.TRIANGLES,
       this.indices.length,
-      glContext.UNSIGNED_SHORT,
+      shader.glContext.UNSIGNED_SHORT,
       0
     );
-    this.#disableBuffers(glContext);
+    this.#disableBuffers(shader.glContext);
   }
 }
 

@@ -46,7 +46,8 @@ class CubeMesh extends Mesh {
       cubeVertices.flat()  as unknown as Float32Array,
       boxIndices,
       center,
-      color
+      color,
+      material
     );
   }
 }

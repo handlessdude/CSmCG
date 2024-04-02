@@ -8,12 +8,11 @@ import { palette } from 'src/shared/resources/palette';
 import { cubesData, pedestalOffset } from 'src/shared/resources/pedestal-model';
 import { Mesh } from 'src/shared/entities/mesh/mesh';
 import { boxNormals } from 'src/shared/resources/box-model';
-import { attributeKeys } from 'src/shared/resources/shaders/gourad/vertex-shader';
 import { PointLightSource } from 'src/shared/entities/light-source/point-light-source';
-import { uniformKeys } from 'src/shared/resources/shaders/phong/fragment-shader';
 import { ShaderType } from 'src/features/lab-05-base-shading/resources/shader-type';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { ref, Ref } from 'vue';
+import { attributeKeys, uniformKeys } from 'src/shared/resources/shaders/shader-keys';
 
 const useBaseShadingScene = (
   shaders: {
@@ -96,8 +95,8 @@ const useBaseShadingScene = (
 
     shaders[shaderType.value].use();
 
-    shaders[shaderType.value].setViewMat(viewMatrix);
-    shaders[shaderType.value].setProjMat(projMatrix)
+    shaders[shaderType.value].setMat4(uniformKeys.mView, viewMatrix);
+    shaders[shaderType.value].setMat4(uniformKeys.mProj, projMatrix)
 
     shaders[shaderType.value].glContext.clearColor(
       ...(palette.darkBlue as [number, number, number]),

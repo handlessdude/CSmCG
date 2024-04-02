@@ -1,20 +1,6 @@
-const uniformKeys = {
-  lightPos: 'lightPos',
-  viewPos: 'viewPos',
+import { uniformKeys } from 'src/shared/resources/shaders/shader-keys';
 
-  lightAmbientStrength: 'lightAmbientStrength',
-  lightSpecularStrength: 'lightSpecularStrength',
-  lightAmbientColor: 'lightAmbientColor',
-  lightDiffuseColor: 'lightDiffuseColor',
-  lightSpecularColor: 'lightSpecularColor',
-
-/*
-  materialShininess: 'materialShininess',
-  materialAmbientColor: 'materialAmbientColor',
-  materialDiffuseColor: 'materialDiffuseColor',
-  materialSpecularColor: 'materialSpecularColor',
-*/
-}
+// todo: insert keys in script itself
 
 const fragmentShaderSource = `#version 300 es
 precision highp float;
@@ -23,16 +9,17 @@ in vec3 fragColor;
 in vec3 fragNormal;
 in vec3 fragPos;
 
-uniform vec3 lightPos;
-uniform vec3 viewPos;
+uniform vec3 ${uniformKeys.lightPos};
+uniform vec3 ${uniformKeys.viewPos};
 
-uniform float lightAmbientStrength;
-uniform float lightSpecularStrength;
-uniform vec3 lightAmbientColor;
-uniform vec3 lightDiffuseColor;
-uniform vec3 lightSpecularColor;
+uniform float ${uniformKeys.lightAmbientStrength};
+uniform float ${uniformKeys.lightSpecularStrength};
+uniform vec3 ${uniformKeys.lightAmbientColor};
+uniform vec3 ${uniformKeys.lightDiffuseColor};
+uniform vec3 ${uniformKeys.lightSpecularColor};
 
-// uniform float materialShininess;
+uniform float ${uniformKeys.materialShininess};
+
 // uniform vec3 materialAmbientColor;
 // uniform vec3 materialDiffuseColor;
 // uniform vec3 materialSpecularColor;
@@ -40,8 +27,6 @@ uniform vec3 lightSpecularColor;
 out vec4 outColor;
 
 void main() {
-
-  float materialShininess = 8.0;
 
   vec3 norm = normalize(fragNormal);
   vec3 lightDir = normalize(lightPos - fragPos);
@@ -63,5 +48,5 @@ void main() {
 `;
 
 export {
-  fragmentShaderSource, uniformKeys,
+  fragmentShaderSource,
 }
