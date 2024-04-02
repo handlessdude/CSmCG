@@ -31,9 +31,6 @@ const setupCamera = (
     projectionConfig.farPlane
   );
 
-  program.setViewMat(viewMatrix);
-  program.setProjMat(projMatrix)
-
   return {
     viewMatrix,
     projMatrix,
