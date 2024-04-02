@@ -14,6 +14,10 @@ import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { ref, Ref } from 'vue';
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { LightingModelType } from 'src/features/lab-05-base-shading/resources/lighting-model-type';
+import { vertPositionKey } from 'src/shared/resources/shaders/base/base-shaders';
+
+
+const positionSize = 3;
 
 const useBaseShadingScene = (
   shaders: {
@@ -61,16 +65,23 @@ const useBaseShadingScene = (
   });
 
   const setupBuffersInShader = (mesh: Mesh, shader: BaseShaderProgram) => {
-    mesh.setupBaseBuffers(
+    mesh.setupEBO(
       shader.program as WebGLProgram,
       shader.glContext
     );
     mesh.attachBuffer(
       shader.program as WebGLProgram,
       shader.glContext,
+      attributes.vertPosition,
+      mesh.vertices,
+      positionSize
+    )
+    mesh.attachBuffer(
+      shader.program as WebGLProgram,
+      shader.glContext,
       attributes.vertNormal,
       boxNormals,
-      3
+      positionSize
     );
   }
 

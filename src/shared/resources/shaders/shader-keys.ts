@@ -19,13 +19,10 @@ const uniforms = {
   lightSpecularColor: 'lightSpecularColor',
 
   materialShininess: 'materialShininess',
-  /*
-    // todo: use in shaders
-    materialShininess: 'materialShininess',
-    materialAmbientColor: 'materialAmbientColor',
-    materialDiffuseColor: 'materialDiffuseColor',
-    materialSpecularColor: 'materialSpecularColor',
-  */
+  materialAmbientColor: 'materialAmbientColor',
+  materialDiffuseColor: 'materialDiffuseColor',
+  materialSpecularColor: 'materialSpecularColor',
+
   isPhongLightingEnabled: 'isPhongLightingEnabled',
 }
 

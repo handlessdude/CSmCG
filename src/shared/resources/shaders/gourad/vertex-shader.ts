@@ -1,9 +1,9 @@
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 
 const vertexShaderSource = `#version 300 es
-layout(location = 0) in vec3 ${attributes.vertPosition};
-layout(location = 1) in vec3 ${attributes.vertColor};
-layout(location = 2) in vec3 ${attributes.vertNormal};
+in vec3 ${attributes.vertPosition};
+in vec3 ${attributes.vertNormal};
+// in vec3 ${attributes.vertColor};
 
 uniform vec3 ${uniforms.lightPos};
 uniform vec3 ${uniforms.viewPos};
@@ -19,14 +19,13 @@ uniform vec3 ${uniforms.lightDiffuseColor};
 uniform vec3 ${uniforms.lightSpecularColor};
 
 uniform float ${uniforms.materialShininess};
-// uniform vec3 materialAmbientColor;
-// uniform vec3 materialDiffuseColor;
-// uniform vec3 materialSpecularColor;
+uniform vec3 ${uniforms.materialAmbientColor};
+uniform vec3 ${uniforms.materialDiffuseColor};
+uniform vec3 ${uniforms.materialSpecularColor};
 
 uniform float ${uniforms.isPhongLightingEnabled};
 
 out vec3 fragColor;
-out vec3 lightingColor;
 
 void main() {
 
@@ -53,12 +52,10 @@ void main() {
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniforms.materialShininess});
   vec3 specular = lightSpecularStrength * spec * lightSpecularColor;
 
-  lightingColor =
-    ${uniforms.isPhongLightingEnabled} * ambient
-    + diffuse
-    + ${uniforms.isPhongLightingEnabled} * specular;
-
-  fragColor = lightingColor * vertColor;
+  fragColor =
+    ${uniforms.isPhongLightingEnabled} * ambient * ${uniforms.materialAmbientColor}
+    + diffuse * ${uniforms.materialDiffuseColor}
+    + ${uniforms.isPhongLightingEnabled} * specular * ${uniforms.materialSpecularColor};
 }
 `;
 

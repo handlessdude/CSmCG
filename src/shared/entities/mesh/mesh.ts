@@ -18,8 +18,8 @@ class Mesh {
   }> = {}
 
   constructor(
-    private readonly vertices: Float32Array,
-    private readonly indices: Uint16Array,
+    public readonly vertices: Float32Array,
+    public readonly indices: Uint16Array,
     readonly center: vec3 = [0, 0, 0],
     private readonly color: ReadonlyVec3 = [0, 0, 1],
     public material: BaseMaterial | undefined = undefined,
@@ -40,6 +40,17 @@ class Mesh {
     this.#bufferPool[bufferKey] = {
       vertexBufferObject, attribLocation, componentsPerAttribute
     }
+  }
+
+  setupEBO = (
+    program: WebGLProgram,
+    glContext: WebGL2RenderingContext,
+  ) => {
+    const {
+      indexBufferObject
+    } = setupEBO(glContext, program, this.indices);
+
+    this.#elementBufferObject = indexBufferObject;
   }
 
   setupBaseBuffers = (
@@ -64,12 +75,6 @@ class Mesh {
       colorData as unknown as Float32Array,
       colorSize
     )
-
-    const {
-      indexBufferObject
-    } = setupEBO(glContext, program, this.indices);
-
-    this.#elementBufferObject = indexBufferObject;
   }
 
   #enableBuffers = (glContext: WebGL2RenderingContext) => {
@@ -102,6 +107,9 @@ class Mesh {
   ) => {
     if (this.material) {
       shader.setFloat(uniforms.materialShininess, this.material.shininess);
+      shader.setVec3(uniforms.materialAmbientColor, this.material.ambientColor as Float32List);
+      shader.setVec3(uniforms.materialDiffuseColor, this.material.diffuseColor as Float32List);
+      shader.setVec3(uniforms.materialSpecularColor, this.material.specularColor as Float32List);
     }
     shader.glContext.bindBuffer(shader.glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
     this.#enableBuffers(shader.glContext);
