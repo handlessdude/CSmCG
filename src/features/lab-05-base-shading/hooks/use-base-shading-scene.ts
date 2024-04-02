@@ -13,20 +13,23 @@ import { ShaderType } from 'src/features/lab-05-base-shading/resources/shader-ty
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { ref, Ref } from 'vue';
 import { attributeKeys, uniformKeys } from 'src/shared/resources/shaders/shader-keys';
+import { LightingModelType } from 'src/features/lab-05-base-shading/resources/lighting-model-type';
 
 const useBaseShadingScene = (
   shaders: {
     [shaderType in ShaderType]: BaseShaderProgram
   },
-  currentShaderType: Ref<ShaderType>,
   lightSource: PointLightSource,
   camera: {
     position: ReadonlyVec3,
     aspect: number,
-  }
+  },
+  currentShaderType: Ref<ShaderType>,
+  currentLightingModelType: Ref<LightingModelType>,
 ) => {
 
   const shaderType = ref(currentShaderType);
+  const lightingModelType = ref(currentLightingModelType);
 
   const {
     viewMatrix,
@@ -125,6 +128,9 @@ const useBaseShadingScene = (
     pedestal.members.forEach(placeMemberOnScene);
 
     // light uniforms
+    const isPhongEnabled = Number(lightingModelType.value === LightingModelType.PHONG);
+    shaders[shaderType.value].setFloat(uniformKeys.isPhongLightingEnabled, isPhongEnabled);
+
     shaders[shaderType.value].setVec3(uniformKeys.lightPos, lightSource.position as Float32List);
     shaders[shaderType.value].setFloat(uniformKeys.lightAmbientStrength, lightSource.ambient.strength);
     shaders[shaderType.value].setFloat(uniformKeys.lightSpecularStrength, lightSource.specular.strength);

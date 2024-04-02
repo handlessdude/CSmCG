@@ -10,7 +10,8 @@
             Settings
           </div>
         </q-card-section>
-        <q-card-section class="no-padding q-mb-sm">
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
           <div class="text-body2">Ambient light strength</div>
           <q-slider
             v-model="lightAmbientStrength"
@@ -20,11 +21,30 @@
             label
           />
         </q-card-section>
-        <q-card-section class="no-padding q-mb-sm">
-          <div class="text-body2 q-mb-sm">Shader</div>
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
+          <div class="text-body2 q-mb-sm">Shader type</div>
           <div class="q-gutter-sm">
             <q-radio dense v-model="currentShaderType" :val="ShaderType.PHONG" label="Phong" />
             <q-radio dense v-model="currentShaderType" :val="ShaderType.GOURAD" label="Gourad" />
+          </div>
+        </q-card-section>
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
+          <div class="text-body2 q-mb-sm">Lighting model</div>
+          <div class="q-gutter-sm">
+            <q-radio
+              dense
+              v-model="currentLightingModelType"
+              :val="LightingModelType.PHONG"
+              label="Phong"
+            />
+            <q-radio
+              dense
+              v-model="currentLightingModelType"
+              :val="LightingModelType.LAMBERT"
+              label="Lambert"
+            />
           </div>
         </q-card-section>
       </q-card>
@@ -55,6 +75,7 @@ import {
 
 import { PointLightSource } from 'src/shared/entities/light-source/point-light-source';
 import { ShaderType } from 'src/features/lab-05-base-shading/resources/shader-type';
+import { LightingModelType } from 'src/features/lab-05-base-shading/resources/lighting-model-type';
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
@@ -85,6 +106,7 @@ const lightAmbientStrength = computed({
 });
 
 const currentShaderType = ref(ShaderType.PHONG);
+const currentLightingModelType = ref(LightingModelType.PHONG);
 
 const setupAnimation = () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {
@@ -115,12 +137,13 @@ const setupAnimation = () => {
     groupAbsRotate
   } = useBaseShadingScene(
     shaders,
-    currentShaderType,
     lantern,
     {
       position: viewPos,
       aspect: glCanvas.value.width / glCanvas.value.height,
-    }
+    },
+    currentShaderType,
+    currentLightingModelType
   )
 
   setKeyboardListener(cubeRotate, groupSelfRotate, groupAbsRotate);

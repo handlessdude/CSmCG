@@ -19,10 +19,11 @@ uniform vec3 ${uniformKeys.lightDiffuseColor};
 uniform vec3 ${uniformKeys.lightSpecularColor};
 
 uniform float ${uniformKeys.materialShininess};
-
 // uniform vec3 materialAmbientColor;
 // uniform vec3 materialDiffuseColor;
 // uniform vec3 materialSpecularColor;
+
+uniform float ${uniformKeys.isPhongLightingEnabled};
 
 out vec4 outColor;
 
@@ -38,10 +39,14 @@ void main() {
 
   vec3 viewDir = normalize(viewPos - fragPos);
   vec3 reflectDir = reflect(-lightDir, norm);
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), materialShininess);
+  float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniformKeys.materialShininess});
   vec3 specular = lightSpecularStrength * spec * lightSpecularColor;
 
-  vec3 result = (ambient + diffuse + specular) * fragColor;
+  vec3 result = (
+    ${uniformKeys.isPhongLightingEnabled} * ambient
+    + diffuse
+    + ${uniformKeys.isPhongLightingEnabled} * specular
+  ) * fragColor;
 
   outColor = vec4(result, 1.0);
 }

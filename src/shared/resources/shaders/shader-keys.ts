@@ -26,6 +26,7 @@ const uniformKeys = {
     materialDiffuseColor: 'materialDiffuseColor',
     materialSpecularColor: 'materialSpecularColor',
   */
+  isPhongLightingEnabled: 'isPhongLightingEnabled',
 }
 
 export {
