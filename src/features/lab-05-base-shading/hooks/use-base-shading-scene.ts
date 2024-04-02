@@ -9,10 +9,12 @@ import { cubesData, pedestalOffset } from 'src/shared/resources/pedestal-model';
 import { Mesh } from 'src/shared/entities/mesh/mesh';
 import { boxNormals } from 'src/shared/resources/box-model';
 import { attributeKeys } from 'src/shared/resources/shaders/gourad/vertex-shader';
+import { PointLightSource } from 'src/shared/entities/light-source/point-light-source';
+import { uniformKeys } from 'src/shared/resources/shaders/phong/fragment-shader';
 
 const useBaseShadingScene = (
   shaderProgram: BaseShaderProgram,
-  lightPos: Float32List,
+  lightSource: PointLightSource,
   viewPos: Float32List,
 ) => {
   if (!shaderProgram.program) {
@@ -31,8 +33,8 @@ const useBaseShadingScene = (
     vec3.add(center, center, pedestalOffset);
   });
 
-  data.forEach(({ center, color }) => {
-    const cube =  new CubeMesh(center, color);
+  data.forEach(({ center, color, material }) => {
+    const cube =  new CubeMesh(center, color, material);
     cube.setupBaseBuffers(
       shaderProgram.program as WebGLProgram,
       shaderProgram.glContext
@@ -46,9 +48,6 @@ const useBaseShadingScene = (
     );
     pedestal.members.push(cube);
   })
-
-  const lightPosKey = 'lightPos';
-  const viewPosKey = 'viewPos';
 
   const loop = () => {
     timer.updateDelta();
@@ -79,9 +78,18 @@ const useBaseShadingScene = (
     const toPedestalCenter = pedestal.center;
     pedestal.members.forEach(placeMemberOnScene);
 
-    shaderProgram.setVec3(lightPosKey, lightPos);
-    shaderProgram.setVec3(viewPosKey, viewPos);
+    // light uniforms
+    shaderProgram.setVec3(uniformKeys.lightPos, lightSource.position as Float32List);
+    shaderProgram.setFloat(uniformKeys.lightAmbientStrength, lightSource.ambient.strength);
+    shaderProgram.setFloat(uniformKeys.lightSpecularStrength, lightSource.specular.strength);
+    shaderProgram.setVec3(uniformKeys.lightAmbientColor, lightSource.ambient.color as Float32List);
+    shaderProgram.setVec3(uniformKeys.lightDiffuseColor, lightSource.diffuse.color as Float32List);
+    shaderProgram.setVec3(uniformKeys.lightSpecularColor, lightSource.specular.color as Float32List);
 
+    // eye uniforms
+    shaderProgram.setVec3(uniformKeys.viewPos, viewPos);
+
+    // todo: maybe pass material uniforms in the following loop or just in mesh.draw
     pedestal.draw();
 
     requestAnimationFrame(loop);

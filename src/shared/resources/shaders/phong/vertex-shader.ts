@@ -4,6 +4,12 @@ const attributeKeys = {
   vertNormal: 'vertNormal',
 }
 
+const uniformKeys = {
+  mWorld: 'mWorld',
+  mView: 'mView',
+  mProj: 'mProj',
+}
+
 const vertexShaderSource = `#version 300 es
 layout(location = 0) in vec3 vertPosition;
 layout(location = 1) in vec3 vertColor;
@@ -31,5 +37,6 @@ void main() {
 
 export {
   attributeKeys,
-  vertexShaderSource
+  vertexShaderSource,
+  uniformKeys
 };

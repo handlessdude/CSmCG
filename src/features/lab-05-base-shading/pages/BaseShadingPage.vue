@@ -24,6 +24,7 @@ import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { setKeyboardListener } from 'src/features/lab-05-base-shading/utils/keyboard-controller';
 import { vertexShaderSource } from 'src/shared/resources/shaders/phong/vertex-shader';
 import { fragmentShaderSource } from 'src/shared/resources/shaders/phong/fragment-shader';
+import { PointLightSource } from 'src/shared/entities/light-source/point-light-source';
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
@@ -41,6 +42,22 @@ const setupAnimation = () => {
   );
 
   const viewPos: ReadonlyVec3 = [0, 5, -15];
+  const lightPos: ReadonlyVec3 = [0, 3, -15];
+
+  const lantern = new PointLightSource(
+    [0, 3, -15],
+    {
+      color: [1.0, 1.0, 1.0],
+      strength: 0.2,
+    },
+    {
+      color: [1.0, 1.0, 1.0],
+    },
+    {
+      color: [1.0, 1.0, 1.0],
+      strength: 0.9,
+  });
+
   setupCamera(program,{
       eye: viewPos,
       center: [0, 0, 0],
@@ -61,7 +78,7 @@ const setupAnimation = () => {
     groupAbsRotate
   } = useBaseShadingScene(
     program,
-    viewPos as unknown as Float32List,
+    lantern,
     viewPos as unknown as Float32List
   )
 

@@ -97,7 +97,7 @@ class Mesh {
     glContext: WebGL2RenderingContext,
   ) => {
     glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
-    this. #enableBuffers(glContext);
+    this.#enableBuffers(glContext);
     glContext.drawElements(
       glContext.TRIANGLES,
       this.indices.length,
