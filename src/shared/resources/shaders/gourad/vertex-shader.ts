@@ -18,6 +18,8 @@ uniform vec3 ${uniforms.lightAmbientColor};
 uniform vec3 ${uniforms.lightDiffuseColor};
 uniform vec3 ${uniforms.lightSpecularColor};
 
+uniform vec3 ${uniforms.attenuation};
+
 uniform float ${uniforms.materialShininess};
 uniform vec3 ${uniforms.materialAmbientColor};
 uniform vec3 ${uniforms.materialDiffuseColor};
@@ -52,10 +54,15 @@ void main() {
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), ${uniforms.materialShininess});
   vec3 specular = lightSpecularStrength * spec * lightSpecularColor;
 
+  float distance = length(${uniforms.lightPos} - Position);
+  float attCoef = 1.0 / (${uniforms.attenuation}.x + ${uniforms.attenuation}.y * distance + ${uniforms.attenuation}.z * pow(distance, 2.0));
+
   fragColor =
+    attCoef * (
     ${uniforms.isPhongLightingEnabled} * ambient * ${uniforms.materialAmbientColor}
     + diffuse * ${uniforms.materialDiffuseColor}
-    + ${uniforms.isPhongLightingEnabled} * specular * ${uniforms.materialSpecularColor};
+    + ${uniforms.isPhongLightingEnabled} * specular * ${uniforms.materialSpecularColor}
+    );
 }
 `;
 

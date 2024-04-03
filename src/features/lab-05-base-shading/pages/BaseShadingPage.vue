@@ -47,6 +47,40 @@
             />
           </div>
         </q-card-section>
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
+          <div class="text-body2 q-mb-sm">Attenuation</div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k0</q-badge>
+            <q-slider
+              v-model="currentAttenuation[0]"
+              :min="attenuationConfig.min"
+              :max="attenuationConfig.max"
+              :step="attenuationConfig.step"
+              label
+            />
+          </div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k1</q-badge>
+            <q-slider
+              v-model="currentAttenuation[1]"
+              :min="0.0"
+              :max="attenuationConfig.max"
+              :step="attenuationConfig.step"
+              label
+            />
+          </div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k2</q-badge>
+            <q-slider
+              v-model="currentAttenuation[2]"
+              :min="0.0"
+              :max="attenuationConfig.max"
+              :step="attenuationConfig.step"
+              label
+            />
+          </div>
+        </q-card-section>
       </q-card>
     </div>
   </q-page>
@@ -54,7 +88,7 @@
 
 <script setup lang="ts">
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
-import { computed, onMounted, Ref, ref } from 'vue';
+import { computed, onMounted, Ref, ref, watch } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { ReadonlyVec3 } from 'gl-matrix';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
@@ -79,12 +113,16 @@ import { LightingModelType } from 'src/features/lab-05-base-shading/resources/li
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
-const viewPos: ReadonlyVec3 = [0, 5, -15];
+const viewPos: ReadonlyVec3 = [0, 3, -15];
 
-const lightPos: ReadonlyVec3 = [0, 3, -15];
+const attenuationConfig = {
+  min: 0.001,
+  max: 1.0,
+  step: 0.001,
+}
 
 const lantern = new PointLightSource(
-  lightPos,
+  viewPos,
   {
     color: [1.0, 1.0, 1.0],
     strength: 0.2,
@@ -107,6 +145,12 @@ const lightAmbientStrength = computed({
 
 const currentShaderType = ref(ShaderType.PHONG);
 const currentLightingModelType = ref(LightingModelType.PHONG);
+
+const currentAttenuation = ref({
+  0: attenuationConfig.max,
+  1: 0.0,
+  2: 0.0,
+});
 
 const setupAnimation = () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {
@@ -143,7 +187,8 @@ const setupAnimation = () => {
       aspect: glCanvas.value.width / glCanvas.value.height,
     },
     currentShaderType,
-    currentLightingModelType
+    currentLightingModelType,
+    currentAttenuation
   )
 
   setKeyboardListener(cubeRotate, groupSelfRotate, groupAbsRotate);

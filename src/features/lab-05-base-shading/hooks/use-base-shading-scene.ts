@@ -30,10 +30,12 @@ const useBaseShadingScene = (
   },
   currentShaderType: Ref<ShaderType>,
   currentLightingModelType: Ref<LightingModelType>,
+  currentAttenuation: Ref<{ 0: number, 1: number, 2: number }>
 ) => {
 
   const shaderType = ref(currentShaderType);
   const lightingModelType = ref(currentLightingModelType);
+  const attenuation = ref(currentAttenuation);
 
   const {
     viewMatrix,
@@ -148,6 +150,8 @@ const useBaseShadingScene = (
     shaders[shaderType.value].setVec3(uniforms.lightAmbientColor, lightSource.ambient.color as Float32List);
     shaders[shaderType.value].setVec3(uniforms.lightDiffuseColor, lightSource.diffuse.color as Float32List);
     shaders[shaderType.value].setVec3(uniforms.lightSpecularColor, lightSource.specular.color as Float32List);
+
+    shaders[shaderType.value].setVec3(uniforms.attenuation, [attenuation.value[0], attenuation.value[1], attenuation.value[2]]);
 
     // eye uniforms
     shaders[shaderType.value].setVec3(

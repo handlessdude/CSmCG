@@ -22,6 +22,7 @@ const uniforms = {
   materialAmbientColor: 'materialAmbientColor',
   materialDiffuseColor: 'materialDiffuseColor',
   materialSpecularColor: 'materialSpecularColor',
+  attenuation: 'attenuation',
 
   isPhongLightingEnabled: 'isPhongLightingEnabled',
 }
