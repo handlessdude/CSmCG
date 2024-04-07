@@ -7,7 +7,7 @@ import { CubeMesh } from 'src/shared/entities/cube-mesh/cube-mesh';
 import { palette } from 'src/shared/resources/palette';
 import { cubesData, pedestalOffset } from 'src/shared/resources/pedestal-model';
 import { Mesh } from 'src/shared/entities/mesh/mesh';
-import { boxNormals } from 'src/shared/resources/box-model';
+import { boxNormals, boxTextureCoords } from 'src/shared/resources/box-model';
 import { PointLightSource } from 'src/shared/entities/light-source/point-light-source';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { ref, Ref } from 'vue';
@@ -17,8 +17,37 @@ import { LightingModelType } from 'src/shared/resources/lighting/lighting-model-
 
 
 const positionSize = 3;
+const textureCoordSize = 2;
 
-const useBaseShadingScene = (
+const createTexture = (
+  glContext: WebGL2RenderingContext,
+  image: HTMLImageElement) => {
+  const texture = glContext.createTexture();
+  glContext.activeTexture(glContext.TEXTURE0);
+  glContext.bindTexture(glContext.TEXTURE_2D, texture);
+
+  //указывает далее идущему методу gl.texImage2D(), как текстура должна позиционироваться.
+  // Так, в данном случае мы передаем в качестве параметра значение gl.UNPACK_FLIP_Y_WEBGL
+  // - этот параметр указывает методу gl.texImage2D(),
+  // что изображение надо перевернуть относительно горизонтальной оси.
+  // glContext.pixelStorei(glContext.UNPACK_FLIP_Y_WEBGL, true);
+
+  glContext.texImage2D(
+    glContext.TEXTURE_2D,
+    0,
+    glContext.RGBA,
+    glContext.RGBA,
+    glContext.UNSIGNED_BYTE,
+    image,
+  );
+  // glContext.generateMipmap(glContext.TEXTURE_2D);
+  glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MAG_FILTER, glContext.NEAREST);
+  glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MIN_FILTER, glContext.NEAREST);
+
+  return texture as WebGLTexture;
+}
+// todo: make injection of base lighting scene
+const useBaseTexturesScene = (
   shaders: {
     [shaderType in ShaderType]: BaseShaderProgram
   },
@@ -32,6 +61,7 @@ const useBaseShadingScene = (
   currentAttenuation: Ref<{ 0: number, 1: number, 2: number }>,
   currentToonCoefficients: Ref<{ 0: number, 1: number, 2: number }>,
   currentToonThresholds: Ref<{ 0: number, 1: number, 2: number }>,
+  textureImages: Array<HTMLImageElement>,
 ) => {
 
   const shaderType = ref(currentShaderType);
@@ -63,6 +93,10 @@ const useBaseShadingScene = (
   const pedestalAbsAngle = new RotationAngle(() => timer.delta);
   const pedestal = new MeshGroup();
 
+  const textures = textureImages.map(
+    (image)=> createTexture(shaders[shaderType.value].glContext, image)
+  );
+
   const data = Array.from(cubesData)
   data.forEach(({ center })=> {
     vec3.add(center, center, pedestalOffset);
@@ -86,6 +120,13 @@ const useBaseShadingScene = (
       attributes.vertNormal,
       boxNormals,
       positionSize
+    );
+    mesh.attachBuffer(
+      shader.program as WebGLProgram,
+      shader.glContext,
+      attributes.vertTextureCoord,
+      boxTextureCoords,
+      textureCoordSize
     );
   }
 
@@ -147,6 +188,8 @@ const useBaseShadingScene = (
     const isBlinnEnabled = Number(lightingModelType.value === LightingModelType.BLINN_PHONG);
     const isToonShadingEnabled = Number(lightingModelType.value === LightingModelType.TOON_SHADING);
 
+    shaders[shaderType.value].setInteger(uniforms.sampler1, 0 /*todo: insert real sampler*/);
+
     shaders[shaderType.value].setFloat(uniforms.isBlinnLightingEnabled, isBlinnEnabled);
     shaders[shaderType.value].setFloat(uniforms.isPhongLightingEnabled, isPhongEnabled);
     shaders[shaderType.value].setFloat(uniforms.isToonLightingEnabled, isToonShadingEnabled);
@@ -197,4 +240,4 @@ const useBaseShadingScene = (
     },
   }
 }
-export { useBaseShadingScene }
+export { useBaseTexturesScene }

@@ -108,6 +108,11 @@ class BaseShaderProgram {
     this.glContext.uniformMatrix4fv(location, false, val);
   }
 
+  setInteger = (name: string, val: number) => {
+    const location = this.#getUniformLocation(name);
+    this.glContext.uniform1i(location, val);
+  }
+
   setFloat = (name: string, val: number) => {
     const location = this.#getUniformLocation(name);
     this.glContext.uniform1f(location, val);

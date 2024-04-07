@@ -5,4 +5,5 @@ export enum RouteName {
   STATIC_2D_3D_03 = 'STATIC_2D_3D_03',
   PEDESTAL = 'PEDESTAL',
   BASE_SHADING = 'BASE_SHADING',
+  TEXTURES = 'TEXTURES',
 }

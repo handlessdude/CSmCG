@@ -42,6 +42,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-05-base-shading/pages/BaseShadingPage.vue'),
       },
+      {
+        path: '/06-textures',
+        name: RouteName.TEXTURES,
+        component: () =>
+          import('src/features/lab-06-textures/pages/BaseTexturesPage.vue'),
+      },
     ],
   },
   {

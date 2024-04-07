@@ -2,6 +2,7 @@ const attributes = {
   vertPosition: 'vertPosition',
   vertColor: 'vertColor',
   vertNormal: 'vertNormal',
+  vertTextureCoord: 'vertTextureCoord',
 }
 
 const uniforms = {
@@ -30,6 +31,10 @@ const uniforms = {
 
   toonCoefs: 'toonCoefs',
   toonThresholds: 'toonThresholds',
+
+  sampler1: 'sampler1',
+  sampler2: 'sampler2',
+  sampler3: 'sampler3',
 }
 
 export {

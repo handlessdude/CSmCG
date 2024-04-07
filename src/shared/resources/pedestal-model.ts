@@ -1,7 +1,7 @@
 import { ReadonlyVec3, vec3 } from 'gl-matrix';
 import { palette } from 'src/shared/resources/palette';
-import { bronze, gold, silver } from 'src/features/lab-05-base-shading/resources/materials';
 import { BaseMaterial } from 'src/shared/entities/material/base-material';
+import { bronze, gold, silver } from 'src/shared/resources/materials/metals';
 
 const cubesData: Array<{
   color: ReadonlyVec3,
