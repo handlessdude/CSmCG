@@ -29,12 +29,16 @@ const useBaseShadingScene = (
   },
   currentShaderType: Ref<ShaderType>,
   currentLightingModelType: Ref<LightingModelType>,
-  currentAttenuation: Ref<{ 0: number, 1: number, 2: number }>
+  currentAttenuation: Ref<{ 0: number, 1: number, 2: number }>,
+  currentToonCoefficients: Ref<{ 0: number, 1: number, 2: number }>,
+  currentToonThresholds: Ref<{ 0: number, 1: number, 2: number }>,
 ) => {
 
   const shaderType = ref(currentShaderType);
   const lightingModelType = ref(currentLightingModelType);
   const attenuation = ref(currentAttenuation);
+  const toonCoefficients = ref(currentToonCoefficients);
+  const toonThresholds = ref(currentToonThresholds);
 
   const {
     viewMatrix,
@@ -141,9 +145,11 @@ const useBaseShadingScene = (
     // light uniforms
     const isPhongEnabled = Number(lightingModelType.value === LightingModelType.PHONG);
     const isBlinnEnabled = Number(lightingModelType.value === LightingModelType.BLINN_PHONG);
+    const isToonShadingEnabled = Number(lightingModelType.value === LightingModelType.TOON_SHADING);
 
     shaders[shaderType.value].setFloat(uniforms.isBlinnLightingEnabled, isBlinnEnabled);
     shaders[shaderType.value].setFloat(uniforms.isPhongLightingEnabled, isPhongEnabled);
+    shaders[shaderType.value].setFloat(uniforms.isToonLightingEnabled, isToonShadingEnabled);
 
     shaders[shaderType.value].setVec3(uniforms.lightPos, lightSource.position as Float32List);
     shaders[shaderType.value].setFloat(uniforms.lightAmbientStrength, lightSource.ambient.strength);
@@ -153,6 +159,8 @@ const useBaseShadingScene = (
     shaders[shaderType.value].setVec3(uniforms.lightSpecularColor, lightSource.specular.color as Float32List);
 
     shaders[shaderType.value].setVec3(uniforms.attenuation, [attenuation.value[0], attenuation.value[1], attenuation.value[2]]);
+    shaders[shaderType.value].setVec3(uniforms.toonCoefs, [toonCoefficients.value[0], toonCoefficients.value[1], toonCoefficients.value[2]]);
+    shaders[shaderType.value].setVec3(uniforms.toonThresholds, [toonThresholds.value[0], toonThresholds.value[1], toonThresholds.value[2]]);
 
     // eye uniforms
     shaders[shaderType.value].setVec3(

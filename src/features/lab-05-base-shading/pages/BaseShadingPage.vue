@@ -51,12 +51,80 @@
               :val="LightingModelType.BLINN_PHONG"
               label="Blinn-Phong"
             />
-<!--            <q-radio
+            <q-radio
               dense
               v-model="currentLightingModelType"
               :val="LightingModelType.TOON_SHADING"
               label="Toon Shading"
-            />-->
+            />
+          </div>
+        </q-card-section>
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
+          <div class="text-body2 q-mb-sm">Toon coefficients</div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k0</q-badge>
+            <q-slider
+              v-model="currentToonCoefficients[0]"
+              :min="0.0"
+              :max="1.0"
+              :step="0.1"
+              label
+            />
+          </div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k1</q-badge>
+            <q-slider
+              v-model="currentToonCoefficients[1]"
+              :min="0.0"
+              :max="1.0"
+              :step="0.1"
+              label
+            />
+          </div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k2</q-badge>
+            <q-slider
+              v-model="currentToonCoefficients[2]"
+              :min="0.0"
+              :max="1.0"
+              :step="0.1"
+              label
+            />
+          </div>
+        </q-card-section>
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
+          <div class="text-body2 q-mb-sm">Toon thresholds</div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k0</q-badge>
+            <q-slider
+              v-model="currentToonThresholds[0]"
+              :min="0.0"
+              :max="1.0"
+              :step="0.1"
+              label
+            />
+          </div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k1</q-badge>
+            <q-slider
+              v-model="currentToonThresholds[1]"
+              :min="0.0"
+              :max="1.0"
+              :step="0.1"
+              label
+            />
+          </div>
+          <div class="row no-wrap q-gutter-md q-mb-sm">
+            <q-badge color="secondary">k2</q-badge>
+            <q-slider
+              v-model="currentToonThresholds[2]"
+              :min="0.0"
+              :max="1.0"
+              :step="0.1"
+              label
+            />
           </div>
         </q-card-section>
         <q-separator spaced/>
@@ -164,6 +232,18 @@ const currentAttenuation = ref({
   2: 0.0,
 });
 
+const currentToonCoefficients = ref({
+  0: 0.3,
+  1: 0.7,
+  2: 0.3,
+});
+
+const currentToonThresholds = ref({
+  0: 0.0,
+  1: 0.4,
+  2: 0.7,
+});
+
 const setupAnimation = () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {
     throw new Error('No canvas context found')
@@ -200,7 +280,9 @@ const setupAnimation = () => {
     },
     currentShaderType,
     currentLightingModelType,
-    currentAttenuation
+    currentAttenuation,
+    currentToonCoefficients,
+    currentToonThresholds
   )
 
   setKeyboardListener(cubeRotate, groupSelfRotate, groupAbsRotate);

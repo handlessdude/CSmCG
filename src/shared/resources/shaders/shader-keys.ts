@@ -26,6 +26,10 @@ const uniforms = {
 
   isPhongLightingEnabled: 'isPhongLightingEnabled',
   isBlinnLightingEnabled: 'isBlinnLightingEnabled',
+  isToonLightingEnabled: 'isToonLightingEnabled',
+
+  toonCoefs: 'toonCoefs',
+  toonThresholds: 'toonThresholds',
 }
 
 export {
