@@ -23,6 +23,7 @@ const createTexture = (
   glContext: WebGL2RenderingContext,
   image: HTMLImageElement) => {
   const texture = glContext.createTexture();
+  // todo: specify glContext.TEXTUREI for each loaded texture
   glContext.activeTexture(glContext.TEXTURE0);
   glContext.bindTexture(glContext.TEXTURE_2D, texture);
 
