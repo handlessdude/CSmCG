@@ -45,6 +45,18 @@
               :val="LightingModelType.LAMBERT"
               label="Lambert"
             />
+            <q-radio
+              dense
+              v-model="currentLightingModelType"
+              :val="LightingModelType.BLINN_PHONG"
+              label="Blinn-Phong"
+            />
+<!--            <q-radio
+              dense
+              v-model="currentLightingModelType"
+              :val="LightingModelType.TOON_SHADING"
+              label="Toon Shading"
+            />-->
           </div>
         </q-card-section>
         <q-separator spaced/>
@@ -88,7 +100,7 @@
 
 <script setup lang="ts">
 import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
-import { computed, onMounted, Ref, ref, watch } from 'vue';
+import { computed, onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { ReadonlyVec3 } from 'gl-matrix';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
@@ -148,7 +160,7 @@ const currentLightingModelType = ref(LightingModelType.PHONG);
 
 const currentAttenuation = ref({
   0: attenuationConfig.max,
-  1: 0.0,
+  1: 0.01,
   2: 0.0,
 });
 

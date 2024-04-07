@@ -25,6 +25,7 @@ const uniforms = {
   attenuation: 'attenuation',
 
   isPhongLightingEnabled: 'isPhongLightingEnabled',
+  isBlinnLightingEnabled: 'isBlinnLightingEnabled',
 }
 
 export {

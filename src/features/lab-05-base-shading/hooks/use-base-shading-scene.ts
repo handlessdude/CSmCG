@@ -14,7 +14,6 @@ import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { ref, Ref } from 'vue';
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { LightingModelType } from 'src/features/lab-05-base-shading/resources/lighting-model-type';
-import { vertPositionKey } from 'src/shared/resources/shaders/base/base-shaders';
 
 
 const positionSize = 3;
@@ -58,7 +57,6 @@ const useBaseShadingScene = (
   const cubeAngle = new RotationAngle(() => timer.delta);
   const pedestalSelfAngle = new RotationAngle(() => timer.delta);
   const pedestalAbsAngle = new RotationAngle(() => timer.delta);
-
   const pedestal = new MeshGroup();
 
   const data = Array.from(cubesData)
@@ -142,6 +140,9 @@ const useBaseShadingScene = (
 
     // light uniforms
     const isPhongEnabled = Number(lightingModelType.value === LightingModelType.PHONG);
+    const isBlinnEnabled = Number(lightingModelType.value === LightingModelType.BLINN_PHONG);
+
+    shaders[shaderType.value].setFloat(uniforms.isBlinnLightingEnabled, isBlinnEnabled);
     shaders[shaderType.value].setFloat(uniforms.isPhongLightingEnabled, isPhongEnabled);
 
     shaders[shaderType.value].setVec3(uniforms.lightPos, lightSource.position as Float32List);
