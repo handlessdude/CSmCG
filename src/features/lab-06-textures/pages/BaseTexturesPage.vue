@@ -180,10 +180,10 @@
 <!--                <div class="row text-body2 col justify-center">
                   Color
                 </div>-->
-                <div class="row text-body2 col justify-center">
+                <div class="row text-caption col justify-center">
                   Number texture
                 </div>
-                <div class="row text-body2 col justify-center">
+                <div class="row text-caption col justify-center">
                   Material texture
                 </div>
               </div>

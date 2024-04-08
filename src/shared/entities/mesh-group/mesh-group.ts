@@ -2,14 +2,14 @@ import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import { Mesh } from 'src/shared/entities/mesh/mesh';
 import { ReadonlyVec3 } from 'gl-matrix';
 
-class MeshGroup {
-  #members: Array<Mesh> = [];
+class MeshGroup<T extends Mesh> {
+  #members: Array<T> = [];
 
   get members() {
     return this.#members
   }
 
-  drawMember = (mesh: Mesh, shader: BaseShaderProgram) => {
+  drawMember = (mesh: T, shader: BaseShaderProgram) => {
     shader.setWorldMat(mesh.worldMat);
     mesh.draw(shader);
   }

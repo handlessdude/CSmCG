@@ -14,6 +14,7 @@ import { ComputedRef, ref, Ref } from 'vue';
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { ShaderType } from 'src/shared/resources/shaders/shader-type';
 import { LightingModelType } from 'src/shared/resources/lighting/lighting-model-type';
+import { CubeTextured } from 'src/shared/entities/cube-mesh/cube-textured';
 
 
 const positionSize = 3;
@@ -93,7 +94,7 @@ const useBaseTexturesScene = (
   const cubeAngle = new RotationAngle(() => timer.delta);
   const pedestalSelfAngle = new RotationAngle(() => timer.delta);
   const pedestalAbsAngle = new RotationAngle(() => timer.delta);
-  const pedestal = new MeshGroup();
+  const pedestal = new MeshGroup<CubeTextured>();
 
   const textures = textureImages.map(
     (image, idx)=> createTexture(
@@ -103,22 +104,22 @@ const useBaseTexturesScene = (
     )
   );
 
-  const setTexturesToActiveShader = () => {
-/*    textures.forEach((value) => {
+/*  const setTexturesToActiveShader = () => {
+    /!*    textures.forEach((value) => {
       shaders[shaderType.value].setInteger(
         uniforms[`sampler${value.textureUnitIdx}` as keyof typeof uniforms], value.textureUnitIdx
       );
-    });*/
+    });*!/
     shaders[shaderType.value].setInteger(
       uniforms[`sampler${textures[0].textureUnitIdx}` as keyof typeof uniforms], textures[0].textureUnitIdx
     );
+    shaders[shaderType.value].setFloat(uniforms.numberTextureContrib, textureContribution.value.numberTexture);
+
     shaders[shaderType.value].setInteger(
       uniforms[`sampler${textures[1].textureUnitIdx}` as keyof typeof uniforms], textures[1].textureUnitIdx
     );
-    // shaders[shaderType.value].setFloat(uniforms.colorContrib, textureContribution.value.color);
-    shaders[shaderType.value].setFloat(uniforms.numberTextureContrib, textureContribution.value.numberTexture);
     shaders[shaderType.value].setFloat(uniforms.mtlTextureContrib, textureContribution.value.materialTexture);
-  }
+  }*/
 
   const data = Array.from(cubesData)
   data.forEach(({ center })=> {
@@ -155,7 +156,22 @@ const useBaseTexturesScene = (
 
   const createScene = () => {
     data.forEach(({ center, color, material }) => {
-      const cube =  new CubeMesh(center, color, material);
+      const cube =  new CubeTextured(
+        [textures[0], textures[1]],
+        [
+          {
+            key: uniforms.numberTextureContrib,
+            value: textureContribution.value.numberTexture,
+          },
+          {
+            key: uniforms.mtlTextureContrib,
+            value: textureContribution.value.materialTexture,
+          },
+        ],
+        center,
+        color,
+        material
+      );
       pedestal.members.push(cube);
     })
   }
@@ -211,7 +227,10 @@ const useBaseTexturesScene = (
     const isBlinnEnabled = Number(lightingModelType.value === LightingModelType.BLINN_PHONG);
     const isToonShadingEnabled = Number(lightingModelType.value === LightingModelType.TOON_SHADING);
 
-    setTexturesToActiveShader();
+    pedestal.members.forEach((mesh) => {
+      mesh.textureContrib[0].value = textureContribution.value.numberTexture;
+      mesh.textureContrib[1].value = textureContribution.value.materialTexture;
+    });
 
     shaders[shaderType.value].setFloat(uniforms.isBlinnLightingEnabled, isBlinnEnabled);
     shaders[shaderType.value].setFloat(uniforms.isPhongLightingEnabled, isPhongEnabled);

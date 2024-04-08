@@ -102,9 +102,7 @@ class Mesh {
     })
   }
 
-  draw = (
-    shader: BaseShaderProgram
-  ) => {
+  draw(shader: BaseShaderProgram) {
     if (this.material) {
       shader.setFloat(uniforms.materialShininess, this.material.shininess);
       shader.setVec3(uniforms.materialAmbientColor, this.material.ambientColor as Float32List);
