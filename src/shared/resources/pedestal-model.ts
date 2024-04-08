@@ -7,24 +7,29 @@ const cubesData: Array<{
   color: ReadonlyVec3,
   center: vec3,
   material?: BaseMaterial,
+  textureData: [string, string]
 }> = [
   {
     color: palette.silver, // todo remove?
     center: [-2, 0, 0],
     material: silver,
+    textureData: ['/src/assets/textures/second.png', '/src/assets/textures/angel.png'],
   },{
     color: palette.gold,
     center: [0, 0, 0],
-    material: gold
+    material: gold,
+    textureData: ['/src/assets/textures/first.png', '/src/assets/textures/artem.png'],
   },{
     color: palette.gold,
     center: [0, 2, 0],
-    material: gold
+    material: gold,
+    textureData: ['/src/assets/textures/first.png', '/src/assets/textures/artem.png'],
   },
   {
     color: palette.bronze,
     center: [2, 0, 0],
-    material: bronze
+    material: bronze,
+    textureData: ['/src/assets/textures/third.png', '/src/assets/textures/tylko-jedno-w-glowie-mam.png'],
   },
 ];
 

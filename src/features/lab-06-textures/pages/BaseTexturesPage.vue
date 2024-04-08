@@ -323,7 +323,10 @@ const textureContribution = computed(() => ({
 
 const textureSources = [
   '/src/assets/textures/artem.png',
+  '/src/assets/textures/first.png',
+  '/src/assets/textures/second.png',
   '/src/assets/textures/angel.png',
+  '/src/assets/textures/third.png',
   '/src/assets/textures/tylko-jedno-w-glowie-mam.png',
 ]
 
@@ -359,7 +362,9 @@ const setupAnimation = async () => {
   }
 
   const textureImages = await Promise.all(
-    textureSources.map(async (src) => await loadImage(src))
+    textureSources.map(
+      async (src) => [src, await loadImage(src)] as [string, HTMLImageElement]
+    )
   );
 
   const {

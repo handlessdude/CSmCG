@@ -62,7 +62,7 @@ const useBaseTexturesScene = (
   currentAttenuation: Ref<{ 0: number, 1: number, 2: number }>,
   currentToonCoefficients: Ref<{ 0: number, 1: number, 2: number }>,
   currentToonThresholds: Ref<{ 0: number, 1: number, 2: number }>,
-  textureImages: Array<HTMLImageElement>,
+  textureImagesData: Array<[string, HTMLImageElement]>,
   currentTextureContribution:  ComputedRef<{/*color: number, */numberTexture: number, materialTexture: number}>
 ) => {
 
@@ -96,30 +96,15 @@ const useBaseTexturesScene = (
   const pedestalAbsAngle = new RotationAngle(() => timer.delta);
   const pedestal = new MeshGroup<CubeTextured>();
 
-  const textures = textureImages.map(
-    (image, idx)=> createTexture(
+  const textures = Object.fromEntries(textureImagesData.map(
+    ([src, image], idx) => [
+      src,
+      createTexture(
       shaders[shaderType.value].glContext,
       image,
       idx,
-    )
-  );
-
-/*  const setTexturesToActiveShader = () => {
-    /!*    textures.forEach((value) => {
-      shaders[shaderType.value].setInteger(
-        uniforms[`sampler${value.textureUnitIdx}` as keyof typeof uniforms], value.textureUnitIdx
-      );
-    });*!/
-    shaders[shaderType.value].setInteger(
-      uniforms[`sampler${textures[0].textureUnitIdx}` as keyof typeof uniforms], textures[0].textureUnitIdx
-    );
-    shaders[shaderType.value].setFloat(uniforms.numberTextureContrib, textureContribution.value.numberTexture);
-
-    shaders[shaderType.value].setInteger(
-      uniforms[`sampler${textures[1].textureUnitIdx}` as keyof typeof uniforms], textures[1].textureUnitIdx
-    );
-    shaders[shaderType.value].setFloat(uniforms.mtlTextureContrib, textureContribution.value.materialTexture);
-  }*/
+    )]
+  ));
 
   const data = Array.from(cubesData)
   data.forEach(({ center })=> {
@@ -155,9 +140,9 @@ const useBaseTexturesScene = (
   }
 
   const createScene = () => {
-    data.forEach(({ center, color, material }) => {
+    data.forEach(({ center, color, material, textureData }) => {
       const cube =  new CubeTextured(
-        [textures[0], textures[1]],
+        [textures[textureData[0]], textures[textureData[1]]],
         [
           {
             key: uniforms.numberTextureContrib,

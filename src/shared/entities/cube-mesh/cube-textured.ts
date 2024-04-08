@@ -21,13 +21,14 @@ class CubeTextured extends CubeMesh {
     color: ReadonlyVec3 = [0, 0, 1],
     public material: BaseMaterial | undefined = undefined,
   ) {
+    console.log(textures)
     super(center, color, material);
   }
 
   draw(shader: BaseShaderProgram) {
     this.textures.forEach((value, idx)=>{
       shader.setInteger(
-        uniforms[`sampler${value.textureUnitIdx}` as keyof typeof uniforms], value.textureUnitIdx
+        uniforms[`sampler${idx}` as keyof typeof uniforms], value.textureUnitIdx
       );
       shader.setFloat(this.textureContrib[idx].key, this.textureContrib[idx].value);
     })
