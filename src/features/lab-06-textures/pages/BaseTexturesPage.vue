@@ -60,71 +60,75 @@
           </div>
         </q-card-section>
         <q-separator spaced/>
-        <q-card-section class="no-padding">
-          <div class="text-body2 text-bold q-mb-sm">Toon coefficients</div>
-          <div class="row no-wrap q-gutter-md q-mb-sm">
-            <q-badge color="secondary">k0</q-badge>
-            <q-slider
-              v-model="currentToonCoefficients[0]"
-              :min="0.0"
-              :max="1.0"
-              :step="0.1"
-              label
-            />
+        <q-card-section class="no-padding full-width" horizontal>
+          <div class="col">
+            <div class="text-body2 text-bold q-mb-sm">Toon coefficients</div>
+            <div class="row no-wrap q-gutter-md q-mb-sm">
+              <q-badge color="secondary">k0</q-badge>
+              <q-slider
+                v-model="currentToonCoefficients[0]"
+                :min="0.0"
+                :max="1.0"
+                :step="0.1"
+                label
+              />
+            </div>
+            <div class="row no-wrap q-gutter-md q-mb-sm">
+              <q-badge color="secondary">k1</q-badge>
+              <q-slider
+                v-model="currentToonCoefficients[1]"
+                :min="0.0"
+                :max="1.0"
+                :step="0.1"
+                label
+              />
+            </div>
+            <div class="row no-wrap q-gutter-md q-mb-sm">
+              <q-badge color="secondary">k2</q-badge>
+              <q-slider
+                v-model="currentToonCoefficients[2]"
+                :min="0.0"
+                :max="1.0"
+                :step="0.1"
+                label
+              />
+            </div>
           </div>
-          <div class="row no-wrap q-gutter-md q-mb-sm">
-            <q-badge color="secondary">k1</q-badge>
-            <q-slider
-              v-model="currentToonCoefficients[1]"
-              :min="0.0"
-              :max="1.0"
-              :step="0.1"
-              label
-            />
-          </div>
-          <div class="row no-wrap q-gutter-md q-mb-sm">
-            <q-badge color="secondary">k2</q-badge>
-            <q-slider
-              v-model="currentToonCoefficients[2]"
-              :min="0.0"
-              :max="1.0"
-              :step="0.1"
-              label
-            />
-          </div>
-        </q-card-section>
-        <q-separator spaced/>
-        <q-card-section class="no-padding">
-          <div class="text-body2 text-bold q-mb-sm">Toon thresholds</div>
-          <div class="row no-wrap q-gutter-md q-mb-sm">
-            <q-badge color="secondary">k0</q-badge>
-            <q-slider
-              v-model="currentToonThresholds[0]"
-              :min="0.0"
-              :max="1.0"
-              :step="0.1"
-              label
-            />
-          </div>
-          <div class="row no-wrap q-gutter-md q-mb-sm">
-            <q-badge color="secondary">k1</q-badge>
-            <q-slider
-              v-model="currentToonThresholds[1]"
-              :min="0.0"
-              :max="1.0"
-              :step="0.1"
-              label
-            />
-          </div>
-          <div class="row no-wrap q-gutter-md q-mb-sm">
-            <q-badge color="secondary">k2</q-badge>
-            <q-slider
-              v-model="currentToonThresholds[2]"
-              :min="0.0"
-              :max="1.0"
-              :step="0.1"
-              label
-            />
+          <q-separator
+            vertical
+            spaced/>
+          <div class="col">
+            <div class="text-body2 text-bold q-mb-sm">Toon thresholds</div>
+            <div class="row no-wrap q-gutter-md q-mb-sm">
+              <q-badge color="secondary">k0</q-badge>
+              <q-slider
+                v-model="currentToonThresholds[0]"
+                :min="0.0"
+                :max="1.0"
+                :step="0.1"
+                label
+              />
+            </div>
+            <div class="row no-wrap q-gutter-md q-mb-sm">
+              <q-badge color="secondary">k1</q-badge>
+              <q-slider
+                v-model="currentToonThresholds[1]"
+                :min="0.0"
+                :max="1.0"
+                :step="0.1"
+                label
+              />
+            </div>
+            <div class="row no-wrap q-gutter-md q-mb-sm">
+              <q-badge color="secondary">k2</q-badge>
+              <q-slider
+                v-model="currentToonThresholds[2]"
+                :min="0.0"
+                :max="1.0"
+                :step="0.1"
+                label
+              />
+            </div>
           </div>
         </q-card-section>
         <q-separator spaced/>
@@ -159,6 +163,54 @@
               :step="attenuationConfig.step"
               label
             />
+          </div>
+        </q-card-section>
+        <q-separator spaced/>
+        <q-card-section class="no-padding">
+          <div class="text-body2 text-bold q-mb-sm">Texture contribution</div>
+          <div class="row">
+            <div class="
+              col
+              column
+              no-wrap
+              q-gutter-md
+              q-mb-sm
+            ">
+              <div class="row">
+<!--                <div class="row text-body2 col justify-center">
+                  Color
+                </div>-->
+                <div class="row text-body2 col justify-center">
+                  Number texture
+                </div>
+                <div class="row text-body2 col justify-center">
+                  Material texture
+                </div>
+              </div>
+<!--              <q-range
+                class="q-mt-lg"
+                v-model="sliderModel"
+                :min="sliderConfig.MIN_PERCENT"
+                :max="sliderConfig.MAX_PERCENT"
+                :step="sliderConfig.STEP"
+                :left-label-value="`${sliderModel.min * toFrac}`"
+                :right-label-value="`${sliderModel.max  * toFrac}`"
+                label-always
+                track-color="blue"
+                inner-track-color="transparent"
+                selection-color="transparent"
+              />-->
+              <q-slider
+                v-model="sliderModel"
+                :min="sliderConfig.MIN_PERCENT"
+                :max="sliderConfig.MAX_PERCENT"
+                :step="sliderConfig.STEP"
+                label
+                :label-value="`${sliderModel * toFrac}`"
+                label-always
+                color="primary"
+              />
+            </div>
           </div>
         </q-card-section>
       </q-card>
@@ -244,6 +296,31 @@ const currentToonThresholds = ref({
   2: 0.7,
 });
 
+/*const sliderModel =ref({
+  min: 25,
+  max: 75
+});*/
+
+const sliderModel = ref(50);
+
+const sliderConfig = {
+  MIN_PERCENT: 0,
+  MAX_PERCENT: 100,
+  STEP: 1,
+}
+const toFrac = 0.01;
+
+/*const colorContribution = computed(() => ({
+  color: sliderModel.value.min * toFrac,
+  numberTexture: (sliderModel.value.max - sliderModel.value.min) * toFrac,
+  materialTexture: (sliderConfig.MAX_PERCENT - sliderModel.value.max) * toFrac,
+}))*/
+
+const textureContribution = computed(() => ({
+  numberTexture: sliderModel.value * toFrac,
+  materialTexture: (sliderConfig.MAX_PERCENT - sliderModel.value) * toFrac,
+}))
+
 const textureSources = [
   '/src/assets/textures/artem.png',
   '/src/assets/textures/angel.png',
@@ -302,7 +379,8 @@ const setupAnimation = async () => {
     currentAttenuation,
     currentToonCoefficients,
     currentToonThresholds,
-    textureImages
+    textureImages,
+    textureContribution
   )
 
   setKeyboardListener(cubeRotate, groupSelfRotate, groupAbsRotate);

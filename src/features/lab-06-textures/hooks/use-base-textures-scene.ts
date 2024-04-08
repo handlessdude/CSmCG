@@ -10,7 +10,7 @@ import { Mesh } from 'src/shared/entities/mesh/mesh';
 import { boxNormals, boxTextureCoords } from 'src/shared/resources/box-model';
 import { PointLightSource } from 'src/shared/entities/light-source/point-light-source';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
-import { ref, Ref } from 'vue';
+import { ComputedRef, ref, Ref } from 'vue';
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { ShaderType } from 'src/shared/resources/shaders/shader-type';
 import { LightingModelType } from 'src/shared/resources/lighting/lighting-model-type';
@@ -21,18 +21,13 @@ const textureCoordSize = 2;
 
 const createTexture = (
   glContext: WebGL2RenderingContext,
-  image: HTMLImageElement) => {
+  image: HTMLImageElement,
+  textureUnitIdx: number,
+  ) => {
   const texture = glContext.createTexture();
-  // todo: specify glContext.TEXTUREI for each loaded texture
-  glContext.activeTexture(glContext.TEXTURE0);
+  const textureUnit = glContext[`TEXTURE${textureUnitIdx}` as keyof typeof glContext] as number;
+  glContext.activeTexture(textureUnit);
   glContext.bindTexture(glContext.TEXTURE_2D, texture);
-
-  //указывает далее идущему методу gl.texImage2D(), как текстура должна позиционироваться.
-  // Так, в данном случае мы передаем в качестве параметра значение gl.UNPACK_FLIP_Y_WEBGL
-  // - этот параметр указывает методу gl.texImage2D(),
-  // что изображение надо перевернуть относительно горизонтальной оси.
-  // glContext.pixelStorei(glContext.UNPACK_FLIP_Y_WEBGL, true);
-
   glContext.texImage2D(
     glContext.TEXTURE_2D,
     0,
@@ -45,7 +40,11 @@ const createTexture = (
   glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MAG_FILTER, glContext.NEAREST);
   glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MIN_FILTER, glContext.NEAREST);
 
-  return texture as WebGLTexture;
+  return {
+    textureUnitIdx,
+    textureUnit,
+    texture: texture as WebGLTexture
+  };
 }
 // todo: make injection of base lighting scene
 const useBaseTexturesScene = (
@@ -63,6 +62,7 @@ const useBaseTexturesScene = (
   currentToonCoefficients: Ref<{ 0: number, 1: number, 2: number }>,
   currentToonThresholds: Ref<{ 0: number, 1: number, 2: number }>,
   textureImages: Array<HTMLImageElement>,
+  currentTextureContribution:  ComputedRef<{/*color: number, */numberTexture: number, materialTexture: number}>
 ) => {
 
   const shaderType = ref(currentShaderType);
@@ -70,6 +70,7 @@ const useBaseTexturesScene = (
   const attenuation = ref(currentAttenuation);
   const toonCoefficients = ref(currentToonCoefficients);
   const toonThresholds = ref(currentToonThresholds);
+  const textureContribution = ref(currentTextureContribution);
 
   const {
     viewMatrix,
@@ -95,8 +96,29 @@ const useBaseTexturesScene = (
   const pedestal = new MeshGroup();
 
   const textures = textureImages.map(
-    (image)=> createTexture(shaders[shaderType.value].glContext, image)
+    (image, idx)=> createTexture(
+      shaders[shaderType.value].glContext,
+      image,
+      idx,
+    )
   );
+
+  const setTexturesToActiveShader = () => {
+/*    textures.forEach((value) => {
+      shaders[shaderType.value].setInteger(
+        uniforms[`sampler${value.textureUnitIdx}` as keyof typeof uniforms], value.textureUnitIdx
+      );
+    });*/
+    shaders[shaderType.value].setInteger(
+      uniforms[`sampler${textures[0].textureUnitIdx}` as keyof typeof uniforms], textures[0].textureUnitIdx
+    );
+    shaders[shaderType.value].setInteger(
+      uniforms[`sampler${textures[1].textureUnitIdx}` as keyof typeof uniforms], textures[1].textureUnitIdx
+    );
+    // shaders[shaderType.value].setFloat(uniforms.colorContrib, textureContribution.value.color);
+    shaders[shaderType.value].setFloat(uniforms.numberTextureContrib, textureContribution.value.numberTexture);
+    shaders[shaderType.value].setFloat(uniforms.mtlTextureContrib, textureContribution.value.materialTexture);
+  }
 
   const data = Array.from(cubesData)
   data.forEach(({ center })=> {
@@ -189,7 +211,7 @@ const useBaseTexturesScene = (
     const isBlinnEnabled = Number(lightingModelType.value === LightingModelType.BLINN_PHONG);
     const isToonShadingEnabled = Number(lightingModelType.value === LightingModelType.TOON_SHADING);
 
-    shaders[shaderType.value].setInteger(uniforms.sampler1, 0 /*todo: insert real sampler*/);
+    setTexturesToActiveShader();
 
     shaders[shaderType.value].setFloat(uniforms.isBlinnLightingEnabled, isBlinnEnabled);
     shaders[shaderType.value].setFloat(uniforms.isPhongLightingEnabled, isPhongEnabled);

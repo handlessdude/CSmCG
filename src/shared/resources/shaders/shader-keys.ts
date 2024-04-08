@@ -32,9 +32,13 @@ const uniforms = {
   toonCoefs: 'toonCoefs',
   toonThresholds: 'toonThresholds',
 
+  sampler0: 'sampler0',
   sampler1: 'sampler1',
   sampler2: 'sampler2',
-  sampler3: 'sampler3',
+
+  colorContrib: 'colorContrib',
+  numberTextureContrib: 'numberTextureContrib',
+  mtlTextureContrib: 'mtlTextureContrib',
 }
 
 export {

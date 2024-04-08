@@ -9,7 +9,9 @@ in vec3 fragNormal;
 in vec3 fragPos;
 in vec2 fragTextureCoord;
 
+uniform sampler2D ${uniforms.sampler0};
 uniform sampler2D ${uniforms.sampler1};
+// uniform sampler2D ${uniforms.sampler2};
 
 uniform vec3 ${uniforms.lightPos};
 uniform vec3 ${uniforms.viewPos};
@@ -32,6 +34,12 @@ uniform vec3 ${uniforms.materialSpecularColor};
 uniform float ${uniforms.isPhongLightingEnabled};
 uniform float ${uniforms.isBlinnLightingEnabled};
 uniform float ${uniforms.isToonLightingEnabled};
+
+
+// uniform float ${uniforms.colorContrib};
+uniform float ${uniforms.numberTextureContrib};
+uniform float ${uniforms.mtlTextureContrib};
+
 
 out vec4 outColor;
 
@@ -79,16 +87,23 @@ void main() {
   float distance = length(${uniforms.lightPos} - fragPos);
   float attCoef = 1.0 / (${uniforms.attenuation}.x + ${uniforms.attenuation}.y * distance + ${uniforms.attenuation}.z * pow(distance, 2.0));
 
-  vec4 textureColor = texture(${uniforms.sampler1}, fragTextureCoord);
+  vec4 textureColor0 = texture(${uniforms.sampler0}, fragTextureCoord);
+  vec4 textureColor1 = texture(${uniforms.sampler1}, fragTextureCoord);
+  // vec4 textureColor2 = texture(${uniforms.sampler2}, fragTextureCoord);
 
-  vec3 result =
+    vec4 textureColor =
+    // ${uniforms.colorContrib} * textureColor0 +
+    ${uniforms.numberTextureContrib} * textureColor0
+    + ${uniforms.mtlTextureContrib} * textureColor1;
+
+  vec3 lighting =
     attCoef * (
     ${uniforms.isPhongLightingEnabled} * ambient * ${uniforms.materialAmbientColor}
-    + diffuse * ${uniforms.materialDiffuseColor}
+    + 1.0                              * diffuse * ${uniforms.materialDiffuseColor}
     + ${uniforms.isPhongLightingEnabled} * specular * ${uniforms.materialSpecularColor}
     );
 
-  outColor = vec4(result, 1.0) * textureColor;
+  outColor = vec4(lighting, 1.0) * textureColor;
 }
 `;
 
