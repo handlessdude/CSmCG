@@ -48,6 +48,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-06-textures/pages/BaseTexturesPage.vue'),
       },
+      {
+        path: '/07-bump-mapping',
+        name: RouteName.BUMP_MAPPING,
+        component: () =>
+          import('src/features/lab-07-bump-mapping/pages/BumpMappingPage.vue'),
+      },
     ],
   },
   {

@@ -5,11 +5,26 @@ import { vertColorKey, vertPositionKey } from 'src/shared/resources/shaders/base
 import { BaseMaterial } from 'src/shared/entities/material/base-material';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import { uniforms } from 'src/shared/resources/shaders/shader-keys';
+import { baseMtl } from 'src/shared/resources/materials/base';
+import { ObjData } from 'src/shared/utils/obj-loader/obj-loader';
 
 const positionSize = 3;
 const colorSize = 3;
 
+const VERTICES_PER_FACE = 3;
+
+interface MeshParams {
+  color?: ReadonlyVec3;
+  material?: BaseMaterial;
+  worldMat?: Float32Array;
+}
+
 class Mesh {
+  public readonly material;
+  public readonly color;
+  public readonly indices: Uint16Array | undefined;
+  public readonly worldMat;
+
   #elementBufferObject: WebGLBuffer | null = null;
   #bufferPool: Record<string, {
     vertexBufferObject: WebGLBuffer | null;
@@ -18,13 +33,18 @@ class Mesh {
   }> = {}
 
   constructor(
-    public readonly vertices: Float32Array,
-    public readonly indices: Uint16Array,
+    public readonly meshData: ObjData,
     readonly center: vec3 = [0, 0, 0],
-    private readonly color: ReadonlyVec3 = [0, 0, 1],
-    public material: BaseMaterial | undefined = undefined,
-    readonly worldMat = makeIdentity4x4(),
-  ) { }
+   {
+      color = [0, 0, 1],
+      material = baseMtl,
+      worldMat = makeIdentity4x4(),
+    }: MeshParams,
+  ) {
+    this.material = material;
+    this.color = color;
+    this.worldMat = worldMat;
+  }
 
   attachBuffer = (
     program: WebGLProgram,
@@ -46,6 +66,7 @@ class Mesh {
     program: WebGLProgram,
     glContext: WebGL2RenderingContext,
   ) => {
+    if (!this.indices) throw new Error('No indices in mesh!');
     const {
       indexBufferObject
     } = setupEBO(glContext, program, this.indices);
@@ -57,15 +78,16 @@ class Mesh {
     program: WebGLProgram,
     glContext: WebGL2RenderingContext,
   ) => {
+    const vertices = new Float32Array(this.meshData.vertices.flat());
     this.attachBuffer(
       program,
       glContext,
       vertPositionKey,
-      this.vertices,
+      vertices,
       positionSize
     )
 
-    const verticesCount = this.vertices.length / positionSize;
+    const verticesCount = vertices.length / positionSize;
     const colorData = Array(verticesCount).fill(this.color).flat();
 
     this.attachBuffer(
@@ -103,22 +125,41 @@ class Mesh {
   }
 
   draw(shader: BaseShaderProgram) {
+    shader.setWorldMat(this.worldMat);
+
     if (this.material) {
       shader.setFloat(uniforms.materialShininess, this.material.shininess);
       shader.setVec3(uniforms.materialAmbientColor, this.material.ambientColor as Float32List);
       shader.setVec3(uniforms.materialDiffuseColor, this.material.diffuseColor as Float32List);
       shader.setVec3(uniforms.materialSpecularColor, this.material.specularColor as Float32List);
     }
-    shader.glContext.bindBuffer(shader.glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
+
+    if (this.meshData.indices) {
+      shader.glContext.bindBuffer(shader.glContext.ELEMENT_ARRAY_BUFFER, this.#elementBufferObject);
+    }
     this.#enableBuffers(shader.glContext);
-    shader.glContext.drawElements(
-      shader.glContext.TRIANGLES,
-      this.indices.length,
-      shader.glContext.UNSIGNED_SHORT,
-      0
-    );
+
+    if (this.indices) {
+      shader.glContext.drawElements(
+        shader.glContext.TRIANGLES,
+        this.indices.length,
+        shader.glContext.UNSIGNED_SHORT,
+        0
+      );
+    } else {
+      shader.glContext.drawArrays(
+        shader.glContext.TRIANGLES,
+        0,
+        this.meshData.faceCount * this.meshData.vertexPerFace, // remove
+      );
+    }
+
     this.#disableBuffers(shader.glContext);
   }
+}
+
+export type {
+  MeshParams
 }
 
 export {

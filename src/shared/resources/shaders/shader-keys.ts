@@ -41,6 +41,12 @@ const uniforms = {
   mtlTextureContrib: 'mtlTextureContrib',
 }
 
+type Uniforms = typeof uniforms;
+
+export type {
+  Uniforms
+}
+
 export {
   uniforms, attributes
 }

@@ -24,8 +24,7 @@ const cubesData: Array<{
     center: [0, 2, 0],
     material: gold,
     textureData: ['/src/assets/textures/first.png', '/src/assets/textures/artem.png'],
-  },
-  {
+  },{
     color: palette.bronze,
     center: [2, 0, 0],
     material: bronze,

@@ -14,8 +14,8 @@ interface AngleController {
 
 const setKeyboardListener = (
   cubeRotate: AngleController,
-  groupSelfRotate: AngleController,
-  groupAbsRotate: AngleController,
+  groupSelfRotate?: AngleController,
+  groupAbsRotate?: AngleController,
 ) => {
   document.addEventListener(
     'keydown',
@@ -24,11 +24,11 @@ const setKeyboardListener = (
       if (key === UserControls.CubeRotateClockwise) cubeRotate.dec();
       if (key === UserControls.CubeRotateCounterclockwise) cubeRotate.inc();
 
-      if (key === UserControls.GroupSelfRotateClockwise) groupSelfRotate.dec();
-      if (key === UserControls.GroupSelfRotateCounterclockwise) groupSelfRotate.inc();
+      if (key === UserControls.GroupSelfRotateClockwise) groupSelfRotate?.dec();
+      if (key === UserControls.GroupSelfRotateCounterclockwise) groupSelfRotate?.inc();
 
-      if (key === UserControls.GroupAbsRotateClockwise) groupAbsRotate.dec();
-      if (key === UserControls.GroupAbsRotateCounterclockwise) groupAbsRotate.inc();
+      if (key === UserControls.GroupAbsRotateClockwise) groupAbsRotate?.dec();
+      if (key === UserControls.GroupAbsRotateCounterclockwise) groupAbsRotate?.inc();
     },
     false,
   );

@@ -75,6 +75,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'leaderboard',
     routeName: RouteName.TEXTURES,
   },
+  {
+    title: 'Lab 07. Bump mapping',
+    icon: 'circle',
+    routeName: RouteName.BUMP_MAPPING,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

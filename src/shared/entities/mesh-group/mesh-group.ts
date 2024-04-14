@@ -9,14 +9,9 @@ class MeshGroup<T extends Mesh> {
     return this.#members
   }
 
-  drawMember = (mesh: T, shader: BaseShaderProgram) => {
-    shader.setWorldMat(mesh.worldMat);
-    mesh.draw(shader);
-  }
-
   draw = (shader: BaseShaderProgram) => {
-    this.#members.forEach((cube) => {
-      this.drawMember(cube, shader)
+    this.#members.forEach((mesh) => {
+      mesh.draw(shader);
     })
   };
 
