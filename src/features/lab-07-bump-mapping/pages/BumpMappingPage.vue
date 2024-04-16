@@ -191,7 +191,7 @@ import { useBumpMappingScene } from 'src/features/lab-07-bump-mapping/hooks/use-
 
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
-const viewPos: ReadonlyVec3 = [0, 3, -3];
+const viewPos: ReadonlyVec3 = [0, 3, -2];
 
 const attenuationConfig = {
   min: 0.001,

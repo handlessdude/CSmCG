@@ -37,9 +37,30 @@ uniform float ${uniforms.isToonLightingEnabled};
 
 out vec4 outColor;
 
+float perturbation() {
+    // in essence, ${uniforms.sampler0} is a height map
+
+    float height = texture( ${uniforms.sampler0}, fragTextureCoord).r;
+
+    //  rate of change of fragTextureCoord along the axes
+    vec2 dx = dFdx(fragTextureCoord);
+    vec2 dy = dFdy(fragTextureCoord);
+
+    // now we take height at a slightly offset position in the x & y directions
+    // and find difference with height at fragTextureCoord
+
+    // height difference in the x direction
+    float xHeightDelta = texture( ${uniforms.sampler0}, fragTextureCoord + dx).r - height;
+
+    // height difference in the y direction
+    float yHeightDelta = texture( ${uniforms.sampler0}, fragTextureCoord + dy).r - height;
+
+    return fragTextureCoord.x * xHeightDelta + fragTextureCoord.y * yHeightDelta;
+}
+
 void main() {
 
-  vec3 norm = normalize(fragNormal);
+  vec3 norm = normalize(fragNormal) + perturbation();
   vec3 lightDir = normalize(lightPos - fragPos);
 
   // ambient
@@ -88,9 +109,9 @@ void main() {
     + ${uniforms.isPhongLightingEnabled} * specular * ${uniforms.materialSpecularColor}
   );
 
-  vec4 textureColor = texture(${uniforms.sampler0}, fragTextureCoord);
+  // vec4 textureColor = texture(${uniforms.sampler0}, fragTextureCoord);
 
-  outColor = vec4(lighting, 1.0) * textureColor;
+  outColor = vec4(lighting, 1.0);
 }
 `;
 
