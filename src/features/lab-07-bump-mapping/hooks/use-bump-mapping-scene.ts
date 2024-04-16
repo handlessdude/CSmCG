@@ -13,6 +13,8 @@ import { LightingModelType } from 'src/shared/resources/lighting/lighting-model-
 import { OBJParser } from 'src/shared/utils/obj-loader/obj-loader';
 import { MeshTextured } from 'src/shared/entities/mesh/mesh-textured';
 import { loadImage } from 'src/shared/utils/image-loader';
+import { bronze, gold } from 'src/shared/resources/materials/metals';
+import { orange } from 'src/shared/resources/materials/fruits';
 
 const positionSize = 3;
 const textureCoordSize = 2;
@@ -87,8 +89,10 @@ const useBumpMappingScene = async (
 
   const cubeAngle = new RotationAngle(() => timer.delta);
 
+  const bumpSrc = '/src/assets/textures/bump.jpg';
+
   const objSrc = '/src/assets/meshes/sphere.obj';
-  const textureSrc = '/src/assets/textures/help_me.png';
+  const textureSrc = bumpSrc;
 
   const objLoader = new OBJParser();
   const sphereMeshData = await objLoader.load(objSrc);
@@ -104,7 +108,9 @@ const useBumpMappingScene = async (
     sphereMeshData,
     [0, 0, 0],
     [texture],
-    {}
+    {
+      material: orange
+    }
   );
 
   const setupBuffersInShader = (mesh: Mesh, shader: BaseShaderProgram) => {
