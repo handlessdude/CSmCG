@@ -80,6 +80,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'circle',
     routeName: RouteName.BUMP_MAPPING,
   },
+  {
+    title: 'Lab 08. Fireworks',
+    icon: 'circle',
+    routeName: RouteName.FIREWORKS,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

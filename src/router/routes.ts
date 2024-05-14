@@ -54,6 +54,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-07-bump-mapping/pages/BumpMappingPage.vue'),
       },
+      {
+        path: '/08-fireworks',
+        name: RouteName.FIREWORKS,
+        component: () =>
+          import('src/features/lab-08-fireworks/pages/FireworksPage.vue'),
+      },
     ],
   },
   {
