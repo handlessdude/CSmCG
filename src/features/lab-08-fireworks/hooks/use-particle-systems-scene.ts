@@ -19,6 +19,7 @@ import {
 import {
   bengalParticleTrackFragSource
 } from 'src/shared/resources/shaders/particle-systems/bengal-light/particle-tracks/trackFrag';
+import { Spark } from 'src/features/lab-08-fireworks/entities/spark';
 
 const BUFFERS_CONFIG = {
   POSITION_SIZE: 3,
@@ -77,26 +78,50 @@ const useParticleSystemsScene = async (
   const worldMatrix = new Float32Array(16);
   mat4.identity(worldMatrix);
 
-  const sparksPositions = [
-    1, 0, 0,
-    -1, 0.5, 0,
-    -0.5, -1, 0
-  ];
+  const sparks: Spark[] = [];
+  for (let i = 0; i < Spark.sparksCount; i++) {
+    sparks.push(new Spark());
+  }
 
-  const tracksColors: number[] = [];
-  const tracksPositions: number[] = [];
-  for (let i = 0; i < sparksPositions.length; i += 3) {
-    tracksPositions.push(
-      // для каждой координаты добавляем точку начала координат, чтобы получить след искры
-      0, 0, 0,
-      sparksPositions[i], sparksPositions[i + 1], sparksPositions[i + 2]
-    );
-    // цвет в начале координат будет белый (горячий), а дальше будет приближаться к оранжевому
-    tracksColors.push(
-      1, 1, 1,
-      // 0.47, 0.31, 0.24,
-      1, 0, 0,
-    );
+  const moveSparks = () => {
+    const now = performance.now();
+    for (let i = 0; i < sparks.length; i++) {
+      sparks[i].move(now);
+    }
+  };
+
+  const getSparksPositions = () => {
+    const positions: number[] = [];
+    sparks.forEach(function(item) {
+      // искры двигаются только в одной плоскости xy
+      positions.push(item.x, item.y, 0);
+    });
+    return positions;
+  }
+
+  const getTracksColors = (sparksPositions: number[]) => {
+    const tracksColors: number[] = [];
+    for (let i = 0; i < sparksPositions.length; i += 3) {
+      // цвет в начале координат будет белый (горячий), а дальше будет приближаться к оранжевому
+      tracksColors.push(
+        1, 1, 1,
+        // 0.47, 0.31, 0.24,
+        1, 0, 0,
+      );
+    }
+    return tracksColors;
+  }
+
+  const getTracksPositions = (sparksPositions: number[]) => {
+    const tracksPositions: number[] = [];
+    for (let i = 0; i < sparksPositions.length; i += 3) {
+      tracksPositions.push(
+        // для каждой координаты добавляем точку начала координат, чтобы получить след искры
+        0, 0, 0,
+        sparksPositions[i], sparksPositions[i + 1], sparksPositions[i + 2]
+      );
+    }
+    return tracksPositions;
   }
 
   const initSparks = () => {
@@ -108,7 +133,6 @@ const useParticleSystemsScene = async (
 
     const vertexBufferObject = glContext.createBuffer();
     glContext.bindBuffer(glContext.ARRAY_BUFFER, vertexBufferObject);
-    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(sparksPositions), glContext.STATIC_DRAW);
 
     return {
       sparkPosLocation,
@@ -121,7 +145,7 @@ const useParticleSystemsScene = async (
     sparksPositionsBuffer
   } = initSparks();
 
-  const drawSparks = () => {
+  const drawSparks = (sparksPositions: number[]) => {
     bengalParticleShader.use();
 
     bengalParticleShader.setMat4(uniforms.mWorld, worldMatrix);
@@ -130,6 +154,7 @@ const useParticleSystemsScene = async (
 
     glContext.enableVertexAttribArray(sparkPosLocation);
     glContext.bindBuffer(glContext.ARRAY_BUFFER, sparksPositionsBuffer);
+    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(sparksPositions), glContext.STATIC_DRAW);
     glContext.vertexAttribPointer(
       sparkPosLocation,
       BUFFERS_CONFIG.POSITION_SIZE,
@@ -159,11 +184,9 @@ const useParticleSystemsScene = async (
 
     const tracksPositionsBuffer = glContext.createBuffer();
     glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksPositionsBuffer);
-    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(tracksPositions), glContext.STATIC_DRAW);
 
     const tracksColorsBuffer = glContext.createBuffer();
     glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksColorsBuffer);
-    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(tracksColors), glContext.STATIC_DRAW);
 
     return {
       trackPosLocation,
@@ -180,7 +203,10 @@ const useParticleSystemsScene = async (
     tracksColorsBuffer
   } = initTracks();
 
-  const drawTracks = () => {
+  const drawTracks = (sparksPositions: number[]) => {
+    const tracksPositions = getTracksPositions(sparksPositions);
+    const tracksColors = getTracksColors(sparksPositions);
+
     bengalParticleTrackShader.use();
 
     bengalParticleTrackShader.setMat4(uniforms.mWorld, worldMatrix);
@@ -189,6 +215,7 @@ const useParticleSystemsScene = async (
 
     glContext.enableVertexAttribArray(trackPosLocation);
     glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksPositionsBuffer);
+    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(tracksPositions), glContext.STATIC_DRAW);
     glContext.vertexAttribPointer(
       trackPosLocation,
       BUFFERS_CONFIG.POSITION_SIZE,
@@ -200,6 +227,7 @@ const useParticleSystemsScene = async (
 
     glContext.enableVertexAttribArray(trackColorLocation);
     glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksColorsBuffer);
+    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(tracksColors), glContext.STATIC_DRAW);
     glContext.vertexAttribPointer(
       trackColorLocation,
       BUFFERS_CONFIG.COLOR_SIZE,
@@ -216,6 +244,7 @@ const useParticleSystemsScene = async (
   };
 
 
+
   const loop = () => {
     timer.updateDelta();
 
@@ -228,8 +257,10 @@ const useParticleSystemsScene = async (
       | bengalParticleShader.glContext.COLOR_BUFFER_BIT
     );
 
-    drawSparks();
-    drawTracks();
+    moveSparks();
+    const sparksPositions = getSparksPositions();
+    drawSparks(sparksPositions);
+    drawTracks(sparksPositions);
 
     requestAnimationFrame(loop);
   };

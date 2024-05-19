@@ -1,13 +1,12 @@
 class Spark {
-  static sparksCount =200;
+  static sparksCount = 200;
 
-  // задаём направление полёта искры в градусах, от 0 до 360
-  angle = Math.random() * 360;
+  angle = Math.random() * 360 * Math.PI / 180;
   // радиус - это расстояние, которое пролетит искра
   radius = Math.random();
 
   // у каждой искры своя скорость. multiplier подбирается эмпирически
-  multiplier = 125 + Math.random() * 125;
+  multiplier = 100 * (1 + Math.random());
 
   // время создания искры
   timeFromCreation = performance.now();
@@ -21,7 +20,16 @@ class Spark {
   x = 0;
   y = 0;
 
+  constructor() {
+    this.init();
+  }
+
   init(){
+    this.angle = Math.random() * 360 * Math.PI / 180;
+    this.radius = Math.random();
+    this.multiplier = 125 * (1 + Math.random());
+    this.timeFromCreation = performance.now();
+
     // отмеряем точки на окружности - максимальные координаты искры
     this.xMax = Math.cos(this.angle) * this.radius;
     this.yMax = Math.sin(this.angle) * this.radius;
