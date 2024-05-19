@@ -1,8 +1,6 @@
-import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import { mat4, ReadonlyVec3 } from 'gl-matrix';
 
 const setupCamera = (
-  program: BaseShaderProgram,
   viewConfig: {
     eye: ReadonlyVec3,
     center: ReadonlyVec3,

@@ -10,11 +10,10 @@ import { ref, Ref } from 'vue';
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { ShaderType } from 'src/shared/resources/shaders/shader-type';
 import { LightingModelType } from 'src/shared/resources/lighting/lighting-model-type';
-import { OBJParser } from 'src/shared/utils/obj-loader/obj-loader';
 import { MeshTextured } from 'src/shared/entities/mesh/mesh-textured';
-import { loadImage } from 'src/shared/utils/image-loader';
-import { bronze, gold } from 'src/shared/resources/materials/metals';
 import { orange } from 'src/shared/resources/materials/fruits';
+import { OBJParser } from 'src/shared/utils/resource-loaders/obj-loader';
+import { loadImage } from 'src/shared/utils/resource-loaders/image-loader';
 
 const positionSize = 3;
 const textureCoordSize = 2;
@@ -72,7 +71,7 @@ const useBumpMappingScene = async (
   const {
     viewMatrix,
     projMatrix
-  } = setupCamera(shaders[shaderType.value],{
+  } = setupCamera({
       eye: camera.position,
       center: [0, 0, 0],
       up: [0, 1, 0],

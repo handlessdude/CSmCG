@@ -6,7 +6,7 @@ import { BaseMaterial } from 'src/shared/entities/material/base-material';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import { uniforms } from 'src/shared/resources/shaders/shader-keys';
 import { baseMtl } from 'src/shared/resources/materials/base';
-import { ObjData } from 'src/shared/utils/obj-loader/obj-loader';
+import { ObjData } from 'src/shared/utils/resource-loaders/obj-loader';
 
 const positionSize = 3;
 const colorSize = 3;
