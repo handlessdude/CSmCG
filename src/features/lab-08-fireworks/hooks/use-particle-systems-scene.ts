@@ -21,63 +21,10 @@ import {
 } from 'src/shared/resources/shaders/particle-systems/bengal-light/particle-tracks/trackFrag';
 
 const BUFFERS_CONFIG = {
-  POSITIONSIZE: 3,
-  TEXTURECOORDSIZE: 2,
-}
-
-class Spark {
-  static sparksCount =200;
-
-  // задаём направление полёта искры в градусах, от 0 до 360
-  angle = Math.random() * 360;
-  // радиус - это расстояние, которое пролетит искра
-  radius = Math.random();
-
-  // у каждой искры своя скорость. multiplier подбирается эмпирически
-  multiplier = 125 + Math.random() * 125;
-
-  // время создания искры
-  timeFromCreation = performance.now();
-
-  xMax = 0;
-  yMax = 0;
-
-  dx = 0;
-  dy = 0;
-
-  x = 0;
-  y = 0;
-
-  init(){
-    // отмеряем точки на окружности - максимальные координаты искры
-    this.xMax = Math.cos(this.angle) * this.radius;
-    this.yMax = Math.sin(this.angle) * this.radius;
-
-    // dx и dy - приращение искры за вызов отрисовки, то есть её скорость,
-    this.dx = this.xMax / this.multiplier;
-    this.dy = this.yMax / this.multiplier;
-
-    // Для того, чтобы не все искры начинали движение из начала координат,
-    // делаем каждой искре свой отступ, но не более максимальных значений.
-    this.x = (this.dx * 1000) % this.xMax;
-    this.y = (this.dy * 1000) % this.yMax;
-  }
-
-  move(time: number) {
-    // находим разницу между вызовами отрисовки, чтобы анимация работала
-    // одинаково на компьютерах разной мощности
-    const timeShift = time - this.timeFromCreation;
-    this.timeFromCreation = time;
-    // приращение зависит от времени между отрисовками
-    const speed = timeShift;
-    this.x += this.dx * speed;
-    this.y += this.dy * speed;
-    // если искра достигла конечной точки, запускаем её заново из начала координат
-    if (Math.abs(this.x) > Math.abs(this.xMax) || Math.abs(this.y) > Math.abs(this.yMax)) {
-      this.init();
-      return;
-    }
-  }
+  POSITION_SIZE: 3,
+  COLOR_SIZE: 3,
+  TRACK_SIZE: 6,
+  UV_SIZE: 2,
 }
 
 const useParticleSystemsScene = async (
@@ -136,18 +83,21 @@ const useParticleSystemsScene = async (
     -0.5, -1, 0
   ];
 
-  /*  const colors = [];
-    const positionsFromCenter = [];
-    for (let i = 0; i < positions.length; i += 3) {
+  const tracksColors: number[] = [];
+  const tracksPositions: number[] = [];
+  for (let i = 0; i < sparksPositions.length; i += 3) {
+    tracksPositions.push(
       // для каждой координаты добавляем точку начала координат, чтобы получить след искры
-      positionsFromCenter.push(0, 0, 0);
-      positionsFromCenter.push(positions[i], positions[i + 1], positions[i + 2]);
-      // цвет в начале координат будет белый (горячий), а дальше будет приближаться к оранжевому
-      colors.push(
-        1, 1, 1,
-        0.47, 0.31, 0.24,
-      );
-    }*/
+      0, 0, 0,
+      sparksPositions[i], sparksPositions[i + 1], sparksPositions[i + 2]
+    );
+    // цвет в начале координат будет белый (горячий), а дальше будет приближаться к оранжевому
+    tracksColors.push(
+      1, 1, 1,
+      // 0.47, 0.31, 0.24,
+      1, 0, 0,
+    );
+  }
 
   const initSparks = () => {
     if (!bengalParticleShader.program) throw new Error('no sparks program');
@@ -172,58 +122,114 @@ const useParticleSystemsScene = async (
   } = initSparks();
 
   const drawSparks = () => {
-    const bytesPerAttr = 3;
-    glContext.enableVertexAttribArray(sparkPosLocation);
-    glContext.bindBuffer(glContext.ARRAY_BUFFER, sparksPositionsBuffer);
-    glContext.vertexAttribPointer(
-      sparkPosLocation,
-      bytesPerAttr,
-      glContext.FLOAT,
-      false,
-      bytesPerAttr * Float32Array.BYTES_PER_ELEMENT,// Size of an individual vertex
-      0 // Offset from the beginning of a single vertex to this attribute
-    );
-    glContext.activeTexture(particleTexture.textureUnit);
-    glContext.bindTexture(glContext.TEXTURE_2D, particleTexture.texture);
-    bengalParticleShader.setInteger('u_pointTexture', particleTextureUnitIdx);
-    glContext.drawArrays(glContext.POINTS, 0, sparksPositions.length / 3)
-  };
-
-  const initTracks = () => {
-    if (!bengalParticleTrackShader.program) throw new Error('no tracks program');
-    const positionAttributeLocationTrack = glContext.getAttribLocation(
-      bengalParticleTrackShader.program,
-      attributes.vertPosition
-    );
-    const colorAttributeLocationTrack = glContext.getAttribLocation(
-      bengalParticleTrackShader.program,
-      attributes.vertColor
-    );
-    return {
-      positionAttributeLocationTrack,
-      colorAttributeLocationTrack
-    }
-  };
-
-  const loop = () => {
-    timer.updateDelta();
-
     bengalParticleShader.use();
 
     bengalParticleShader.setMat4(uniforms.mWorld, worldMatrix);
     bengalParticleShader.setMat4(uniforms.mView, viewMatrix);
     bengalParticleShader.setMat4(uniforms.mProj, projMatrix)
 
-    bengalParticleShader.glContext.clearColor(
+    glContext.enableVertexAttribArray(sparkPosLocation);
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, sparksPositionsBuffer);
+    glContext.vertexAttribPointer(
+      sparkPosLocation,
+      BUFFERS_CONFIG.POSITION_SIZE,
+      glContext.FLOAT,
+      false,
+      BUFFERS_CONFIG.POSITION_SIZE * Float32Array.BYTES_PER_ELEMENT,// Size of an individual vertex
+      0 // Offset from the beginning of a single vertex to this attribute
+    );
+    glContext.activeTexture(particleTexture.textureUnit);
+    glContext.bindTexture(glContext.TEXTURE_2D, particleTexture.texture);
+    bengalParticleShader.setInteger('u_pointTexture', particleTextureUnitIdx);
+    glContext.drawArrays(glContext.POINTS, 0, sparksPositions.length / 3);
+
+    glContext.disableVertexAttribArray(sparkPosLocation);
+  };
+
+  const initTracks = () => {
+    if (!bengalParticleTrackShader.program) throw new Error('no tracks program');
+    const trackPosLocation = glContext.getAttribLocation(
+      bengalParticleTrackShader.program,
+      attributes.vertPosition
+    );
+    const trackColorLocation = glContext.getAttribLocation(
+      bengalParticleTrackShader.program,
+      attributes.vertColor
+    );
+
+    const tracksPositionsBuffer = glContext.createBuffer();
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksPositionsBuffer);
+    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(tracksPositions), glContext.STATIC_DRAW);
+
+    const tracksColorsBuffer = glContext.createBuffer();
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksColorsBuffer);
+    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(tracksColors), glContext.STATIC_DRAW);
+
+    return {
+      trackPosLocation,
+      trackColorLocation,
+      tracksPositionsBuffer,
+      tracksColorsBuffer
+    }
+  };
+
+  const {
+    trackPosLocation,
+    trackColorLocation,
+    tracksPositionsBuffer,
+    tracksColorsBuffer
+  } = initTracks();
+
+  const drawTracks = () => {
+    bengalParticleTrackShader.use();
+
+    bengalParticleTrackShader.setMat4(uniforms.mWorld, worldMatrix);
+    bengalParticleTrackShader.setMat4(uniforms.mView, viewMatrix);
+    bengalParticleTrackShader.setMat4(uniforms.mProj, projMatrix)
+
+    glContext.enableVertexAttribArray(trackPosLocation);
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksPositionsBuffer);
+    glContext.vertexAttribPointer(
+      trackPosLocation,
+      BUFFERS_CONFIG.POSITION_SIZE,
+      glContext.FLOAT,
+      false,
+      BUFFERS_CONFIG.POSITION_SIZE * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+      0 // Offset from the beginning of a single vertex to this attribute
+    );
+
+    glContext.enableVertexAttribArray(trackColorLocation);
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, tracksColorsBuffer);
+    glContext.vertexAttribPointer(
+      trackColorLocation,
+      BUFFERS_CONFIG.COLOR_SIZE,
+      glContext.FLOAT,
+      false,
+      BUFFERS_CONFIG.COLOR_SIZE * Float32Array.BYTES_PER_ELEMENT,// Size of an individual vertex
+      0 // Offset from the beginning of a single vertex to this attribute
+    );
+
+    glContext.drawArrays(glContext.LINES, 0, tracksPositions.length / 3);
+
+    glContext.disableVertexAttribArray(trackPosLocation);
+    glContext.disableVertexAttribArray(trackColorLocation);
+  };
+
+
+  const loop = () => {
+    timer.updateDelta();
+
+    glContext.clearColor(
       ...(palette.darkBlue as [number, number, number]),
       1.0
     );
-    bengalParticleShader.glContext.clear(
+    glContext.clear(
       bengalParticleShader.glContext.DEPTH_BUFFER_BIT
       | bengalParticleShader.glContext.COLOR_BUFFER_BIT
     );
 
     drawSparks();
+    drawTracks();
 
     requestAnimationFrame(loop);
   };
