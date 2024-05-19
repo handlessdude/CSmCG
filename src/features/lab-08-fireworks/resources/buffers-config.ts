@@ -1,0 +1,10 @@
+const BUFFERS_CONFIG = {
+  POSITION_SIZE: 3,
+  COLOR_SIZE: 3,
+  TRACK_SIZE: 6,
+  UV_SIZE: 2,
+}
+
+export {
+  BUFFERS_CONFIG
+}
