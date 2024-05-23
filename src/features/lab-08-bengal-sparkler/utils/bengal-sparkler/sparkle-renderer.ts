@@ -6,7 +6,7 @@ import {
 import {
   bengalParticleFragSource
 } from 'src/shared/resources/shaders/particle-systems/bengal-light/particles/particleFrag';
-import { BUFFERS_CONFIG } from 'src/features/lab-08-fireworks/resources/buffers-config';
+import { BUFFERS_CONFIG } from 'src/features/lab-08-bengal-sparkler/resources/buffers-config';
 import { loadImage } from 'src/shared/utils/resource-loaders/image-loader';
 import { createTexture } from 'src/shared/utils/webgl/create-texture';
 

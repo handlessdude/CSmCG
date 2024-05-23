@@ -1,5 +1,5 @@
 import { attributes, uniforms } from 'src/shared/resources/shaders/shader-keys';
-import { BUFFERS_CONFIG } from 'src/features/lab-08-fireworks/resources/buffers-config';
+import { BUFFERS_CONFIG } from 'src/features/lab-08-bengal-sparkler/resources/buffers-config';
 import { BaseShaderProgram } from 'src/shared/utils/webgl/base-shader-program';
 import {
   bengalParticleTrackVertSource
@@ -10,7 +10,7 @@ import {
 import {
   getTracksColors,
   getTracksPositions
-} from 'src/features/lab-08-fireworks/utils/bengal-sparkler/system-manager';
+} from 'src/features/lab-08-bengal-sparkler/utils/bengal-sparkler/system-manager';
 
 const useTrackRenderer = (
   glContext: WebGL2RenderingContext,

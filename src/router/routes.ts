@@ -55,10 +55,16 @@ const routes: RouteRecordRaw[] = [
           import('src/features/lab-07-bump-mapping/pages/BumpMappingPage.vue'),
       },
       {
+        path: '/08-bengal-sparkler',
+        name: RouteName.BENGAL_SPARKLER,
+        component: () =>
+          import('src/features/lab-08-bengal-sparkler/pages/BengalSparklerPage.vue'),
+      },
+      {
         path: '/08-fireworks',
         name: RouteName.FIREWORKS,
         component: () =>
-          import('src/features/lab-08-fireworks/pages/ParticleSystemsPage.vue'),
+          import('src/features/lab-08-fireworks/pages/FireworksPage.vue'),
       },
     ],
   },

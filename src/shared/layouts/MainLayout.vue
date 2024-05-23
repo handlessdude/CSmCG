@@ -81,6 +81,11 @@ const essentialLinks: EssentialLinkProps[] = [
     routeName: RouteName.BUMP_MAPPING,
   },
   {
+    title: 'Lab 08. Bengal sparkler',
+    icon: 'circle',
+    routeName: RouteName.BENGAL_SPARKLER,
+  },
+  {
     title: 'Lab 08. Fireworks',
     icon: 'circle',
     routeName: RouteName.FIREWORKS,

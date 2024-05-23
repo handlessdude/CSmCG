@@ -1,5 +1,5 @@
 const bengalParticleFragSource = `#version 300 es
-precision mediump float;
+precision highp float;
 
 uniform sampler2D u_pointTexture;
 

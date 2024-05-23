@@ -2,12 +2,16 @@ import { Timer } from 'src/shared/utils/webgl/timer';
 import { glMatrix, mat4, ReadonlyVec3 } from 'gl-matrix';
 import { palette } from 'src/shared/resources/palette';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
-import { Spark } from 'src/features/lab-08-fireworks/entities/spark';
-import { useSparksRenderer } from 'src/features/lab-08-fireworks/utils/bengal-sparkler/sparkle-renderer';
-import { getSparksPositions, moveSparks } from 'src/features/lab-08-fireworks/utils/bengal-sparkler/system-manager';
-import { useTrackRenderer } from 'src/features/lab-08-fireworks/utils/bengal-sparkler/track-renderer';
+import { Spark } from 'src/features/lab-08-bengal-sparkler/entities/spark';
+import { useSparksRenderer } from 'src/features/lab-08-bengal-sparkler/utils/bengal-sparkler/sparkle-renderer';
+import { getSparksPositions, moveSparks } from 'src/features/lab-08-bengal-sparkler/utils/bengal-sparkler/system-manager';
+import { useTrackRenderer } from 'src/features/lab-08-bengal-sparkler/utils/bengal-sparkler/track-renderer';
 
-const useParticleSystemsScene = async (
+const sceneConfig = {
+  clearColor: palette.darkBlue as [number, number , number]
+}
+
+const useBengalSparklerScene = async (
   glContext: WebGL2RenderingContext,
   camera: {
     position: ReadonlyVec3,
@@ -56,10 +60,7 @@ const useParticleSystemsScene = async (
   const loop = () => {
     timer.updateDelta();
 
-    glContext.clearColor(
-      ...(palette.darkBlue as [number, number, number]),
-      1.0
-    );
+    glContext.clearColor(...sceneConfig.clearColor, 1.0);
     glContext.clear(glContext.DEPTH_BUFFER_BIT | glContext.COLOR_BUFFER_BIT);
 
     moveSparks(sparks);
@@ -74,7 +75,9 @@ const useParticleSystemsScene = async (
     timer.init();
 
     glContext.enable(glContext.BLEND);
-    glContext.blendFunc(glContext.SRC_ALPHA, glContext.ONE);
+    glContext.blendFunc(glContext.SRC_ALPHA, glContext.ONE_MINUS_SRC_ALPHA);
+    // glContext.blendFunc(glContext.ONE, glContext.ONE_MINUS_SRC_ALPHA);
+
     requestAnimationFrame(loop);
   }
 
@@ -82,4 +85,4 @@ const useParticleSystemsScene = async (
     runSceneLoop,
   }
 }
-export { useParticleSystemsScene }
+export { useBengalSparklerScene }

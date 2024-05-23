@@ -1,4 +1,4 @@
-import { Spark } from 'src/features/lab-08-fireworks/entities/spark';
+import { Spark } from 'src/features/lab-08-bengal-sparkler/entities/spark';
 
 const moveSparks = (sparks: Spark[]) => {
   const now = performance.now();
