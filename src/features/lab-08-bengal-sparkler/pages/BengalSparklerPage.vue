@@ -2,7 +2,10 @@
   <q-page padding>
     <div class="row justify-center items-center">
       <q-card flat class="q-pa-md">
-        <GLCanvas ref="glCanvas" />
+        <GLCanvas
+          ref="glCanvas"
+          :depth-test="false"
+        />
       </q-card>
     </div>
   </q-page>

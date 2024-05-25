@@ -60,13 +60,16 @@ const useBengalSparklerScene = async (
   const loop = () => {
     timer.updateDelta();
 
+    glContext.enable(glContext.BLEND);
+    glContext.blendFunc(glContext.SRC_ALPHA, glContext.ONE_MINUS_SRC_ALPHA);
+
     glContext.clearColor(...sceneConfig.clearColor, 1.0);
-    glContext.clear(glContext.DEPTH_BUFFER_BIT | glContext.COLOR_BUFFER_BIT);
+    glContext.clear(glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT);
 
     moveSparks(sparks);
     const sparksPositions = getSparksPositions(sparks);
-    drawSparks(sparksPositions);
     drawTracks(sparksPositions);
+    drawSparks(sparksPositions);
 
     requestAnimationFrame(loop);
   };
@@ -74,9 +77,7 @@ const useBengalSparklerScene = async (
   const runSceneLoop = () => {
     timer.init();
 
-    glContext.enable(glContext.BLEND);
-    glContext.blendFunc(glContext.SRC_ALPHA, glContext.ONE_MINUS_SRC_ALPHA);
-    // glContext.blendFunc(glContext.ONE, glContext.ONE_MINUS_SRC_ALPHA);
+
 
     requestAnimationFrame(loop);
   }

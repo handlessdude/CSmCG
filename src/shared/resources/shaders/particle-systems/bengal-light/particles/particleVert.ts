@@ -8,7 +8,7 @@ uniform mat4 mProj;
 
 void main() {
   gl_Position = mProj * mView * mWorld * vec4(vertPosition, 1.0);
-  gl_PointSize = 40.0;
+  gl_PointSize = 16.0;
 }
 `;
 
