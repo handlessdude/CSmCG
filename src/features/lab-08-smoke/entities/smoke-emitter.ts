@@ -2,7 +2,7 @@ import { vec3 } from 'gl-matrix';
 import { ParticlePool } from 'src/shared/utils/physics/particle-pool';
 import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
 
-const config ={
+const config = {
   size: {
     min: 20,
     max: 120,
@@ -17,7 +17,12 @@ const config ={
   },
   color: [0.2, 0.2, 0.2],
   mass:  0.002,
+  x: { min: 5, max: 30, },
+  y: { min: 5, max: 30, },
+  z: { min: 10, max: 30, },
 }
+
+const randsign = () => Math.random() < 0.5? -1 : 1;
 
 class SmokeEmitter {
   origin: vec3;
@@ -33,9 +38,9 @@ class SmokeEmitter {
           particle.vz += Math.sin(time * Math.random()) * 0.07;
           particle.vx += Math.sin(time * Math.random()) * 0.07;
         },
-        x: this.origin[0],
-        y: this.origin[1],
-        z: this.origin[2],
+        x: this.origin[0] + config.x.min + randsign() *  Math.random() * (config.x.max - config.x.min),
+        y: this.origin[1] + config.y.min + randsign() *  Math.random() * (config.y.max - config.y.min),
+        z: this.origin[2] + config.z.min + randsign() *  Math.random() *  (config.z.max - config.z.min),
         mass: config.mass,
         gravity: Math.random(),
         size: config.size.min + Math.random() * (config.size.max - config.size.min),
