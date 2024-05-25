@@ -16,14 +16,14 @@ const config = {
     min: 20,
     max: 60,
   },
-  color: [0.2, 0.2, 0.2],
+  color: [0.0, 1.0, 1.0],
   mass:  0.002,
   x: { min: 5, max: 30, },
   y: { min: 5, max: 30, },
   z: { min: 10, max: 30, },
 }
 
-class SmokeEmitter {
+class FountainEmitter {
   origin: vec3;
 
   constructor(origin: vec3) {
@@ -54,5 +54,5 @@ class SmokeEmitter {
 }
 
 export {
-  SmokeEmitter
+  FountainEmitter
 }

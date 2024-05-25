@@ -95,6 +95,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'circle',
     routeName: RouteName.SMOKE,
   },
+  {
+    title: 'Lab 09. Fountain',
+    icon: 'circle',
+    routeName: RouteName.FOUNTAIN,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

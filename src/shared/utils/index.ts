@@ -11,4 +11,6 @@ const makeVModelFromProps = <IProps, EmitOption>(
       emit(`update:${String(propName)}` as EmitOption, value),
   });
 
-export { makeVModelFromProps };
+const randsign = () => Math.random() < 0.5? -1 : 1;
+
+export { makeVModelFromProps, randsign };
