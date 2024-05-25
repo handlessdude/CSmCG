@@ -76,9 +76,6 @@ const useBengalSparklerScene = async (
 
   const runSceneLoop = () => {
     timer.init();
-
-
-
     requestAnimationFrame(loop);
   }
 

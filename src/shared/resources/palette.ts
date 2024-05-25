@@ -1,5 +1,6 @@
 import { toFracIntensity } from 'src/shared/utils/color-models';
 
+type Color = [number, number, number];
 const palette = {
   black      : [0.0, 0.0, 0.0],
   white      : [1.0, 1.0, 1.0],
@@ -16,6 +17,7 @@ const palette = {
   bronze     : toFracIntensity([250, 189, 98]),
 }
 
+export type { Color }
 export {
   palette
 }

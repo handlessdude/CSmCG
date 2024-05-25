@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row justify-center items-center">
       <q-card flat class="q-pa-md">
-        <GLCanvas ref="glCanvas" />
+        <GLCanvas ref="glCanvas" :depth-test="false"/>
       </q-card>
     </div>
   </q-page>
@@ -16,7 +16,7 @@ import { ReadonlyVec3 } from 'gl-matrix';
 import { useFireworksScene } from 'src/features/lab-08-fireworks/hooks/use-fireworks-scene';
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
-const viewPos: ReadonlyVec3 = [0, 3, -2];
+const viewPos: ReadonlyVec3 = [-23, 293, 97];
 
 const setupAnimation = async () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {

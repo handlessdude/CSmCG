@@ -1,8 +1,7 @@
 const BUFFERS_CONFIG = {
   POSITION_SIZE: 3,
   COLOR_SIZE: 3,
-  TRACK_SIZE: 6,
-  UV_SIZE: 2,
+  SIZE_SIZE: 1, // lol
 }
 
 export {

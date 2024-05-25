@@ -2,6 +2,7 @@ const attributes = {
   vertPosition: 'vertPosition',
   vertColor: 'vertColor',
   vertNormal: 'vertNormal',
+  vertSize: 'vertSize',
   vertTextureCoord: 'vertTextureCoord',
 }
 
