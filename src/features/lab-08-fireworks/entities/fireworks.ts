@@ -1,6 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import { ParticlePool } from 'src/features/lab-08-fireworks/entities/particle-pool';
 import { Color } from 'src/shared/resources/palette';
+import { World } from 'src/features/lab-08-fireworks/entities/world';
 
 class Fireworks {
   bomb: () => void;
@@ -27,11 +28,9 @@ class Fireworks {
     this.maxSize = 10;
   }
 
-  FireRandom(): void {
-    this.bomb();
-  }
+  FireRandom(): void { this.bomb(); }
 
-  Init(world: any, pp: ParticlePool): void {
+  Init(world: World, pp: ParticlePool): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
@@ -224,7 +223,7 @@ class Fireworks {
     };
 
     this.bomb = function(): void {
-      const pos = world.GetLaunchPosition();
+      const pos = world.getLaunchPosition();
       self.mortarEffect(pos);
 
       const seed = Math.random() * 4 | 0;

@@ -89,11 +89,13 @@ const useFireworkParticleRenderer = async (
     loc: number,
     buffer: WebGLBuffer,
     data: number[],
-    attrSize: number
+    attrSize: number,
+    updateData: boolean
   ) => {
     glContext.enableVertexAttribArray(loc);
     glContext.bindBuffer(glContext.ARRAY_BUFFER, buffer);
-    glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(data), glContext.DYNAMIC_DRAW);
+    if (updateData)
+      glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(data), glContext.DYNAMIC_DRAW);
     glContext.vertexAttribPointer(
       loc,
       attrSize,
@@ -108,6 +110,11 @@ const useFireworkParticleRenderer = async (
     posData: number[],
     colorData: number[],
     sizeData: number[],
+    needsUpdate: {
+      positions: boolean;
+      colors: boolean;
+      sizes: boolean;
+    }
   ) => {
     particleShader.use();
 
@@ -115,9 +122,9 @@ const useFireworkParticleRenderer = async (
     particleShader.setMat4(uniforms.mView, config.viewMatrix);
     particleShader.setMat4(uniforms.mProj, config.projMatrix)
 
-    enableBuffer(posLocation, posBuffer, posData, BUFFERS_CONFIG.POSITION_SIZE);
-    enableBuffer(posLocation, colorBuffer, colorData, BUFFERS_CONFIG.COLOR_SIZE);
-    enableBuffer(posLocation, sizeBuffer, sizeData, BUFFERS_CONFIG.SIZE_SIZE);
+    enableBuffer(posLocation, posBuffer, posData, BUFFERS_CONFIG.POSITION_SIZE, needsUpdate.positions);
+    enableBuffer(posLocation, colorBuffer, colorData, BUFFERS_CONFIG.COLOR_SIZE, needsUpdate.colors);
+    enableBuffer(posLocation, sizeBuffer, sizeData, BUFFERS_CONFIG.SIZE_SIZE, needsUpdate.sizes);
 
     bindParticleTexture();
 

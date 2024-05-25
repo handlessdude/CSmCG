@@ -2,11 +2,13 @@ import { ParticlePool } from 'src/features/lab-08-fireworks/entities/particle-po
 import { Timer } from 'src/shared/utils/webgl/timer';
 import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
 import { Fireworks } from 'src/features/lab-08-fireworks/entities/fireworks';
+import { World } from 'src/features/lab-08-fireworks/entities/world';
 
 const useFireworksManager = (timer: Timer) => {
-  const particles = 100000;
+  const particles = 250;
   const pp = new ParticlePool();
   const ff = new Fireworks();
+  const world = new World();
   const invMaxFps = 1/60;
 
   const data: {
@@ -26,6 +28,7 @@ const useFireworksManager = (timer: Timer) => {
   }
 
   const init = () =>  {
+    ff.Init(world, pp);
 
     for (let i = 0; i < particles; i ++ ) {
       const p = new Particle();
@@ -39,25 +42,23 @@ const useFireworksManager = (timer: Timer) => {
 
   let frameDelta = 0;
   let shoot = 0;
+  const shootSpawn = 50;
   const update = () => {
     const time = timer.time;
     const delta = timer.delta;
     frameDelta += delta;
 
-    shoot += delta;
-    if(shoot > 3) {
+    shoot += 1;
+    if (shoot > shootSpawn) {
       console.log('shooted');
       ff.FireRandom();
       shoot = 0;
     }
 
     while(frameDelta >= invMaxFps) {
-      console.log('something happend')
       for ( let i = 0; i < particles * 3; i +=3 ) {
         const pos = i/3 | 0;
-        if (!pp.particles[pos].alive) {
-          continue;
-        }
+        if (!pp.particles[pos].alive) { continue; }
 
         pp.particles[pos].Update(frameDelta, time);
 
@@ -71,14 +72,12 @@ const useFireworksManager = (timer: Timer) => {
         data.colors[i+1] = pp.particles[pos].color[1];
         data.colors[i+2] = pp.particles[pos].color[2];
       }
-
-      needsUpdate.sizes = true;
       needsUpdate.positions = true;
       needsUpdate.colors = true;
+      needsUpdate.sizes = true;
 
       frameDelta -= invMaxFps;
     }
-    // renderer.render( scene, camera );
   }
 
   return {
