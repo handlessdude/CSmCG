@@ -85,6 +85,12 @@ const useFireworkParticleRenderer = async (
 
   const { bindParticleTexture } = await initTextures();
 
+  const initialUpdate = {
+    positions: true,
+    colors: true,
+    sizes: true,
+  }
+
   const enableBuffer = (
     loc: number,
     buffer: WebGLBuffer,
@@ -122,9 +128,32 @@ const useFireworkParticleRenderer = async (
     particleShader.setMat4(uniforms.mView, config.viewMatrix);
     particleShader.setMat4(uniforms.mProj, config.projMatrix)
 
-    enableBuffer(posLocation, posBuffer, posData, BUFFERS_CONFIG.POSITION_SIZE, needsUpdate.positions);
-    enableBuffer(posLocation, colorBuffer, colorData, BUFFERS_CONFIG.COLOR_SIZE, needsUpdate.colors);
-    enableBuffer(posLocation, sizeBuffer, sizeData, BUFFERS_CONFIG.SIZE_SIZE, needsUpdate.sizes);
+    enableBuffer(
+      posLocation,
+      posBuffer,
+      posData,
+      BUFFERS_CONFIG.POSITION_SIZE,
+      initialUpdate.positions || needsUpdate.positions
+    );
+    initialUpdate.positions= false;
+
+    enableBuffer(
+      colorLocation,
+      colorBuffer,
+      colorData,
+      BUFFERS_CONFIG.COLOR_SIZE,
+      initialUpdate.colors || needsUpdate.colors
+    );
+    initialUpdate.colors= false;
+
+    enableBuffer(
+      sizeLocation,
+      sizeBuffer,
+      sizeData,
+      BUFFERS_CONFIG.SIZE_SIZE,
+      initialUpdate.sizes || needsUpdate.sizes
+    );
+    initialUpdate.sizes = false;
 
     bindParticleTexture();
 

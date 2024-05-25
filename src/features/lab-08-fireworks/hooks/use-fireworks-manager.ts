@@ -1,15 +1,16 @@
 import { ParticlePool } from 'src/features/lab-08-fireworks/entities/particle-pool';
-import { Timer } from 'src/shared/utils/webgl/timer';
 import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
 import { Fireworks } from 'src/features/lab-08-fireworks/entities/fireworks';
 import { World } from 'src/features/lab-08-fireworks/entities/world';
+import * as THREE from 'src/../libs/three.module';
 
-const useFireworksManager = (timer: Timer) => {
-  const particles = 250;
+const useFireworksManager = () => {
+  const particles = 50000;
   const pp = new ParticlePool();
-  const ff = new Fireworks();
   const world = new World();
+  const ff = new Fireworks(world);
   const invMaxFps = 1/60;
+  const clock = new THREE.Clock();
 
   const data: {
     positions:number[];
@@ -28,8 +29,6 @@ const useFireworksManager = (timer: Timer) => {
   }
 
   const init = () =>  {
-    ff.Init(world, pp);
-
     for (let i = 0; i < particles; i ++ ) {
       const p = new Particle();
       p.Init(i);
@@ -42,16 +41,14 @@ const useFireworksManager = (timer: Timer) => {
 
   let frameDelta = 0;
   let shoot = 0;
-  const shootSpawn = 50;
   const update = () => {
-    const time = timer.time;
-    const delta = timer.delta;
+    const time = Date.now() * 0.005;
+    const delta = clock.getDelta();
     frameDelta += delta;
 
-    shoot += 1;
-    if (shoot > shootSpawn) {
-      console.log('shooted');
-      ff.FireRandom();
+    shoot += delta;
+    if (shoot > 0.5) {
+      ff.fire(pp);
       shoot = 0;
     }
 

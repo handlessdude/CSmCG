@@ -14,8 +14,9 @@ out vec3 fragColor;
 
 void main() {
   fragColor = ${attributes.vertColor};
-  gl_Position = mProj * mView * mWorld * vec4(vertPosition, 1.0);
-  gl_PointSize = vertSize;
+  vec4 pos = mView * mWorld * vec4(vertPosition, 1.0);
+  gl_PointSize = vertSize * ( 300.0 / -pos.z );
+  gl_Position = ${uniforms.mProj} * pos;
 }
 `;
 

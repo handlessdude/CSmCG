@@ -16,7 +16,8 @@ import { ReadonlyVec3 } from 'gl-matrix';
 import { useFireworksScene } from 'src/features/lab-08-fireworks/hooks/use-fireworks-scene';
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
-const viewPos: ReadonlyVec3 = [0, 293, 97];
+const viewPos: ReadonlyVec3 = [0, 1500, 750];
+const lookAt: ReadonlyVec3 = [0, 500, 0];
 
 const setupAnimation = async () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {
@@ -27,6 +28,7 @@ const setupAnimation = async () => {
 
   const { runSceneLoop } = await useFireworksScene(glContext,{
     position: viewPos,
+    lookAt,
     aspect: glCanvas.value.width / glCanvas.value.height,
   });
 

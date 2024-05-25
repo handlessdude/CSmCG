@@ -13,6 +13,7 @@ const useFireworksScene = async (
   glContext: WebGL2RenderingContext,
   camera: {
     position: ReadonlyVec3,
+    lookAt: ReadonlyVec3,
     aspect: number,
   },
 ) => {
@@ -21,14 +22,14 @@ const useFireworksScene = async (
     projMatrix
   } = setupCamera({
       eye: camera.position,
-      center: [0, 0, 0],
+      center: camera.lookAt,
       up: [0, 1, 0],
     },
     {
       fovy: glMatrix.toRadian(45),
       aspect: camera.aspect,
       nearPlane: 0.1,
-      farPlane: 1000.0,
+      farPlane: 5000.0,
     }
   )
 
@@ -43,7 +44,7 @@ const useFireworksScene = async (
     worldMatrix,
     viewMatrix,
     projMatrix,
-    particleTextureSrc: '/src/assets/textures/spark1.png',
+    particleTextureSrc: '/src/assets/textures/spark2.png',
   });
 
   const {
@@ -51,13 +52,12 @@ const useFireworksScene = async (
     update,
     data,
     needsUpdate
-  } = useFireworksManager(timer);
+  } = useFireworksManager();
 
   const loop = () => {
     timer.updateDelta();
 
     update();
-    // here goes particle update in manager
 
     glContext.enable(glContext.BLEND);
     glContext.blendFunc(glContext.SRC_ALPHA, glContext.ONE_MINUS_SRC_ALPHA);

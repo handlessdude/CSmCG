@@ -30,36 +30,44 @@ class ParticlePool {
     this.particles = [];
   }
 
-  New(prop: ParticleProperties): void {
+  New(prop: ParticleProperties) {
     this.current++;
     if (this.current === this.particles.length) {
       this.current = 0;
     }
 
-    const particle = this.particles[this.current];
-    particle.alive = true;
-    particle.x = prop.x;
-    particle.y = prop.y;
-    particle.z = prop.z;
-    particle.vy = prop.vy || 0;
-    particle.vz = prop.vz || 0;
-    particle.vx = prop.vx || 0;
-    particle.size = prop.size || 1;
-    particle.life = prop.life || 1;
-    particle.mass = prop.mass || 1;
-    particle.decay = prop.decay || 10;
-    particle.gravity = prop.gravity || -9.82;
-    particle.color[0] = prop.r || 1.0;
-    particle.color[1] = prop.g || 1.0;
-    particle.color[2] = prop.b || 1.0;
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    particle.condition = prop.condition || ((p, d, t) => {});
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    particle.action = prop.action || ((p, d, t) => {});
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    particle.effect = prop.effect || ((p, d, t) => {});
+    // const particle = this.particles[this.current];
+    this.particles[this.current].alive = true;
+    this.particles[this.current].x = prop.x;
+    this.particles[this.current].y = prop.y;
+    this.particles[this.current].z = prop.z;
+    this.particles[this.current].vy = prop.vy || 0;
+    this.particles[this.current].vz = prop.vz || 0;
+    this.particles[this.current].vx = prop.vx || 0;
+    this.particles[this.current].size = prop.size || 1;
+    this.particles[this.current].life = prop.life || 1;
+    this.particles[this.current].mass = prop.mass || 1;
+    this.particles[this.current].decay = prop.decay || 10;
+    this.particles[this.current].gravity = prop.gravity || -9.82;
+    this.particles[this.current].color[0] = prop.r || 1.0;
+    this.particles[this.current].color[1] = prop.g || 1.0;
+    this.particles[this.current].color[2] = prop.b || 1.0;
 
-    if (prop.onCreate) { prop.onCreate(particle); }
+    this.particles[this.current].condition = prop.condition || (
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+      (p, d, t) => {}
+    );
+    this.particles[this.current].action = prop.action || (
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+      (p, d, t) => {}
+    );
+    this.particles[this.current].effect = prop.effect || (
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+      (p, d, t) => {}
+    );
+
+    // console.log(prop, this.particles[this.current])
+    if (prop.onCreate) { prop.onCreate(this.particles[this.current]); }
   }
 }
 
