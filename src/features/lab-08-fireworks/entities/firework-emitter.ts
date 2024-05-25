@@ -1,17 +1,14 @@
 import { vec3 } from 'gl-matrix';
 import { ParticlePool } from 'src/features/lab-08-fireworks/entities/particle-pool';
 import { Color } from 'src/shared/resources/palette';
-import { World } from 'src/features/lab-08-fireworks/entities/world';
 import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
 
-class Fireworks {
+class FireworkEmitter {
   maxSize = 10;
-
-  constructor(readonly world: World) {}
 
   mortarEffect(pos: vec3, pp: ParticlePool): void {
     for (let i = 0; i < 100; i++) {
-      pp.New({
+      pp.add({
         effect: function(particle, dt, time) {
           particle.vz += Math.sin(time * Math.random()) / 50;
           particle.vx += Math.sin(time * Math.random()) / 50;
@@ -55,7 +52,7 @@ class Fireworks {
         break;
     }
     for (let i = 0; i < max; i++) {
-      pp.New({
+      pp.add({
         x: particle.x,
         y: particle.y,
         z: particle.z,
@@ -100,7 +97,7 @@ class Fireworks {
         g = color[1];
         b = color[2];
       }
-      pp.New({
+      pp.add({
         x: particle.x,
         y: particle.y,
         z: particle.z,
@@ -127,7 +124,7 @@ class Fireworks {
       const vx = 1 - Math.random() * 2;
       const vz = 1 - Math.random() * 2;
       const life = 0.1 + Math.random();
-      pp.New({
+      pp.add({
         x: particle.x,
         y: particle.y,
         z: particle.z,
@@ -182,7 +179,7 @@ class Fireworks {
       }
     }
 
-    pp.New({
+    pp.add({
       x: particle.x,
       y: particle.y,
       z: particle.z,
@@ -198,8 +195,7 @@ class Fireworks {
   };
 
   fire(pp: ParticlePool): void {
-    const pos = this.world.getLaunchPosition();
-    // this.mortarEffect(pos, pp);
+    const launchPos = vec3.fromValues(0.0, 0.0, 0.0);
 
     const seed = Math.random() * 4 | 0;
     const color: Color = [Math.random(), Math.random(), Math.random()];
@@ -207,13 +203,13 @@ class Fireworks {
     const size = 20 + Math.random() * Math.min(350, this.maxSize);
     this.maxSize += 10;
 
-    pp.New({
+    pp.add({
       effect: (particle, dt, time) => {
         this.shellEffect(particle, dt, time, seed, pp);
       },
-      x: pos[0],
-      y: pos[1],
-      z: pos[2],
+      x: launchPos[0],
+      y: launchPos[1],
+      z: launchPos[2],
       size: size,
       mass: 0.5,
       vz: 0,
@@ -268,7 +264,7 @@ class Fireworks {
               break;
           }
 
-          pp.New({
+          pp.add({
             effect: (particle, dt, time) => {
               this.flairEffect(particle, dt, time, seed, color, size, pp);
             },
@@ -293,4 +289,4 @@ class Fireworks {
   };
 }
 
-export { Fireworks };
+export { FireworkEmitter };

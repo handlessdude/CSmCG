@@ -85,12 +85,6 @@ const useFireworkParticleRenderer = async (
 
   const { bindParticleTexture } = await initTextures();
 
-  const initialUpdate = {
-    positions: true,
-    colors: true,
-    sizes: true,
-  }
-
   const enableBuffer = (
     loc: number,
     buffer: WebGLBuffer,
@@ -100,8 +94,9 @@ const useFireworkParticleRenderer = async (
   ) => {
     glContext.enableVertexAttribArray(loc);
     glContext.bindBuffer(glContext.ARRAY_BUFFER, buffer);
-    if (updateData)
+    if (updateData) {
       glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(data), glContext.DYNAMIC_DRAW);
+    }
     glContext.vertexAttribPointer(
       loc,
       attrSize,
@@ -116,11 +111,6 @@ const useFireworkParticleRenderer = async (
     posData: number[],
     colorData: number[],
     sizeData: number[],
-    needsUpdate: {
-      positions: boolean;
-      colors: boolean;
-      sizes: boolean;
-    }
   ) => {
     particleShader.use();
 
@@ -133,27 +123,24 @@ const useFireworkParticleRenderer = async (
       posBuffer,
       posData,
       BUFFERS_CONFIG.POSITION_SIZE,
-      initialUpdate.positions || needsUpdate.positions
+      true
     );
-    initialUpdate.positions= false;
 
     enableBuffer(
       colorLocation,
       colorBuffer,
       colorData,
       BUFFERS_CONFIG.COLOR_SIZE,
-      initialUpdate.colors || needsUpdate.colors
+      true
     );
-    initialUpdate.colors= false;
 
     enableBuffer(
       sizeLocation,
       sizeBuffer,
       sizeData,
       BUFFERS_CONFIG.SIZE_SIZE,
-      initialUpdate.sizes || needsUpdate.sizes
+      true
     );
-    initialUpdate.sizes = false;
 
     bindParticleTexture();
 

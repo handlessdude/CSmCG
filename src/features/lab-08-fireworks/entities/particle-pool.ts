@@ -30,7 +30,7 @@ class ParticlePool {
     this.particles = [];
   }
 
-  New(prop: ParticleProperties) {
+  add(prop: ParticleProperties) {
     this.current++;
     if (this.current === this.particles.length) {
       this.current = 0;

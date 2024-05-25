@@ -1,5 +1,4 @@
 import { Color } from 'src/shared/resources/palette';
-import { cloneVNode } from 'vue';
 
 class Particle {
   i: number;

@@ -51,7 +51,6 @@ const useFireworksScene = async (
     init,
     update,
     data,
-    needsUpdate
   } = useFireworksManager();
 
   const loop = () => {
@@ -65,7 +64,7 @@ const useFireworksScene = async (
     glContext.clearColor(...sceneConfig.clearColor, 1.0);
     glContext.clear(glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT);
 
-    drawParticles(data.positions, data.colors, data.sizes, needsUpdate);
+    drawParticles(data.positions, data.colors, data.sizes);
 
     requestAnimationFrame(loop);
   };

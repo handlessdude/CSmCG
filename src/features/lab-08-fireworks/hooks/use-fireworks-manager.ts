@@ -1,16 +1,16 @@
 import { ParticlePool } from 'src/features/lab-08-fireworks/entities/particle-pool';
 import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
-import { Fireworks } from 'src/features/lab-08-fireworks/entities/fireworks';
-import { World } from 'src/features/lab-08-fireworks/entities/world';
+import { FireworkEmitter } from 'src/features/lab-08-fireworks/entities/firework-emitter';
 import * as THREE from 'src/../libs/three.module';
 
 const useFireworksManager = () => {
   const particles = 50000;
   const pp = new ParticlePool();
-  const world = new World();
-  const ff = new Fireworks(world);
-  const invMaxFps = 1/60;
+  const emitter = new FireworkEmitter();
+  const MAX_FPS = 60;
   const clock = new THREE.Clock();
+  let frameDelta = 0;
+  let fireCounter = 0;
 
   const data: {
     positions:number[];
@@ -22,11 +22,6 @@ const useFireworksManager = () => {
     sizes: [],
   };
 
-  const needsUpdate = {
-    positions: false,
-    colors: false,
-    sizes: false
-  }
 
   const init = () =>  {
     for (let i = 0; i < particles; i ++ ) {
@@ -39,20 +34,18 @@ const useFireworksManager = () => {
     }
   }
 
-  let frameDelta = 0;
-  let shoot = 0;
   const update = () => {
     const time = Date.now() * 0.005;
     const delta = clock.getDelta();
     frameDelta += delta;
 
-    shoot += delta;
-    if (shoot > 0.5) {
-      ff.fire(pp);
-      shoot = 0;
+    fireCounter += 1;
+    if (fireCounter > 10) {
+      emitter.fire(pp);
+      fireCounter = 0;
     }
 
-    while(frameDelta >= invMaxFps) {
+    while(frameDelta >= 1 / MAX_FPS) {
       for ( let i = 0; i < particles * 3; i +=3 ) {
         const pos = i/3 | 0;
         if (!pp.particles[pos].alive) { continue; }
@@ -69,16 +62,12 @@ const useFireworksManager = () => {
         data.colors[i+1] = pp.particles[pos].color[1];
         data.colors[i+2] = pp.particles[pos].color[2];
       }
-      needsUpdate.positions = true;
-      needsUpdate.colors = true;
-      needsUpdate.sizes = true;
-
-      frameDelta -= invMaxFps;
+      frameDelta -= 1 / MAX_FPS;
     }
   }
 
   return {
-    init, update, data, needsUpdate
+    init, update, data,
   }
 }
 
