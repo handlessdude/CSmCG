@@ -66,6 +66,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('src/features/lab-08-fireworks/pages/FireworksPage.vue'),
       },
+      {
+        path: '/08-smoke',
+        name: RouteName.SMOKE,
+        component: () =>
+          import('src/features/lab-08-smoke/pages/SmokePage.vue'),
+      },
     ],
   },
   {

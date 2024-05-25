@@ -6,7 +6,7 @@ import { loadImage } from 'src/shared/utils/resource-loaders/image-loader';
 import { createTexture } from 'src/shared/utils/webgl/create-texture';
 import { BUFFERS_CONFIG } from 'src/features/lab-08-bengal-sparkler/resources/buffers-config';
 
-const useFireworkParticleRenderer = async (
+const useParticleRenderer = async (
   glContext: WebGL2RenderingContext,
   config: {
     worldMatrix: Float32Array,
@@ -157,5 +157,5 @@ const useFireworkParticleRenderer = async (
 }
 
 export {
-  useFireworkParticleRenderer
+  useParticleRenderer
 }

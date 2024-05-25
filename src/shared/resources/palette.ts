@@ -3,6 +3,7 @@ import { toFracIntensity } from 'src/shared/utils/color-models';
 type Color = [number, number, number];
 const palette = {
   black      : [0.0, 0.0, 0.0],
+  purple      : toFracIntensity ([26, 11, 51]),
   white      : [1.0, 1.0, 1.0],
   red        :   [1.0, 0.0, 0.0],
   yellow     : [1.0, 1.0, 0.0],

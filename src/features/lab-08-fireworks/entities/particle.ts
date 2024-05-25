@@ -21,8 +21,8 @@ class Particle {
   action: (particle: Particle, dt: number, time: number) => void;
   effect: (particle: Particle, dt: number, time: number) => void;
 
-  constructor() {
-    this.i = 0;
+  constructor(i: number) {
+    this.i = i;
     this.x = 0;
     this.y = 0;
     this.z = 0;
@@ -44,12 +44,7 @@ class Particle {
     this.effect = () => {};
   }
 
-  Init(i: number): void {
-    this.color = [1.0, 1.0, 1.0];
-    this.i = i;
-  }
-
-  Update(dt: number, time: number): void {
+  update(dt: number, time: number): void {
     this.life -= dt;
     this.size -= dt * this.decay;
 
@@ -81,17 +76,17 @@ class Particle {
 
     if (this.condition(this, dt, time)) {
       this.action(this, dt, time);
-      this.Reset();
+      this.reset();
     }
 
     this.effect(this, dt, time);
 
     if (this.life <= 0 || this.size <= 0) {
-      this.Reset();
+      this.reset();
     }
   }
 
-  Reset(): void {
+  reset(): void {
     this.x = 0;
     this.y = 0;
     this.z = 0;

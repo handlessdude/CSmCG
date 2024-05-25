@@ -15,7 +15,7 @@ interface ParticleProperties {
   r?: number;
   g?: number;
   b?: number;
-  condition?: (particle: Particle, dt: number, time: number) => void;
+  condition?: (particle: Particle, dt: number, time: number) => boolean;
   action?: (particle: Particle, dt: number, time: number) => void;
   effect?: (particle: Particle, dt: number, time: number) => void;
   onCreate?: (particle: Particle) => void;
@@ -36,7 +36,6 @@ class ParticlePool {
       this.current = 0;
     }
 
-    // const particle = this.particles[this.current];
     this.particles[this.current].alive = true;
     this.particles[this.current].x = prop.x;
     this.particles[this.current].y = prop.y;
@@ -55,7 +54,7 @@ class ParticlePool {
 
     this.particles[this.current].condition = prop.condition || (
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-      (p, d, t) => {}
+      (p, d, t) => { return false }
     );
     this.particles[this.current].action = prop.action || (
     // eslint-disable-next-line @typescript-eslint/no-empty-function

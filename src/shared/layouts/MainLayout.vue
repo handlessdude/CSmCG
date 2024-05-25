@@ -90,6 +90,11 @@ const essentialLinks: EssentialLinkProps[] = [
     icon: 'circle',
     routeName: RouteName.FIREWORKS,
   },
+  {
+    title: 'Lab 08. Smoke',
+    icon: 'circle',
+    routeName: RouteName.SMOKE,
+  },
 ];
 
 const leftDrawerOpen = ref(false);

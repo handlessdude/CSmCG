@@ -1,34 +1,12 @@
 import { vec3 } from 'gl-matrix';
-import { ParticlePool } from 'src/features/lab-08-fireworks/entities/particle-pool';
 import { Color } from 'src/shared/resources/palette';
 import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
+import { ParticlePool } from 'src/shared/utils/physics/particle-pool';
 
 class FireworkEmitter {
   maxSize = 10;
 
-  mortarEffect(pos: vec3, pp: ParticlePool): void {
-    for (let i = 0; i < 100; i++) {
-      pp.add({
-        effect: function(particle, dt, time) {
-          particle.vz += Math.sin(time * Math.random()) / 50;
-          particle.vx += Math.sin(time * Math.random()) / 50;
-        },
-        x: pos[0] + 10 - Math.random() * 20,
-        y: pos[1] + 30 + Math.random() * 5,
-        z: pos[2] + 10 - Math.random() * 20,
-        mass: 0.002,
-        gravity: Math.random(),
-        size: 20 + Math.random() * 100,
-        r: 0.2,
-        g: 0.2,
-        b: 0.2,
-        life: Math.random() * 5,
-        decay: 20 + Math.random() * 20,
-      });
-    }
-  };
-
-  shellEffect(particle: Particle, dt: number, time: number, seed: number, pp: ParticlePool) {
+  shellEffect(particle: Particle, dt: number, time: number, seed: number, pool: ParticlePool) {
     let max = 1;
     let vx = 0;
     let vz = 0;
@@ -52,7 +30,7 @@ class FireworkEmitter {
         break;
     }
     for (let i = 0; i < max; i++) {
-      pp.add({
+      pool.add({
         x: particle.x,
         y: particle.y,
         z: particle.z,
@@ -70,7 +48,7 @@ class FireworkEmitter {
     }
   };
 
-  crackleEffect(particle: Particle, dt: number, time: number, seed: number, color: Color, pp: ParticlePool) {
+  crackleEffect(particle: Particle, dt: number, time: number, seed: number, color: Color, pool: ParticlePool) {
     let r = 0;
     let g = 0;
     let b = 0;
@@ -97,7 +75,7 @@ class FireworkEmitter {
         g = color[1];
         b = color[2];
       }
-      pp.add({
+      pool.add({
         x: particle.x,
         y: particle.y,
         z: particle.z,
@@ -116,7 +94,7 @@ class FireworkEmitter {
     }
   };
 
-  explodeEffect(particle: Particle, dt: number, time: number, seed: number, pp: ParticlePool) {
+  explodeEffect(particle: Particle, dt: number, time: number, seed: number, pool: ParticlePool) {
     for (let i = 0; i < 100 + Math.random() * 200; i++) {
       const size = Math.random() * 80;
       const gravity = -0.5;
@@ -124,7 +102,7 @@ class FireworkEmitter {
       const vx = 1 - Math.random() * 2;
       const vz = 1 - Math.random() * 2;
       const life = 0.1 + Math.random();
-      pp.add({
+      pool.add({
         x: particle.x,
         y: particle.y,
         z: particle.z,
@@ -140,7 +118,7 @@ class FireworkEmitter {
     }
   };
 
-  flairEffect(particle: Particle, dt: number, time: number, seed: number, color: Color, size: number, pp: ParticlePool) {
+  flairEffect(particle: Particle, dt: number, time: number, seed: number, color: Color, size: number, pool: ParticlePool) {
     let r = 1.0;
     let g = 0;
     let b = 0;
@@ -174,12 +152,12 @@ class FireworkEmitter {
 
     if (size > 250 && particle.life < 1.0) {
       if (Math.random() < 0.05) {
-        this.crackleEffect(particle, dt, time, seed, color, pp);
-        particle.Reset();
+        this.crackleEffect(particle, dt, time, seed, color, pool);
+        particle.reset();
       }
     }
 
-    pp.add({
+    pool.add({
       x: particle.x,
       y: particle.y,
       z: particle.z,
@@ -194,7 +172,7 @@ class FireworkEmitter {
     });
   };
 
-  fire(pp: ParticlePool): void {
+  fire(pool: ParticlePool) {
     const launchPos = vec3.fromValues(0.0, 0.0, 0.0);
 
     const seed = Math.random() * 4 | 0;
@@ -203,9 +181,9 @@ class FireworkEmitter {
     const size = 20 + Math.random() * Math.min(350, this.maxSize);
     this.maxSize += 10;
 
-    pp.add({
-      effect: (particle, dt, time) => {
-        this.shellEffect(particle, dt, time, seed, pp);
+    pool.add({
+      effect: (particle: Particle, dt: number, time: number) => {
+        this.shellEffect(particle, dt, time, seed, pool);
       },
       x: launchPos[0],
       y: launchPos[1],
@@ -220,11 +198,11 @@ class FireworkEmitter {
       b: color[2],
       life: 20,
       decay: 10 + Math.random() * 20,
-      condition: (particle, dt, time) => {
+      condition: (particle: Particle, dt: number, time: number) => {
         return particle.vy <= -Math.random() * 20;
       },
-      action: (particle, dt, time) => {
-        this.explodeEffect(particle, dt, time, seed, pp);
+      action: (particle: Particle, dt: number, time: number) => {
+        this.explodeEffect(particle, dt, time, seed, pool);
 
         const grav = -0.1 - Math.random() * 2;
 
@@ -264,9 +242,9 @@ class FireworkEmitter {
               break;
           }
 
-          pp.add({
-            effect: (particle, dt, time) => {
-              this.flairEffect(particle, dt, time, seed, color, size, pp);
+          pool.add({
+            effect: (particle: Particle, dt: number, time: number) => {
+              this.flairEffect(particle, dt, time, seed, color, size, pool);
             },
             x: particle.x,
             y: particle.y,
