@@ -163,7 +163,7 @@ class FountainEmitter {
     }
     pool.add({
       effect: (particle: Particle, dt: number, time: number) => {
-        // this.flairEffect(particle, dt, time, seed, config.color, size, pool);
+        // this.shellEffect(particle, dt, time, seed, pool);
         const grav = -0.1 - Math.random() * 2;
         const speed = 2 + Math.random() * 2;
         const offset = 2 / size;
@@ -200,11 +200,11 @@ class FountainEmitter {
               break;
           }
 
-          if (Math.random() < 0.5) {
+          if (Math.random() < 0.4) {
             const size1= 0.5 * size * (1 + Math.random());
             pool.add({
               effect: (particle: Particle, dt: number, time: number) => {
-                this.flairEffect(particle, dt, time, seed, config.color, size1, pool);
+                this.flairEffect(particle, dt, time, seed, config.color, size1* 0.5, pool);
               },
               x: particle.x,
               y: particle.y,
