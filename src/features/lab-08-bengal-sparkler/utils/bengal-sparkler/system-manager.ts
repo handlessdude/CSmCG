@@ -23,7 +23,7 @@ const getTracksColors = (sparksPositions: number[]) => {
     tracksColors.push(
       1, 1, 1,
       // 0.47, 0.31, 0.24,
-      1, 0, 0,
+      1, 1, 0,
     );
   }
   return tracksColors;

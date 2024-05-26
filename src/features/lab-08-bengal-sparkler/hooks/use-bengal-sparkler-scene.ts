@@ -43,7 +43,7 @@ const useBengalSparklerScene = async (
     worldMatrix,
     viewMatrix,
     projMatrix,
-    particleTextureSrc: '/src/assets/textures/clown-emoji.png',
+    particleTextureSrc: '/src/assets/textures/spark-emoji.png',
   });
 
   const { drawTracks } = useTrackRenderer(glContext, {
