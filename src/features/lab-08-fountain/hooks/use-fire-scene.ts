@@ -3,13 +3,13 @@ import { glMatrix, mat4, ReadonlyVec3, vec3 } from 'gl-matrix';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { useParticleRenderer } from 'src/shared/hooks/particles/use-particle-renderer';
 import { useParticleManager } from 'src/shared/hooks/particles/use-particle-manager';
-import { FountainEmitter } from 'src/features/lab-08-fountain/entities/fountain-emitter';
+import { FireEmitter } from 'src/features/lab-08-fountain/entities/fire-emitter';
 
 const sceneConfig = {
   clearColor: palette.purple as [number, number , number]
 }
 
-const useFountainScene = async (
+const useFireScene = async (
   glContext: WebGL2RenderingContext,
   camera: {
     position: ReadonlyVec3,
@@ -42,15 +42,15 @@ const useFountainScene = async (
     worldMatrix,
     viewMatrix,
     projMatrix,
-    particleTextureSrc: '/src/assets/textures/diamond.png',
+    particleTextureSrc: '/src/assets/textures/flame.png',
   });
 
   const smokeOrigin = vec3.fromValues(0.0, 0.0, 0.0);
-  const emitter = new FountainEmitter(smokeOrigin);
+  const emitter = new FireEmitter(smokeOrigin);
   const { init, update, data } = useParticleManager({
     particlesCount: 25000,
     emitter,
-    spawnFramespan: 1
+    spawnFramespan: 5
   });
 
   const loop = () => {
@@ -78,5 +78,5 @@ const useFountainScene = async (
 }
 
 export{
-  useFountainScene
+  useFireScene
 }

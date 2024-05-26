@@ -13,11 +13,11 @@ import GLCanvas from 'src/shared/components/webgl/GLCanvas.vue';
 import { onMounted, Ref, ref } from 'vue';
 import { MaybeUndefined } from 'src/shared/models/generic';
 import { ReadonlyVec3 } from 'gl-matrix';
-import { useFountainScene } from 'src/features/lab-08-fountain/hooks/use-fountain-scene';
+import { useFireScene } from 'src/features/lab-08-fountain/hooks/use-fire-scene';
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
-const viewPos: ReadonlyVec3 = [0, 1500, 750];
-const lookAt: ReadonlyVec3 = [0, 500, 0];
+const viewPos: ReadonlyVec3 = [0, 100, 750];
+const lookAt: ReadonlyVec3 = [0, 250, 0];
 
 const setupAnimation = async () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {
@@ -26,7 +26,7 @@ const setupAnimation = async () => {
 
   const glContext = glCanvas.value.glContext as WebGL2RenderingContext;
 
-  const { runSceneLoop } = await useFountainScene(glContext,{
+  const { runSceneLoop } = await useFireScene(glContext,{
     position: viewPos,
     lookAt,
     aspect: glCanvas.value.width / glCanvas.value.height,

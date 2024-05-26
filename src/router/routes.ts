@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
         path: '/08-fountain',
         name: RouteName.FOUNTAIN,
         component: () =>
-          import('src/features/lab-08-fountain/pages/FountainPage.vue'),
+          import('src/features/lab-08-fountain/pages/FirePage.vue'),
       },
     ],
   },
