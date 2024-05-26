@@ -19,10 +19,9 @@ const config = {
   },
   color: [0.0, 1.0, 1.0] as Color,
   mass:  0.002,
-  x: { min: 10, max: 30, },
-  y: { min: 30, max: 35, },
-  z: { min: 10, max: 30, },
-  dropSize: 25,
+  x: { min: 5, max: 20, },
+  y: { min: 5, max: 20, },
+  z: { min: 5, max: 20, },
 }
 
 class FireEmitter {
@@ -37,20 +36,20 @@ class FireEmitter {
     for (let i = 0; i < 100; i++) {
       pool.add({
         effect: function(particle, dt, time) {
-          particle.vz += Math.sin(time*Math.random())/50;
-          particle.vx += Math.sin(time*Math.random())/50;
+          particle.vz += Math.sin(time*Math.random()) * 0.02;
+          particle.vx += Math.sin(time*Math.random()) * 0.02;
         },
-        x: this.origin[0] + config.x.min -  Math.random() * (config.x.max - config.x.min),
-        y: this.origin[1] + config.y.min + Math.random() * (config.y.max - config.y.min),
-        z: this.origin[2] + config.z.min - Math.random() *  (config.z.max - config.z.min),
+        x: this.origin[0] + config.x.min + randsign() * Math.random() * (config.x.max - config.x.min),
+        y: this.origin[1] + config.y.min + randsign() * Math.random() * (config.y.max - config.y.min),
+        z: this.origin[2] + config.z.min + randsign() * Math.random() *  (config.z.max - config.z.min),
         mass: 0.002,
         gravity: Math.random(),
-        size: 20+Math.random() * 100,
+        size: 20 + Math.random() * 100,
         r: 1,
         g: 1,
         b: 1,
-        life: Math.random()*5,
-        decay: 20+Math.random()*20,
+        life: Math.random() * 5,
+        decay: 20 + Math.random() * 20,
       });
     }
   };

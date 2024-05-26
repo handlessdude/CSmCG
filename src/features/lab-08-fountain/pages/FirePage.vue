@@ -16,8 +16,8 @@ import { ReadonlyVec3 } from 'gl-matrix';
 import { useFireScene } from 'src/features/lab-08-fountain/hooks/use-fire-scene';
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
-const viewPos: ReadonlyVec3 = [0, 100, 750];
-const lookAt: ReadonlyVec3 = [0, 250, 0];
+const viewPos: ReadonlyVec3 = [0, 100, 400];
+const lookAt: ReadonlyVec3 = [0, 120, 0];
 
 const setupAnimation = async () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {

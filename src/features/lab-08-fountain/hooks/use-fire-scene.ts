@@ -50,11 +50,20 @@ const useFireScene = async (
   const { init, update, data } = useParticleManager({
     particlesCount: 25000,
     emitter,
-    spawnFramespan: 5
+    spawnFramespan: 1
   });
 
+  const T = 10;
+  const angularVelocity = 2 * Math.PI / T;
+  const R = 2;
   const loop = () => {
     update();
+    const t = performance.now() * 0.004;
+    emitter.origin = vec3.fromValues(
+      R * Math.sin(angularVelocity * t),
+      R + R * Math.cos(angularVelocity * t),
+      0,
+    );
 
     glContext.enable(glContext.BLEND);
     glContext.blendFunc(glContext.SRC_ALPHA, glContext.ONE_MINUS_SRC_ALPHA);
