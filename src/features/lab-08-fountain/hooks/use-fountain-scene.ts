@@ -48,7 +48,7 @@ const useFountainScene = async (
   const origin = vec3.fromValues(0.0, 0.0, 0.0);
   const emitter = new FountainEmitter(origin);
   const { init, update, data } = useParticleManager({
-    particlesCount: 25000,
+    particlesCount: 100000,
     emitter,
     spawnFramespan: 1
   });

@@ -17,7 +17,7 @@ import { useFountainScene } from 'src/features/lab-08-fountain/hooks/use-fountai
 const glCanvas: Ref<MaybeUndefined<typeof GLCanvas>> = ref(undefined);
 
 const viewPos: ReadonlyVec3 = [0, 500, 1000];
-const lookAt: ReadonlyVec3 = [0, 300, 0];
+const lookAt: ReadonlyVec3 = [0, 400, 0];
 
 const setupAnimation = async () => {
   if (!glCanvas.value || !glCanvas.value.glContext) {

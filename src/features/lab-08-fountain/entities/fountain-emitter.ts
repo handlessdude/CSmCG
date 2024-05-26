@@ -37,7 +37,7 @@ interface Interval {
   max: number;
 }
 
-const getInInterval = (int: Interval) => int.min = Math.random() * (int.max - int.min);
+const getInInterval = (int: Interval) => int.min + Math.random() * (int.max - int.min);
 
 const randSize = () => getInInterval(config.size);
 
@@ -48,6 +48,10 @@ const randDecay = () => getInInterval(config.decay);
 class FountainEmitter {
   maxSize = 10;
   origin= vec3.fromValues(0,0,0);
+
+  constructor(origin: vec3) {
+    this.origin = origin;
+  }
 
   shellEffect(particle: Particle, dt: number, time: number, seed: number, pool: ParticlePool) {
     let shellParticlesCount = 1;
@@ -84,7 +88,7 @@ class FountainEmitter {
   };
 
   explodeEffect(particle: Particle, dt: number, time: number, seed: number, pool: ParticlePool) {
-    for (let i = 0; i < 100 + Math.random() * 200; i++) {
+    for (let i = 0; i < 100; i++) {
       const gravity = -0.5;
       const vy = 1 - Math.random() * 2;
       const vx = 1 - Math.random() * 2;
@@ -113,7 +117,7 @@ class FountainEmitter {
     if (Math.random() > 0.25) {
       particle.size = particle.size * 0.5
     }
-    if (size > 5 && particle.life < 1.0) {
+    if (size < 5 && particle.life < 1.0) {
       if (Math.random() < 0.5) {
         particle.reset();
       }
@@ -122,12 +126,15 @@ class FountainEmitter {
       x: particle.x,
       y: particle.y,
       z: particle.z,
-      mass: 0.002,
-      gravity: -0.2,
-      size: randSize(),
+      vy: particle.vy * 0.5,
+      vx: particle.vx * 0.5,
+      vz: particle.vz * 0.5,
+      mass: particle.mass * 0.5,
+      gravity: particle.gravity * 0.5,
+      size: particle.size * 0.5,
       ...color,
-      life: Math.random() * 3,
-      decay: 50,
+      life: Math.random(),
+      decay: 1,
     });
   };
 
@@ -135,17 +142,34 @@ class FountainEmitter {
     const seed = Math.random() * 4 | 0;
     const size = 20 + Math.random() * Math.min(5, this.maxSize);
     this.maxSize += 10;
+
+    for (let i = 0; i < 100 + Math.random() * 200; i++) {
+      const vx = getInInterval({ min: 1, max: -1 } );
+      const vy = getInInterval({ min: 1, max: 3 } );
+      const vz = getInInterval({ min: 1, max: -1 } );
+      pool.add({
+        x: this.origin[0],
+        y: this.origin[1],
+        z: this.origin[2],
+        size: 0.2 * size * (1 + Math.random()),
+        mass: 0.2,
+        gravity: -0.9,
+        vx,
+        vy,
+        vz,
+        life: 10 + 20 *  Math.random(),
+        decay: Math.random(),
+      });
+    }
     pool.add({
       effect: (particle: Particle, dt: number, time: number) => {
-        this.shellEffect(particle, dt, time, seed, pool);
-        this.explodeEffect(particle, dt, time, seed, pool);
-        this.flairEffect(particle, dt, time, seed, config.color, particle.size, pool);
+        // this.flairEffect(particle, dt, time, seed, config.color, size, pool);
         const grav = -0.1 - Math.random() * 2;
-        const maxLife = 1 + Math.random() * 6;
         const speed = 2 + Math.random() * 2;
         const offset = 2 / size;
         const inc = Math.PI * (3.0 - Math.sqrt(5.0));
 
+        const maxLife = 1 + Math.random() * 2;
         for (let i = 0; i < size; i++) {
           let vx: number, vy: number, vz: number;
           switch (seed) {
@@ -175,23 +199,27 @@ class FountainEmitter {
               vz *= speed;
               break;
           }
-          pool.add({
-            effect: (particle: Particle, dt: number, time: number) => {
-              this.flairEffect(particle, dt, time, seed, config.color, size, pool);
-            },
-            x: particle.x,
-            y: particle.y,
-            z: particle.z,
-            size: size,
-            mass: 0.001,
-            gravity: grav,
-            vy: vy,
-            vz: vz,
-            vx: vx,
-            ...config.color,
-            life: 0.5 + Math.random() * maxLife,
-            decay: Math.random() * 100,
-          });
+
+          if (Math.random() < 0.5) {
+            const size1= 0.5 * size * (1 + Math.random());
+            pool.add({
+              effect: (particle: Particle, dt: number, time: number) => {
+                this.flairEffect(particle, dt, time, seed, config.color, size1, pool);
+              },
+              x: particle.x,
+              y: particle.y,
+              z: particle.z,
+              size: size1,
+              mass: 0.001,
+              gravity: grav,
+              vy: vy,
+              vz: vz * 0.5,
+              vx: vx * 0.5,
+              ...config.color,
+              life: 0.1 + Math.random() * maxLife * 0.5,
+              decay: Math.random() * 100
+            });
+          }
         }
       },
       x: this.origin[0],
@@ -203,7 +231,7 @@ class FountainEmitter {
       vx: 0,
       vy: 10 + Math.min(size * 0.1, 7),
       ...config.color,
-      life: 20,
+      life: 10,
       decay: randDecay()
     });
   };
