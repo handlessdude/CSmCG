@@ -10,5 +10,6 @@ export enum RouteName {
   BENGAL_SPARKLER = 'BENGAL_SPARKLER',
   FIREWORKS = 'FIREWORKS',
   SMOKE = 'SMOKE',
+  FIRE = 'FIRE',
   FOUNTAIN = 'FOUNTAIN',
 }

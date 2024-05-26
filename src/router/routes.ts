@@ -74,9 +74,15 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/08-fire',
+        name: RouteName.FIRE,
+        component: () =>
+          import('src/features/lab-08-fire/pages/FirePage.vue'),
+      },
+      {
+        path: '/08-fountain',
         name: RouteName.FOUNTAIN,
         component: () =>
-          import('src/features/lab-08-fountain/pages/FirePage.vue'),
+          import('src/features/lab-08-fountain/pages/FountainPage.vue'),
       },
     ],
   },

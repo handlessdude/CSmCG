@@ -1,6 +1,5 @@
 import { vec3 } from 'gl-matrix';
 import { ParticlePool } from 'src/shared/utils/physics/particle-pool';
-import { Particle } from 'src/features/lab-08-fireworks/entities/particle';
 import { Color } from 'src/shared/resources/palette';
 import { randsign } from 'src/shared/utils';
 

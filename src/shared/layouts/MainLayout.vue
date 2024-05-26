@@ -96,7 +96,12 @@ const essentialLinks: EssentialLinkProps[] = [
     routeName: RouteName.SMOKE,
   },
   {
-    title: 'Lab 09. Fountain',
+    title: 'Lab 08. Fire',
+    icon: 'circle',
+    routeName: RouteName.FIRE,
+  },
+  {
+    title: 'Lab 08. Fountain',
     icon: 'circle',
     routeName: RouteName.FOUNTAIN,
   },

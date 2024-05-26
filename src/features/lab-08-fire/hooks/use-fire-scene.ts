@@ -3,7 +3,7 @@ import { glMatrix, mat4, ReadonlyVec3, vec3 } from 'gl-matrix';
 import { setupCamera } from 'src/shared/utils/webgl/setup-camera';
 import { useParticleRenderer } from 'src/shared/hooks/particles/use-particle-renderer';
 import { useParticleManager } from 'src/shared/hooks/particles/use-particle-manager';
-import { FireEmitter } from 'src/features/lab-08-fountain/entities/fire-emitter';
+import { FireEmitter } from 'src/features/lab-08-fire/entities/fire-emitter';
 
 const sceneConfig = {
   clearColor: palette.purple as [number, number , number]
