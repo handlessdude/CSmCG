@@ -42,14 +42,14 @@ const useFountainScene = async (
     worldMatrix,
     viewMatrix,
     projMatrix,
-    particleTextureSrc: '/src/assets/textures/spark.png',
+    particleTextureSrc: '/src/assets/textures/diamond.png',
   });
 
   const smokeOrigin = vec3.fromValues(0.0, 0.0, 0.0);
-  const smokeEmitter = new FountainEmitter(smokeOrigin);
+  const emitter = new FountainEmitter(smokeOrigin);
   const { init, update, data } = useParticleManager({
     particlesCount: 25000,
-    emitter: smokeEmitter,
+    emitter,
     spawnFramespan: 1
   });
 
